@@ -40,7 +40,8 @@ public class WebSecurityFilterChainConfig {
                     configuration.setAllowedHeaders(List.of("*"));
                     return configuration;
                 })).csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/users/authenticate")
+                //.authorizeHttpRequests(request -> request.requestMatchers("/api/v1/users/authenticate")
+                .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/**")
                         .permitAll().anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)

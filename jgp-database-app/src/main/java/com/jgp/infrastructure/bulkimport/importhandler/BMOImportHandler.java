@@ -92,7 +92,16 @@ public class BMOImportHandler implements ImportHandler {
         LocalDate recordedToJGPDBOnDate = ImportHandlerUtils.readAsDate(BMOConstants.DATE_RECORDED_TO_JGP_DB_COL, row);
 
         statuses.add(status);
-        return new BMOData(userService.currentUser().getPartner(), businessName, jgpId, phoneNumber, gender, age, businessLocation, industrySector, businessSegment, isBusinessRegistered, registrationNumber, bmoMembership, bestMonthlyRevenue, worstMonthlyRevenue, totalRegularEmployees, youthRegularEmployees, totalCasualEmployees, youthCasualEmployees, sampleRecordsKept, taNeeds, personWithDisability, refugeeStatus, appFormSubmittedDate, isApplicantEligible, numberOfTAsAttended, taSessionsAttended, isRecommendedForFinance, pipelineDecisionDate, referredFIBusiness, dateRecordedByPartner, recordedToJGPDBOnDate, row.getRowNum());
+        return new BMOData(Objects.nonNull(userService.currentUser()) ? userService.currentUser().getPartner() : null,
+                businessName, jgpId, phoneNumber, gender, age,
+                businessLocation, industrySector, businessSegment,
+                isBusinessRegistered, registrationNumber, bmoMembership,
+                bestMonthlyRevenue, worstMonthlyRevenue, totalRegularEmployees,
+                youthRegularEmployees, totalCasualEmployees, youthCasualEmployees,
+                sampleRecordsKept, taNeeds, personWithDisability, refugeeStatus,
+                appFormSubmittedDate, isApplicantEligible, numberOfTAsAttended,
+                taSessionsAttended, isRecommendedForFinance, pipelineDecisionDate,
+                referredFIBusiness, dateRecordedByPartner, recordedToJGPDBOnDate, row.getRowNum());
     }
 
     public Count importEntity() {

@@ -32,7 +32,7 @@ public class BMOController {
 
     @GetMapping
     public ResponseEntity<List<BMOData>> getAvailableBMODataRecords(@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
-                                                                    @RequestParam(name = "pageSize", defaultValue = "20") Integer pageSize){
+                                                                    @RequestParam(name = "pageSize", defaultValue = "200") Integer pageSize){
         final var sortedByDateCreated =
                 PageRequest.of(pageNumber - 1, pageSize, Sort.by("dateCreated").descending());
         return new ResponseEntity<>(this.bmoDataService.getBMODataRecords(sortedByDateCreated), HttpStatus.OK);
