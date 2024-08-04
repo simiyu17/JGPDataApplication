@@ -10,6 +10,9 @@ import com.jgp.authentication.dto.UserPassChangeDto;
 import com.jgp.authentication.exception.UserNotAuthenticatedException;
 import com.jgp.authentication.exception.UserNotFoundException;
 import com.jgp.authentication.filter.JwtTokenProvider;
+import com.jgp.patner.domain.PartnerRepository;
+import com.jgp.patner.exception.PartnerNotFoundException;
+import com.jgp.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -32,13 +35,16 @@ public class UserServiceImpl implements UserService{
     private final UserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final PartnerRepository partnerRepository;
 
 
     @Transactional
     @Override
-    public void createUser(UserDto user) {
+    public void createUser(UserDto userDto) {
         try {
-            this.userRepository.save(AppUser.createUser(user, passwordEncoder));
+            final var partner = this.partnerRepository.findById(userDto.partnerId())
+                    .orElseThrow(() -> new PartnerNotFoundException(CommonUtil.NO_RESOURCE_FOUND_WITH_ID));
+            this.userRepository.save(AppUser.createUser(partner, userDto, passwordEncoder));
         }catch (Exception e){
             throw new IllegalArgumentException(e);
         }
@@ -77,7 +83,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDto findUserById(Long userId) {
         return this.userRepository.findById(userId)
-                .map(u -> new UserDto(u.getId(), u.getFirstName(), u.getLastName(), u.getUsername(), u.getDesignation(), u.getCellPhone(), u.isActive(), u.isAdmin()))
+                .map(u -> new UserDto(u.getId(), u.getFirstName(), u.getLastName(), u.getUsername(), u.getDesignation(), u.getCellPhone(), u.isActive(), u.isAdmin(), 0L))
                 .orElseThrow(() -> new UserNotFoundException("No user found with Id"));
     }
 
@@ -89,7 +95,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public AuthResponseDto authenticateUser(AuthRequestDto authRequestDto) {
-        createDefaultUser();
         final var userDetails = userDetailsService.loadUserByUsername(authRequestDto.username());
         if (Objects.isNull(userDetails)) {
             throw  new UserNotFoundException("Bad User Credentials !!");
@@ -102,7 +107,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<UserDto> getAllUsers() {
-        return this.userRepository.findAll().stream().map(u -> new UserDto(u.getId(), u.getFirstName(), u.getLastName(), u.getUsername(), u.getDesignation(), u.getCellPhone(), u.isActive(), u.isAdmin())).toList();
+        return this.userRepository.findAll().stream().map(u -> new UserDto(u.getId(), u.getFirstName(), u.getLastName(), u.getUsername(), u.getDesignation(), u.getCellPhone(), u.isActive(), u.isAdmin(), 0L)).toList();
     }
 
     @Override
@@ -118,15 +123,5 @@ public class UserServiceImpl implements UserService{
         return u;
     }
 
-
-    private void createDefaultUser() {
-        AppUser adminUser = this.findUserByUsername("admin@admin.com");
-        if(Objects.isNull(adminUser)){
-            adminUser = AppUser.createUser(new UserDto(null, "Admin", "User", "admin@admin.com", "Administrator", "5464336455", true, true), passwordEncoder);
-            adminUser.setForceChangePass(true);
-            this.userRepository.save(adminUser);
-        }
-
-    }
 
 }

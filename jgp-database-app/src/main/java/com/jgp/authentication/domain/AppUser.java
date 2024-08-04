@@ -2,9 +2,13 @@ package com.jgp.authentication.domain;
 
 
 import com.jgp.authentication.dto.UserDto;
+import com.jgp.patner.domain.Partner;
 import com.jgp.shared.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
@@ -45,11 +49,16 @@ public class AppUser extends BaseEntity {
     @Transient
     private String resetPass;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "partner_id")
+    private Partner partner;
+
     public AppUser() {
     }
 
-    private AppUser(String firstName, String lastName, String username,
+    private AppUser(Partner partner, String firstName, String lastName, String username,
                     String designation, String cellPhone, boolean isActive, boolean forceChangePass, boolean isAdmin, PasswordEncoder encoder) {
+        this.partner = partner;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -69,8 +78,8 @@ public class AppUser extends BaseEntity {
         return String.format("%s, %s", this.firstName, this.lastName);
     }
 
-    public static AppUser createUser(UserDto userDto, PasswordEncoder encoder){
-        return new AppUser(userDto.firstName(), userDto.lastName(), userDto.username(), userDto.designation(), userDto.cellPhone(), userDto.isActive(), true, userDto.isAdmin(), encoder);
+    public static AppUser createUser(Partner partner, UserDto userDto, PasswordEncoder encoder){
+        return new AppUser(partner, userDto.firstName(), userDto.lastName(), userDto.username(), userDto.designation(), userDto.cellPhone(), userDto.isActive(), true, userDto.isAdmin(), encoder);
     }
 
     public void updateUser(UserDto userDto){

@@ -6,7 +6,7 @@
 
 CREATE TABLE users (
 	id                BIGINT GENERATED ALWAYS AS IDENTITY     NOT NULL,
-	date_created timestamp NULL,
+	date_created timestamp DEFAULT CURRENT_TIMESTAMP,
 	last_modified timestamp NULL,
 	cell_phone VARCHAR(255) NULL,
 	designation VARCHAR(255) NULL,
@@ -21,6 +21,10 @@ CREATE TABLE users (
 	last_modified_by_id BIGINT NULL,
 	CONSTRAINT email_unique UNIQUE (email_address),
 	CONSTRAINT users_pkey PRIMARY KEY (id),
-	CONSTRAINT fk4yi7iyejvdeanf2jmu8i6dkc8 FOREIGN KEY (last_modified_by_id) REFERENCES public.users(id),
-	CONSTRAINT fk8nakkftyppd62ke6tv7oo5a92 FOREIGN KEY (created_by_id) REFERENCES public.users(id)
+	CONSTRAINT fk4yi7iyejvdeanf2jmu8i6dkc8 FOREIGN KEY (last_modified_by_id) REFERENCES users(id),
+	CONSTRAINT fk8nakkftyppd62ke6tv7oo5a92 FOREIGN KEY (created_by_id) REFERENCES users(id)
 );
+
+INSERT INTO users
+(cell_phone, designation, first_name, force_change_pass, is_active, is_admin, last_name, "password", email_address)
+VALUES('5464336455', 'Administrator', 'Admin', false, true, true, 'User', '$2a$10$O4gp07pGBTqthaxYkDEglOaBEY65reC1409H/DQMvmjA1CxZcNAYW', 'admin@admin.com');
