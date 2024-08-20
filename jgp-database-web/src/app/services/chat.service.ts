@@ -64,7 +64,7 @@ let talks = [
         'img/profile/ashley.jpg',
         'Ashley Ahlberg', 
         'Online',
-        'Hi, I\'m looking for admin template with angular material 2 design.  What do you think about Annular Admin Template?',
+        'Hi, I\'m looking for admin template with angular material 2 design.  What do you think about Admin Template?',
         new Date(year, month, day-2, hour, minute+3),
         false
     ),
@@ -72,7 +72,7 @@ let talks = [
         'img/users/user.jpg',
         'Emilio Verdines', 
         'Online',
-        'Hi, Annular is a fully compatible with angular material 2, responsive, organized folder structure, clean & customizable code, easy to use and much more...',
+        'Hi, this is a fully compatible with angular material 2, responsive, organized folder structure, clean & customizable code, easy to use and much more...',
         new Date(year, month, day-2, hour, minute+2),
         true
     )

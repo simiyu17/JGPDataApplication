@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "annular": {
+    "jgp-database-web": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -39,7 +39,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/annular",
+            "outputPath": "dist/jgp-database-web",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -97,10 +97,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "annular:build:production"
+              "buildTarget": "jgp-database-web:build:production"
             },
             "development": {
-              "buildTarget": "annular:build:development"
+              "buildTarget": "jgp-database-web:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -132,5 +132,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "f790de4d-7e48-4450-b474-fa314c206762"
   }
 }

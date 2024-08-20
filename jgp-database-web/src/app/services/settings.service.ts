@@ -20,7 +20,7 @@ export class Settings {
 export class SettingsService {
 
   public settings = new Settings(
-    'Annular',      //theme name
+    'JGP',      //theme name
     true,           //loadingSpinner
     true,           //fixedHeader
     true,           //fixedSidenav 

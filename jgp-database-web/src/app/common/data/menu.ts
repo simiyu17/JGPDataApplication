@@ -3,8 +3,8 @@ import { Menu } from "../models/menu.model";
 export const verticalMenuItems = [
     new Menu(1, 'Dashboard', '/', null, 'dashboard', null, false, 0),
     new Menu(2, 'Users', '/users', null, 'supervisor_account', null, false, 0),
-    new Menu(3, 'UI Features', null, null, 'computer', null, true, 0),
-    new Menu(4, 'Buttons', '/ui/buttons', null, 'keyboard', null, false, 3),
+    new Menu(3, 'Data Management', null, null, 'computer', null, true, 0),
+    new Menu(4, 'Data Entry', '/ui/buttons', null, 'keyboard', null, false, 3),
     new Menu(5, 'Cards', '/ui/cards', null, 'card_membership', null, false, 3),
     new Menu(6, 'Lists', '/ui/lists', null, 'list', null, false, 3),
     new Menu(7, 'Grids', '/ui/grids', null, 'grid_on', null, false, 3),

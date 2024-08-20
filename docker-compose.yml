@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  postgres_db:
+    container_name: postgres_db
+    image: postgres:15.4-alpine
+    environment:
+      - POSTGRES_PASSWORD=S3cretHptu
+      - POSTGRES_USER=jgp_db_user
+      - POSTGRES_DB=jgp_db
+    networks:
+      - jgp-app-net
+  jgp-app:
+    container_name: jgp-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    networks:
+      - jgp-app-net
+    environment:
+      - POSTGRESQL_HOST=postgres_db
+      - POSTGRESQL_PORT=5432
+      - POSTGRESQL_USER=jgp_db_user
+      - POSTGRESQL_PASSWORD=S3cretHptu
+      - POSTGRESQL_DATABASE=jgp_db
+    depends_on:
+      - postgres_db
+    ports:
+      - "8082:8082"
+
+networks:
+  jgp-app-net:
+    driver: bridge
