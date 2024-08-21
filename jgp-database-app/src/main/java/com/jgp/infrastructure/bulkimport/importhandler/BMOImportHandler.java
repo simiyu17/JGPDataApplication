@@ -1,8 +1,11 @@
 package com.jgp.infrastructure.bulkimport.importhandler;
 
 import com.jgp.authentication.service.UserService;
-import com.jgp.bmo.domain.BMOData;
-import com.jgp.bmo.service.BMODataService;
+import com.jgp.bmo.domain.BMOClientData;
+import com.jgp.bmo.service.BMOClientDataService;
+import com.jgp.client.domain.Client;
+import com.jgp.client.dto.ClientDto;
+import com.jgp.client.service.ClientService;
 import com.jgp.infrastructure.bulkimport.constants.BMOConstants;
 import com.jgp.infrastructure.bulkimport.constants.TemplatePopulateImportConstants;
 import com.jgp.infrastructure.bulkimport.data.Count;
@@ -27,9 +30,10 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class BMOImportHandler implements ImportHandler {
 
-    private final BMODataService bmoDataService;
+    private final BMOClientDataService bmoDataService;
+    private final ClientService clientService;
     private final UserService userService;
-    List<BMOData> bmoDataList;
+    List<BMOClientData> bmoDataList;
     private Workbook workbook;
     private List<String> statuses;
 
@@ -56,31 +60,8 @@ public class BMOImportHandler implements ImportHandler {
     }
 
 
-    private BMOData readBMOData(Row row) {
+    private BMOClientData readBMOData(Row row) {
         String status = ImportHandlerUtils.readAsString(BMOConstants.STATUS_COL, row);
-        String businessName = ImportHandlerUtils.readAsString(BMOConstants.BUSINESS_NAME_COL, row);
-        String jgpId = ImportHandlerUtils.readAsString(BMOConstants.JGP_ID_COL, row);
-        String phoneNumber = ImportHandlerUtils.readAsString(BMOConstants.BUSINESS_PHONE_NUMBER_COL, row);
-        String gender = ImportHandlerUtils.readAsString(BMOConstants.GENDER_COL, row);
-        Integer age = ImportHandlerUtils.readAsInt(BMOConstants.AGE_COL, row);
-        String businessLocation = ImportHandlerUtils.readAsString(BMOConstants.BUSINESS_LOCATION_COL, row);
-        String industrySector = ImportHandlerUtils.readAsString(BMOConstants.INDUSTRY_SECTOR_COL, row);
-        String businessSegment = ImportHandlerUtils.readAsString(BMOConstants.BUSINESS_SEGMENT_COL, row);
-        Boolean isBusinessRegistered = "YES".equals(ImportHandlerUtils.readAsString(BMOConstants.IS_BUSINESS_REGISTERED_COL, row));
-        String registrationNumber = ImportHandlerUtils.readAsString(BMOConstants.BUSINESS_REG_NUMBER, row);
-        Boolean bmoMembership = "YES".equals(ImportHandlerUtils.readAsString(BMOConstants.MEMBERSHIP_BMO_COL, row));
-        Double bestMonthlyRevenueD = ImportHandlerUtils.readAsDouble(BMOConstants.BEST_MONTH_MONTHLY_REVENUE_COL, row);
-        BigDecimal bestMonthlyRevenue = Objects.nonNull(bestMonthlyRevenueD) ? BigDecimal.valueOf(bestMonthlyRevenueD) : null;
-        Double worstMonthlyRevenueD = ImportHandlerUtils.readAsDouble(BMOConstants.WORST_MONTH_MONTHLY_REVENUE_COL, row);
-        BigDecimal worstMonthlyRevenue = Objects.nonNull(worstMonthlyRevenueD) ? BigDecimal.valueOf(worstMonthlyRevenueD) : null;
-        Integer totalRegularEmployees = ImportHandlerUtils.readAsInt(BMOConstants.TOTAL_REGULAR_EMPLOYEES_COL, row);
-        Integer youthRegularEmployees = ImportHandlerUtils.readAsInt(BMOConstants.YOUTH_REGULAR_EMPLOYEES_COL, row);
-        Integer totalCasualEmployees = ImportHandlerUtils.readAsInt(BMOConstants.TOTAL_CASUAL_EMPLOYEES_COL, row);
-        Integer youthCasualEmployees = ImportHandlerUtils.readAsInt(BMOConstants.YOUTH_CASUAL_EMPLOYEES_COL, row);
-        String sampleRecordsKept = ImportHandlerUtils.readAsString(BMOConstants.SAMPLE_RECORDS_KEPT_COL, row);
-        String taNeeds = ImportHandlerUtils.readAsString(BMOConstants.TA_NEEDS_COL, row);
-        String personWithDisability = ImportHandlerUtils.readAsString(BMOConstants.PERSON_WITH_DISABILITY_COL, row);
-        String refugeeStatus = ImportHandlerUtils.readAsString(BMOConstants.REFUGEE_STATUS_COL, row);
         LocalDate appFormSubmittedDate = ImportHandlerUtils.readAsDate(BMOConstants.APPLICATION_FORM_SUBMITTED_DATE_COL, row);
         Boolean isApplicantEligible = "YES".equals(ImportHandlerUtils.readAsString(BMOConstants.IS_APPLICANT_ELIGIBLE_COL, row));
         Integer numberOfTAsAttended = ImportHandlerUtils.readAsInt(BMOConstants.NUMBER_TAS_ATTENDED_COL, row);
@@ -92,16 +73,55 @@ public class BMOImportHandler implements ImportHandler {
         LocalDate recordedToJGPDBOnDate = ImportHandlerUtils.readAsDate(BMOConstants.DATE_RECORDED_TO_JGP_DB_COL, row);
 
         statuses.add(status);
-        return new BMOData(Objects.nonNull(userService.currentUser()) ? userService.currentUser().getPartner() : null,
-                businessName, jgpId, phoneNumber, gender, age,
-                businessLocation, industrySector, businessSegment,
-                isBusinessRegistered, registrationNumber, bmoMembership,
-                bestMonthlyRevenue, worstMonthlyRevenue, totalRegularEmployees,
-                youthRegularEmployees, totalCasualEmployees, youthCasualEmployees,
-                sampleRecordsKept, taNeeds, personWithDisability, refugeeStatus,
+        return new BMOClientData(Objects.nonNull(userService.currentUser()) ? userService.currentUser().getPartner() : null,
+                getClient(row),
                 appFormSubmittedDate, isApplicantEligible, numberOfTAsAttended,
                 taSessionsAttended, isRecommendedForFinance, pipelineDecisionDate,
                 referredFIBusiness, dateRecordedByPartner, recordedToJGPDBOnDate, row.getRowNum());
+    }
+
+    private Client getClient(Row row){
+        String businessName = ImportHandlerUtils.readAsString(BMOConstants.BUSINESS_NAME_COL, row);
+        String jgpId = ImportHandlerUtils.readAsString(BMOConstants.JGP_ID_COL, row);
+        if (null == jgpId){
+            return null;
+        }
+        final var existingClient = this.clientService.findOneByJGPID(jgpId);
+        if (existingClient.isPresent()){
+            return existingClient.get();
+        }
+        final var phoneNumber = ImportHandlerUtils.readAsString(BMOConstants.BUSINESS_PHONE_NUMBER_COL, row);
+        final var gender = ImportHandlerUtils.readAsString(BMOConstants.GENDER_COL, row);
+        final var age = ImportHandlerUtils.readAsInt(BMOConstants.AGE_COL, row);
+        final var businessLocation = ImportHandlerUtils.readAsString(BMOConstants.BUSINESS_LOCATION_COL, row);
+        final var industrySector = ImportHandlerUtils.readAsString(BMOConstants.INDUSTRY_SECTOR_COL, row);
+        final var businessSegment = ImportHandlerUtils.readAsString(BMOConstants.BUSINESS_SEGMENT_COL, row);
+        final var registrationNumber = ImportHandlerUtils.readAsString(BMOConstants.BUSINESS_REG_NUMBER, row);
+        final var bmoMembership = ImportHandlerUtils.readAsString(BMOConstants.MEMBERSHIP_BMO_COL, row);
+        final var bestMonthlyRevenueD = ImportHandlerUtils.readAsDouble(BMOConstants.BEST_MONTH_MONTHLY_REVENUE_COL, row);
+        final var bestMonthlyRevenue = Objects.nonNull(bestMonthlyRevenueD) ? BigDecimal.valueOf(bestMonthlyRevenueD) : null;
+        final var worstMonthlyRevenueD = ImportHandlerUtils.readAsDouble(BMOConstants.WORST_MONTH_MONTHLY_REVENUE_COL, row);
+        final var worstMonthlyRevenue = Objects.nonNull(worstMonthlyRevenueD) ? BigDecimal.valueOf(worstMonthlyRevenueD) : null;
+        final var totalRegularEmployees = ImportHandlerUtils.readAsInt(BMOConstants.TOTAL_REGULAR_EMPLOYEES_COL, row);
+        final var youthRegularEmployees = ImportHandlerUtils.readAsInt(BMOConstants.YOUTH_REGULAR_EMPLOYEES_COL, row);
+        final var totalCasualEmployees = ImportHandlerUtils.readAsInt(BMOConstants.TOTAL_CASUAL_EMPLOYEES_COL, row);
+        final var youthCasualEmployees = ImportHandlerUtils.readAsInt(BMOConstants.YOUTH_CASUAL_EMPLOYEES_COL, row);
+        final var sampleRecordsKept = ImportHandlerUtils.readAsString(BMOConstants.SAMPLE_RECORDS_KEPT_COL, row);
+        final var taNeeds = ImportHandlerUtils.readAsString(BMOConstants.TA_NEEDS_COL, row);
+        final var personWithDisability = ImportHandlerUtils.readAsString(BMOConstants.PERSON_WITH_DISABILITY_COL, row);
+        final var refugeeStatus = ImportHandlerUtils.readAsString(BMOConstants.REFUGEE_STATUS_COL, row);
+
+        final var clientDto = ClientDto.builder()
+                .phoneNumber(phoneNumber).bestMonthlyRevenue(bestMonthlyRevenue).bmoMembership(bmoMembership)
+                .hasBMOMembership(null != bmoMembership).businessLocation(businessLocation).businessName(businessName)
+                .ownerGender(gender).ownerAge(age).industrySector(industrySector).businessSegment(businessSegment)
+                .registrationNumber(registrationNumber).isBusinessRegistered(null != registrationNumber)
+                .worstMonthlyRevenue(worstMonthlyRevenue).totalRegularEmployees(totalRegularEmployees)
+                .youthRegularEmployees(youthRegularEmployees).totalCasualEmployees(totalCasualEmployees)
+                .youthCasualEmployees(youthCasualEmployees).sampleRecords(sampleRecordsKept).taNeeds(taNeeds)
+                .personWithDisability(personWithDisability).refugeeStatus(refugeeStatus)
+                .build();
+        return this.clientService.createClient(clientDto);
     }
 
     public Count importEntity() {

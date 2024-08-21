@@ -1,13 +1,11 @@
 package com.jgp.bmo.api;
 
-import com.jgp.bmo.domain.BMOData;
-import com.jgp.bmo.service.BMODataService;
-import com.jgp.patner.dto.PartnerDto;
+import com.jgp.bmo.domain.BMOClientData;
+import com.jgp.bmo.service.BMOClientDataService;
 import com.jgp.shared.dto.ApiResponseDto;
 import com.jgp.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +24,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @RequestMapping("api/v1/bmos")
-public class BMOController {
+public class BMOClientController {
 
-    private final BMODataService bmoDataService;
+    private final BMOClientDataService bmoDataService;
 
     @GetMapping
-    public ResponseEntity<List<BMOData>> getAvailableBMODataRecords(@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
-                                                                    @RequestParam(name = "pageSize", defaultValue = "200") Integer pageSize){
+    public ResponseEntity<List<BMOClientData>> getAvailableBMODataRecords(@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
+                                                                          @RequestParam(name = "pageSize", defaultValue = "200") Integer pageSize){
         final var sortedByDateCreated =
                 PageRequest.of(pageNumber - 1, pageSize, Sort.by("dateCreated").descending());
         return new ResponseEntity<>(this.bmoDataService.getBMODataRecords(sortedByDateCreated), HttpStatus.OK);
@@ -45,7 +43,7 @@ public class BMOController {
     }
 
     @GetMapping("{bmoId}")
-    public ResponseEntity<BMOData> getPartner(@PathVariable("bmoId") Long bmoId){
+    public ResponseEntity<BMOClientData> getPartner(@PathVariable("bmoId") Long bmoId){
         return new ResponseEntity<>(this.bmoDataService.findBMODataById(bmoId), HttpStatus.OK);
     }
 

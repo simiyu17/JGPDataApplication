@@ -1,7 +1,7 @@
 package com.jgp.bmo.service;
 
-import com.jgp.bmo.domain.BMOData;
-import com.jgp.bmo.domain.BMODataRepository;
+import com.jgp.bmo.domain.BMOClientData;
+import com.jgp.bmo.domain.BMOClientDataRepository;
 import com.jgp.infrastructure.bulkimport.constants.TemplatePopulateImportConstants;
 import com.jgp.infrastructure.bulkimport.event.BulkImportEvent;
 import com.jgp.util.CommonUtil;
@@ -16,13 +16,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BMODataServiceImpl implements BMODataService {
+public class BMOClientDataServiceImpl implements BMOClientDataService {
 
-    private final BMODataRepository bmoDataRepository;
+    private final BMOClientDataRepository bmoDataRepository;
     private final ApplicationEventPublisher publisher;
 
     @Override
-    public void createBMOData(List<BMOData> bmoDataListRequest) {
+    public void createBMOData(List<BMOClientData> bmoDataListRequest) {
         this.bmoDataRepository.saveAll(bmoDataListRequest);
     }
 
@@ -36,12 +36,12 @@ public class BMODataServiceImpl implements BMODataService {
     }
 
     @Override
-    public List<BMOData> getBMODataRecords(Pageable pageable) {
+    public List<BMOClientData> getBMODataRecords(Pageable pageable) {
         return this.bmoDataRepository.findAll(pageable).stream().toList();
     }
 
     @Override
-    public BMOData findBMODataById(Long bmoId) {
+    public BMOClientData findBMODataById(Long bmoId) {
         return this.bmoDataRepository.findById(bmoId).orElseThrow(() -> new RuntimeException(CommonUtil.NO_RESOURCE_FOUND_WITH_ID));
     }
 }

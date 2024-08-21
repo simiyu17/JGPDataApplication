@@ -1,29 +1,20 @@
-package com.jgp.bmo.domain;
+package com.jgp.client.domain;
 
-
-import com.jgp.patner.domain.Partner;
+import com.jgp.client.dto.ClientDto;
 import com.jgp.shared.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Getter
 @Entity
-@Table(name = "bmo_data")
-public class BMOData extends BaseEntity {
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "partner_id")
-    private Partner partner;
+@Table(name = "clients")
+public class Client extends BaseEntity {
 
     @Column(name = "business_name")
     private String businessName;
@@ -58,6 +49,9 @@ public class BMOData extends BaseEntity {
     @Column(name = "has_bmo_membership")
     private Boolean hasBMOMembership;
 
+    @Column(name = "bmo_membership")
+    private String bmoMembership;
+
     @Column(name = "best_monthly_revenue")
     private BigDecimal bestMonthlyRevenue;
 
@@ -88,40 +82,13 @@ public class BMOData extends BaseEntity {
     @Column(name = "refugee_status")
     private String refugeeStatus;
 
-    @Column(name = "form_submitted_on")
-    private LocalDate dateFormSubmitted;
+    @Column(name = "is_active")
+    private Boolean isActive;
 
-    @Column(name = "is_applicant_eligible")
-    private Boolean isApplicantEligible;
-
-    @Column(name = "tas_attended")
-    private Integer tasAttended;
-
-    @Column(name = "ta_sessions_attended")
-    private Integer taSessionsAttended;
-
-    @Column(name = "recommended_for_finance")
-    private Boolean isRecommendedForFinance;
-
-    @Column(name = "decision_date")
-    private LocalDate decisionDate;
-
-    @Column(name = "fi_business_referred")
-    private String fiBusinessReferred;
-
-    @Column(name = "date_partner_recorded")
-    private LocalDate dateRecordedByPartner;
-
-    @Column(name = "date_recorded_to_jgp")
-    private LocalDate dateRecordedToJGPDB;
-
-    private transient Integer rowIndex;
-
-    public BMOData() {
+    public Client() {
     }
 
-    public BMOData(Partner partner, String businessName, String jgpId, String phoneNumber, String ownerGender, Integer ownerAge, String businessLocation, String industrySector, String businessSegment, Boolean isBusinessRegistered, String registrationNumber, Boolean hasBMOMembership, BigDecimal bestMonthlyRevenue, BigDecimal worstMonthlyRevenue, Integer totalRegularEmployees, Integer youthRegularEmployees, Integer totalCasualEmployees, Integer youthCasualEmployees, String sampleRecords, String taNeeds, String personWithDisability, String refugeeStatus, LocalDate dateFormSubmitted, Boolean isApplicantEligible, Integer tasAttended, Integer taSessionsAttended, Boolean isRecommendedForFinance, LocalDate decisionDate, String fiBusinessReferred, LocalDate dateRecordedByPartner, LocalDate dateRecordedToJGPDB, Integer rowIndex) {
-        this.partner = partner;
+    private Client(String businessName, String jgpId, String phoneNumber, String ownerGender, Integer ownerAge, String businessLocation, String industrySector, String businessSegment, Boolean isBusinessRegistered, String registrationNumber, Boolean hasBMOMembership, String bmoMembership, BigDecimal bestMonthlyRevenue, BigDecimal worstMonthlyRevenue, Integer totalRegularEmployees, Integer youthRegularEmployees, Integer totalCasualEmployees, Integer youthCasualEmployees, String sampleRecords, String taNeeds, String personWithDisability, String refugeeStatus, Boolean isActive) {
         this.businessName = businessName;
         this.jgpId = jgpId;
         this.phoneNumber = phoneNumber;
@@ -133,6 +100,7 @@ public class BMOData extends BaseEntity {
         this.isBusinessRegistered = isBusinessRegistered;
         this.registrationNumber = registrationNumber;
         this.hasBMOMembership = hasBMOMembership;
+        this.bmoMembership = bmoMembership;
         this.bestMonthlyRevenue = bestMonthlyRevenue;
         this.worstMonthlyRevenue = worstMonthlyRevenue;
         this.totalRegularEmployees = totalRegularEmployees;
@@ -143,19 +111,18 @@ public class BMOData extends BaseEntity {
         this.taNeeds = taNeeds;
         this.personWithDisability = personWithDisability;
         this.refugeeStatus = refugeeStatus;
-        this.dateFormSubmitted = dateFormSubmitted;
-        this.isApplicantEligible = isApplicantEligible;
-        this.tasAttended = tasAttended;
-        this.taSessionsAttended = taSessionsAttended;
-        this.isRecommendedForFinance = isRecommendedForFinance;
-        this.decisionDate = decisionDate;
-        this.fiBusinessReferred = fiBusinessReferred;
-        this.dateRecordedByPartner = dateRecordedByPartner;
-        this.dateRecordedToJGPDB = dateRecordedToJGPDB;
-        this.rowIndex = rowIndex;
+        this.isActive = isActive;
     }
 
-
+    public static Client createClient(ClientDto dto){
+        return new Client(dto.businessName(), dto.jgpId(), dto.phoneNumber(), dto.ownerGender(),
+                dto.ownerAge(), dto.businessLocation(), dto.industrySector(), dto.businessSegment(),
+                dto.isBusinessRegistered(), dto.registrationNumber(), dto.hasBMOMembership(),
+                dto.bmoMembership(), dto.bestMonthlyRevenue(), dto.worstMonthlyRevenue(),
+                dto.totalRegularEmployees(), dto.youthRegularEmployees(), dto.totalCasualEmployees(),
+                dto.youthCasualEmployees(), dto.sampleRecords(), dto.taNeeds(),
+                dto.personWithDisability(), dto.refugeeStatus(), Boolean.TRUE);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -163,17 +130,17 @@ public class BMOData extends BaseEntity {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        BMOData bmoData = (BMOData) o;
+        Client client = (Client) o;
 
         return new EqualsBuilder()
-                .appendSuper(super.equals(o)).append(getId(), bmoData.getId())
-                .append(getBusinessName(), bmoData.getBusinessName())
+                .appendSuper(super.equals(o)).append(getId(), client.getId())
+                .append(getJgpId(), client.getJgpId())
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .appendSuper(super.hashCode()).append(getId()).append(getBusinessName()).toHashCode();
+                .appendSuper(super.hashCode()).append(getId()).append(getJgpId()).toHashCode();
     }
 }
