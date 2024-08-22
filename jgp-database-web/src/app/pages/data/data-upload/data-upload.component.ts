@@ -5,11 +5,22 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GlobalService } from '@services/global.service';
+import { BMOClientDataService } from '@services/bmo-client-data.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-data-upload',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, MatButtonModule, MatInputModule, MatProgressSpinnerModule],
+  imports: [
+    ReactiveFormsModule, 
+    FormsModule, 
+    MatButtonModule, 
+    MatInputModule, 
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatProgressBarModule
+  ],
   templateUrl: './data-upload.component.html',
   styleUrl: './data-upload.component.scss'
 })
@@ -18,27 +29,15 @@ export class DataUploadComponent {
   file: any;
   uploadProgress: number | null = null;
 
-  constructor(private httpClient: HttpClient, private gs: GlobalService) { }
+  constructor(private bmoClientDataService: BMOClientDataService, private gs: GlobalService) { }
 
   onFileSelected(event: any) {
     this.file = event.target.files[0];
   }
 
   uploadExcel(){
-    console.log(this.file)
-    const formData = new FormData();
-    formData.append('excelFile', this.file, this.file.name);
-    this.httpClient.post(`${this.gs.BASE_API_URL}/bmos/upload-template`, formData, {
-      reportProgress: true,
-      observe: 'events'
-    }).subscribe({
+    this.bmoClientDataService.uploadBMOClientsData(this.file).subscribe({
       next (response) {
-        if (response.type === HttpEventType.UploadProgress) {
-          this.uploadProgress = Math.round((100 * response.loaded) / (response.total || 1));
-        } else if (response.type === HttpEventType.Response) {
-          alert('File uploaded successfully!');
-          this.uploadProgress = null;
-        }
         console.log(response)
       },
       error(error){

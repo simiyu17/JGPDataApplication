@@ -16,8 +16,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
     //provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(
-      routes,
-      withPreloading(PreloadAllModules),  // comment this line for enable lazy-loading
+      routes
+      //withPreloading(PreloadAllModules),  // comment this line for enable lazy-loading
     ), 
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([httpInterceptor])),

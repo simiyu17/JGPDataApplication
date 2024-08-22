@@ -1,8 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GlobalService } from './global.service';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { UserRole } from '../dto/UserRole';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 

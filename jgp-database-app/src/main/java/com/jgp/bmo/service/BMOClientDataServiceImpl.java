@@ -2,6 +2,8 @@ package com.jgp.bmo.service;
 
 import com.jgp.bmo.domain.BMOClientData;
 import com.jgp.bmo.domain.BMOClientDataRepository;
+import com.jgp.bmo.dto.BMOClientDto;
+import com.jgp.bmo.mapper.BMOClientMapper;
 import com.jgp.infrastructure.bulkimport.constants.TemplatePopulateImportConstants;
 import com.jgp.infrastructure.bulkimport.event.BulkImportEvent;
 import com.jgp.util.CommonUtil;
@@ -20,6 +22,7 @@ public class BMOClientDataServiceImpl implements BMOClientDataService {
 
     private final BMOClientDataRepository bmoDataRepository;
     private final ApplicationEventPublisher publisher;
+    private final BMOClientMapper bmoClientMapper;
 
     @Override
     public void createBMOData(List<BMOClientData> bmoDataListRequest) {
@@ -36,12 +39,12 @@ public class BMOClientDataServiceImpl implements BMOClientDataService {
     }
 
     @Override
-    public List<BMOClientData> getBMODataRecords(Pageable pageable) {
-        return this.bmoDataRepository.findAll(pageable).stream().toList();
+    public List<BMOClientDto> getBMODataRecords(Pageable pageable) {
+        return this.bmoClientMapper.toDto(this.bmoDataRepository.findAll(pageable).stream().toList());
     }
 
     @Override
-    public BMOClientData findBMODataById(Long bmoId) {
-        return this.bmoDataRepository.findById(bmoId).orElseThrow(() -> new RuntimeException(CommonUtil.NO_RESOURCE_FOUND_WITH_ID));
+    public BMOClientDto findBMODataById(Long bmoId) {
+        return this.bmoDataRepository.findById(bmoId).map(this.bmoClientMapper::toDto).orElseThrow(() -> new RuntimeException(CommonUtil.NO_RESOURCE_FOUND_WITH_ID));
     }
 }

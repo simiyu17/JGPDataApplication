@@ -5,7 +5,7 @@ export const verticalMenuItems = [
     new Menu(2, 'Clients', '/clients', null, 'supervisor_account', null, false, 0),
     new Menu(2, 'Users', '/users', null, 'supervisor_account', null, false, 0),
     new Menu(3, 'Data Management', null, null, 'computer', null, true, 0),
-    new Menu(4, 'Data Entry', '/data-list', null, 'keyboard', null, false, 3),
+    new Menu(4, 'Data Entry', '/data-list', null, 'keyboard', null, false, 3)
     /*new Menu(5, 'Cards', '/ui/cards', null, 'card_membership', null, false, 3),
     new Menu(6, 'Lists', '/ui/lists', null, 'list', null, false, 3),
     new Menu(7, 'Grids', '/ui/grids', null, 'grid_on', null, false, 3),
@@ -71,7 +71,7 @@ export const horizontalMenuItems = [
     new Menu(2, 'Clients', '/clients', null, 'supervisor_account', null, false, 0),
     new Menu(2, 'Users', '/users', null, 'supervisor_account', null, false, 0),
     new Menu(3, 'Data Management', null, null, 'computer', null, true, 0),
-    new Menu(4, 'Data Entry', '/data-list', null, 'keyboard', null, false, 3),
+    new Menu(4, 'Data Entry', '/data-list', null, 'keyboard', null, false, 3)
     /*new Menu(5, 'Cards', '/ui/cards', null, 'card_membership', null, false, 3),
     new Menu(6, 'Lists', '/ui/lists', null, 'list', null, false, 3),
     new Menu(7, 'Grids', '/ui/grids', null, 'grid_on', null, false, 3),

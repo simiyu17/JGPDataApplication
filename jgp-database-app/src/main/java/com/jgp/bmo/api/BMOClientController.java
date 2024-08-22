@@ -1,6 +1,7 @@
 package com.jgp.bmo.api;
 
 import com.jgp.bmo.domain.BMOClientData;
+import com.jgp.bmo.dto.BMOClientDto;
 import com.jgp.bmo.service.BMOClientDataService;
 import com.jgp.shared.dto.ApiResponseDto;
 import com.jgp.util.CommonUtil;
@@ -29,7 +30,7 @@ public class BMOClientController {
     private final BMOClientDataService bmoDataService;
 
     @GetMapping
-    public ResponseEntity<List<BMOClientData>> getAvailableBMODataRecords(@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
+    public ResponseEntity<List<BMOClientDto>> getAvailableBMODataRecords(@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
                                                                           @RequestParam(name = "pageSize", defaultValue = "200") Integer pageSize){
         final var sortedByDateCreated =
                 PageRequest.of(pageNumber - 1, pageSize, Sort.by("dateCreated").descending());
@@ -43,7 +44,7 @@ public class BMOClientController {
     }
 
     @GetMapping("{bmoId}")
-    public ResponseEntity<BMOClientData> getPartner(@PathVariable("bmoId") Long bmoId){
+    public ResponseEntity<BMOClientDto> getPartner(@PathVariable("bmoId") Long bmoId){
         return new ResponseEntity<>(this.bmoDataService.findBMODataById(bmoId), HttpStatus.OK);
     }
 

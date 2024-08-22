@@ -1,6 +1,7 @@
 package com.jgp.bmo.service;
 
 import com.jgp.bmo.domain.BMOClientData;
+import com.jgp.bmo.dto.BMOClientDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,8 +13,8 @@ public interface BMOClientDataService {
 
     void uploadBMOData(MultipartFile file);
 
-    List<BMOClientData> getBMODataRecords(Pageable pageable);
+    List<BMOClientDto> getBMODataRecords(Pageable pageable);
 
-    BMOClientData findBMODataById(Long bmoId);
+    BMOClientDto findBMODataById(Long bmoId);
 
 }
