@@ -13,7 +13,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { UserService } from '@services/user.service';
 import { GlobalService } from '@services/global.service';
 import { AuthService } from '@services/auth.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -36,17 +36,17 @@ export class LoginComponent {
   public settings: Settings;
   userloginForm: FormGroup = this.fb.group({});
   msg: string = "";
-  authResponse?: { success: boolean, message: string, authToken: string }
-  constructor(public settingsService: SettingsService, public fb: FormBuilder, public router: Router, private us: UserService, private gs: GlobalService, private authService: AuthService) {
+  authResponse: any
+  authResponse2?: { success: boolean, message: string, authToken: string }
+  constructor(public settingsService: SettingsService, public fb: FormBuilder, public router: Router, private us: UserService, private gs: GlobalService, private authService: AuthService, private httpClient: HttpClient) {
     this.settings = this.settingsService.settings;
     this.userloginForm = this.fb.group({
       'username': [null, Validators.compose([Validators.required, emailValidator])],
-      'password': [null, Validators.compose([Validators.required, Validators.minLength(6)])]
+      'password': [null, Validators.compose([Validators.required, Validators.minLength(1)])]
     });
   }
 
   public onSubmit(): void {
-    console.log(this.userloginForm.value)
     this.authService.login(this.userloginForm.value).subscribe({
       next: (response) => {
         this.authResponse = response

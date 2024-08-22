@@ -22,7 +22,7 @@ export class AnalyticsComponent implements OnInit {
   public showXAxisLabel = true;
   public xAxisLabel = 'Year';
   public showYAxisLabel = true;
-  public yAxisLabel = 'Profit';
+  public yAxisLabel = 'Dummy Profit';
   public colorScheme: any = {
     domain: ['#283593', '#039BE5', '#FF5252']
   };

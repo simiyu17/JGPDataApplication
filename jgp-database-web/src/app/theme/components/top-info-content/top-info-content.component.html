@@ -1,7 +1,7 @@
 <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="info-content has-bg-image" [class.show]="showInfoContent">
     <button mat-mini-fab color="warn" class="close-btn" (click)="closeInfoContent(showInfoContent)"><mat-icon>close</mat-icon></button>
     <div fxFlex="100" fxFlex.gt-sm="40" class="py-3 col">
-        <div fxLayout="row" fxLayoutAlign="center center">
+        <!-- div fxLayout="row" fxLayoutAlign="center center">
             <img src="img/users/user.jpg" class="mat-elevation-z2" alt="">
             <div class="user-details px-4">
                 <h2>Emilio Verdines</h2>
@@ -25,13 +25,13 @@
                     </button>
                 </div>
             </div> 
-        </div>                          
+        </div -->                          
     </div>
     <div fxFlex="100" fxFlex.gt-sm="35" fxFlex.sm="50" ngClass.xs="pb-4" class="top-contact-form col">
-        <form [formGroup]="contactForm" (ngSubmit)="onContactFormSubmit(contactForm.value)" fxLayout="row wrap" class="px-2">            
+        <!-- form [formGroup]="contactForm" (ngSubmit)="onContactFormSubmit(contactForm.value)" fxLayout="row wrap" class="px-2">            
             <div fxFlex="100" class="">
                 <mat-form-field class="w-100">
-                    <input matInput placeholder="Email" formControlName="email" required>
+                    <input matInput placeholder="Emaildd" formControlName="email" required>
                     <mat-error>
                         @if (contactForm.controls.email.errors?.required) {
                             Email is required
@@ -63,15 +63,15 @@
                     <mat-icon class="mr-2">send</mat-icon>Send
                 </button>
             </div> 
-        </form>
+        </form -->
     </div>
     <div fxFlex="50" fxFlex.gt-sm="25" fxShow="false" fxShow.gt-xs class="py-3 col">
-        <div fxLayout="column" fxLayoutAlign="center start" class="controls secondary-text-color">
+        <!-- div fxLayout="column" fxLayoutAlign="center start" class="controls secondary-text-color">
             @for (control of controls; track control) {
                 <mat-checkbox class="my-1" [(ngModel)]="control.checked" labelPosition="after">
                     {{control.name}}
                 </mat-checkbox>
             }           
-        </div>
+        </div -->
     </div>    
 </div>

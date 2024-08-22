@@ -19,5 +19,7 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   }
   req = req.clone({ headers: req.headers.set('Accept', 'application/json') });
 
+  console.log(req)
+
   return next(req);
 };

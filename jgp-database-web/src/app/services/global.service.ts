@@ -7,8 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class GlobalService {
   API_HOST = 'localhost';
   API_PORT = '8082';
-  BASE_API_URL: string = `http://${this.API_HOST}:${this.API_PORT}/jgp-app/api/v1`;
-  
+  BASE_API_URL: string = `http://${this.API_HOST}:${this.API_PORT}/jgp-app/api/v1`;  
  
   HTTP_OPTIONS = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

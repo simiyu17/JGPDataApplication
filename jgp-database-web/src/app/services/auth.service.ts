@@ -47,7 +47,7 @@ export class AuthService {
 
   userRedirection(): void {
     if(this.isAuthenticated()){
-      this.router.navigateByUrl("/dashboard");
+      this.router.navigateByUrl("/");
     }else {
       this.doLogout();
     }
