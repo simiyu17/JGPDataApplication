@@ -13,7 +13,7 @@ services:
       - /data/jgpData:/var/lib/postgresql/data
   jgp_app:
     container_name: jgp_app
-    image: juliangeniuz/jgp-app-api:v1
+    image: juliangeniuz/jgp-app-api:v2
     restart: on-failure
     networks:
       - jgp-app-network
@@ -26,10 +26,10 @@ services:
     depends_on:
       - postgres_jgp_db
     ports:
-      - "8082:8089"
+      - "8082:8082"
   jgp_app_ui:
     container_name: jgp_app_ui
-    image: juliangeniuz/jgp-app-web:v1
+    image: juliangeniuz/jgp-app-web:v2
     restart: on-failure
     networks:
       - jgp-app-network

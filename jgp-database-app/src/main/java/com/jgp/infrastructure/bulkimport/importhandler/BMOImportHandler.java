@@ -119,7 +119,7 @@ public class BMOImportHandler implements ImportHandler {
                 .worstMonthlyRevenue(worstMonthlyRevenue).totalRegularEmployees(totalRegularEmployees)
                 .youthRegularEmployees(youthRegularEmployees).totalCasualEmployees(totalCasualEmployees)
                 .youthCasualEmployees(youthCasualEmployees).sampleRecords(sampleRecordsKept).taNeeds(taNeeds)
-                .personWithDisability(personWithDisability).refugeeStatus(refugeeStatus)
+                .personWithDisability(personWithDisability).refugeeStatus(refugeeStatus).jgpId(jgpId)
                 .build();
         return this.clientService.createClient(clientDto);
     }

@@ -10,6 +10,10 @@ import { ContentHeaderComponent } from '../../theme/components/content-header/co
 import { MatInputModule } from '@angular/material/input';
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { UserService } from '@services/user.service';
+import { GlobalService } from '@services/global.service';
+import { AuthService } from '@services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -28,26 +32,37 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   templateUrl: './login.component.html'
 })
 export class LoginComponent {
-  public form: FormGroup;
   public settings: Settings;
-  constructor(public settingsService: SettingsService, public fb: FormBuilder, public router: Router) {
+  userloginForm: FormGroup = this.fb.group({});
+  msg: string = "";
+  authResponse: any
+  authResponse2?: { success: boolean, message: string, authToken: string }
+  constructor(public settingsService: SettingsService, public fb: FormBuilder, public router: Router, private us: UserService, private gs: GlobalService, private authService: AuthService) {
     this.settings = this.settingsService.settings;
-    this.form = this.fb.group({
-      'email': [null, Validators.compose([Validators.required, emailValidator])],
-      'password': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
-      'rememberMe': false
+    this.userloginForm = this.fb.group({
+      'username': [null, Validators.compose([Validators.required, emailValidator])],
+      'password': [null, Validators.compose([Validators.required, Validators.minLength(1)])]
     });
   }
 
-  public onSubmit(values: Object): void {
-    if (this.form.valid) {
-      this.router.navigate(['/']);
-    }
+  public onSubmit(): void {
+    this.authService.login(this.userloginForm.value).subscribe({
+      next: (response) => {
+        this.authResponse = response
+        this.authService.storeUserDetails(this.authResponse?.authToken);
+        this.authService.userRedirection();
+
+      }
+    });
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.settings.loadingSpinner = false;
     });
+  }
+
+  ngOnInit(): void {
+    this.authService.userRedirection();
   }
 }

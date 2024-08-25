@@ -39,6 +39,9 @@ public class BMOClientController {
 
     @PostMapping("upload-template")
     public ResponseEntity<ApiResponseDto> createPartner(@RequestParam("excelFile") MultipartFile excelFile) {
+        if (excelFile.isEmpty()) {
+            return new ResponseEntity<>(new ApiResponseDto(false, CommonUtil.NO_FILE_TO_UPLOAD), HttpStatus.BAD_REQUEST);
+        }
         this.bmoDataService.uploadBMOData(excelFile);
         return new ResponseEntity<>(new ApiResponseDto(true, CommonUtil.RESOURCE_CREATED), HttpStatus.CREATED);
     }

@@ -37,12 +37,8 @@ export class DataUploadComponent {
 
   uploadExcel(){
     this.bmoClientDataService.uploadBMOClientsData(this.file).subscribe({
-      next (response) {
-        console.log(response)
-      },
-      error(error){
-        console.log(error)
-
+      next: (response) => {
+        this.gs.openSnackBar(response.message, "Dismiss");
       }
     });
 

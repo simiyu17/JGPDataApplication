@@ -20,6 +20,8 @@ public abstract class CommonUtil {
     public static final String RESOURCE_CREATED = "Resource Created";
     public static final String RESOURCE_UPDATED = "Resource Updated";
 
+    public static final String NO_FILE_TO_UPLOAD = "No File To Upload Was Found!";
+
     public static final String STATUS_CELL_IMPORTED = "Imported";
 
     private CommonUtil() {

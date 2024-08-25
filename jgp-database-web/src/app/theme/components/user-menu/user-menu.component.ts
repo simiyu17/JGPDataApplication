@@ -6,6 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
+import { AuthService } from '@services/auth.service';
 
 @Component({
   selector: 'app-user-menu',
@@ -25,7 +26,11 @@ import { MatDividerModule } from '@angular/material/divider';
 })
 export class UserMenuComponent implements OnInit {
   public userImage = "img/users/user.jpg";
-  constructor() { }
+  constructor(private authService: AuthService) { }
+
+  doLogout(): void {
+    this.authService.doLogout()
+  }
 
   ngOnInit() {
   }

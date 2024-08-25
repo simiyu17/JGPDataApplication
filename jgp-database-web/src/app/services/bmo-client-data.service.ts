@@ -15,10 +15,7 @@ export class BMOClientDataService {
     uploadBMOClientsData(file: File): Observable<any> {
         const formData = new FormData();
         formData.append('excelFile', file, file.name);
-        return this.httpClient.post(`${this.gs.BASE_API_URL}/bmos/upload-template`, formData, {
-            reportProgress: true,
-            responseType: 'text'
-          });
+        return this.httpClient.post(`${this.gs.BASE_API_URL}/bmos/upload-template`, formData);
       }
 
       getAvailableBMOClientData(): Observable<any> {
