@@ -2,12 +2,15 @@ package com.jgp.authentication.domain;
 
 
 import com.jgp.authentication.dto.UserDto;
+import com.jgp.authentication.exception.NoAuthorizationException;
 import com.jgp.patner.domain.Partner;
 import com.jgp.shared.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -17,12 +20,20 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "email_address" }, name = "EMAIL_UNIQUE")})
-public class AppUser extends BaseEntity {
+public class AppUser extends BaseEntity implements PlatformUser{
 
 	private String firstName;
 
@@ -35,6 +46,8 @@ public class AppUser extends BaseEntity {
     private String password;
 
     private String designation;
+
+    private String town;
 
     private String cellPhone;
 
@@ -53,11 +66,15 @@ public class AppUser extends BaseEntity {
     @JoinColumn(name = "partner_id")
     private Partner partner;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "appuser_role", joinColumns = @JoinColumn(name = "appuser_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
     public AppUser() {
     }
 
     private AppUser(Partner partner, String firstName, String lastName, String username,
-                    String designation, String cellPhone, boolean isActive, boolean forceChangePass, boolean isAdmin, PasswordEncoder encoder) {
+                    String designation, String town, String cellPhone, boolean isActive, boolean forceChangePass, boolean isAdmin, PasswordEncoder encoder) {
         this.partner = partner;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -68,6 +85,7 @@ public class AppUser extends BaseEntity {
         this.isActive = isActive;
         this.forceChangePass = forceChangePass;
         this.isAdmin = isAdmin;
+        this.town = town;
     }
 
     public String getRole() {
@@ -79,7 +97,7 @@ public class AppUser extends BaseEntity {
     }
 
     public static AppUser createUser(Partner partner, UserDto userDto, PasswordEncoder encoder){
-        return new AppUser(partner, userDto.firstName(), userDto.lastName(), userDto.username(), userDto.designation(), userDto.cellPhone(), userDto.isActive(), true, userDto.isAdmin(), encoder);
+        return new AppUser(partner, userDto.firstName(), userDto.lastName(), userDto.username(), userDto.designation(), userDto.town(), userDto.cellPhone(), userDto.isActive(), true, userDto.isAdmin(), encoder);
     }
 
     public void updateUser(UserDto userDto){
@@ -92,6 +110,9 @@ public class AppUser extends BaseEntity {
         if(!StringUtils.equals(userDto.designation(), this.designation)){
             this.designation = userDto.designation();
         }
+        if(!StringUtils.equals(userDto.town(), this.town)){
+            this.town = userDto.town();
+        }
         if(!StringUtils.equals(userDto.cellPhone(), this.cellPhone)){
             this.cellPhone = userDto.cellPhone();
         }
@@ -100,6 +121,152 @@ public class AppUser extends BaseEntity {
         }
         if(userDto.isAdmin() != this.isAdmin){
             this.isAdmin = userDto.isAdmin();
+        }
+    }
+
+    public void updateRoles(final Set<Role> allRoles) {
+        if (!allRoles.isEmpty()) {
+            this.roles.clear();
+            this.roles = allRoles;
+        }
+    }
+
+    @Override
+    public Collection<GrantedAuthority> getAuthorities() {
+        return populateGrantedAuthorities();
+    }
+
+    private List<GrantedAuthority> populateGrantedAuthorities() {
+        final List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        for (final Role role : this.roles) {
+            final Collection<Permission> permissions = role.getPermissions();
+            for (final Permission permission : permissions) {
+                grantedAuthorities.add(new SimpleGrantedAuthority(permission.getCode()));
+            }
+        }
+        return grantedAuthorities;
+    }
+
+    public boolean hasNotPermissionForAnyOf(final String... permissionCodes) {
+        boolean hasNotPermission = true;
+        for (final String permissionCode : permissionCodes) {
+            final boolean checkPermission = hasPermissionTo(permissionCode);
+            if (checkPermission) {
+                hasNotPermission = false;
+                break;
+            }
+        }
+        return hasNotPermission;
+    }
+
+    /**
+     * Checks whether the user has a given permission explicitly.
+     *
+     * @param permissionCode
+     *            the permission code to check for.
+     * @return whether the user has the specified permission
+     */
+    public boolean hasSpecificPermissionTo(final String permissionCode) {
+        boolean hasPermission = false;
+        for (final Role role : this.roles) {
+            if (role.hasPermissionTo(permissionCode)) {
+                hasPermission = true;
+                break;
+            }
+        }
+        return hasPermission;
+    }
+
+    public void validateHasReadPermission(final String resourceType) {
+        validateHasPermission("READ", resourceType);
+    }
+
+    public void validateHasCreatePermission(final String resourceType) {
+        validateHasPermission("CREATE", resourceType);
+    }
+
+    public void validateHasUpdatePermission(final String resourceType) {
+        validateHasPermission("UPDATE", resourceType);
+    }
+
+    private void validateHasPermission(final String prefix, final String resourceType) {
+        final String authorizationMessage = "User has no authority to " + prefix + " " + resourceType.toLowerCase() + "s";
+        final String matchPermission = prefix + "_" + resourceType.toUpperCase();
+
+        if (!hasNotPermissionForAnyOf("ALL_FUNCTIONS", "ALL_FUNCTIONS_READ", matchPermission)) {
+            return;
+        }
+
+        throw new NoAuthorizationException(authorizationMessage);
+    }
+
+    private boolean hasNotPermissionTo(final String permissionCode) {
+        return !hasPermissionTo(permissionCode);
+    }
+
+    private boolean hasPermissionTo(final String permissionCode) {
+        boolean hasPermission = hasAllFunctionsPermission();
+        if (!hasPermission) {
+            for (final Role role : this.roles) {
+                if (role.hasPermissionTo(permissionCode)) {
+                    hasPermission = true;
+                    break;
+                }
+            }
+        }
+        return hasPermission;
+    }
+
+    private boolean hasAllFunctionsPermission() {
+        boolean match = false;
+        for (final Role role : this.roles) {
+            if (role.hasPermissionTo("ALL_FUNCTIONS")) {
+                match = true;
+                break;
+            }
+        }
+        return match;
+    }
+
+    private boolean hasNotAnyPermission(final List<String> permissions) {
+        return !hasAnyPermission(permissions);
+    }
+
+    public boolean hasAnyPermission(String... permissions) {
+        return hasAnyPermission(Arrays.asList(permissions));
+    }
+
+    public boolean hasAnyPermission(final List<String> permissions) {
+        boolean hasAtLeastOneOf = false;
+
+        for (final String permissionCode : permissions) {
+            if (hasPermissionTo(permissionCode)) {
+                hasAtLeastOneOf = true;
+                break;
+            }
+        }
+
+        return hasAtLeastOneOf;
+    }
+
+    public void validateHasPermissionTo(final String function) {
+        if (hasNotPermissionTo(function)) {
+            final String authorizationMessage = "User has no authority to: " + function;
+            throw new NoAuthorizationException(authorizationMessage);
+        }
+    }
+
+    public void validateHasReadPermission(final String function, final Long userId) {
+        if (!("USER".equalsIgnoreCase(function) && userId.equals(getId()))) {
+            validateHasReadPermission(function);
+        }
+    }
+
+    public void validateHasCheckerPermissionTo(final String function) {
+        final String checkerPermissionName = function.toUpperCase() + "_CHECKER";
+        if (hasNotPermissionTo("CHECKER_SUPER_USER") && hasNotPermissionTo(checkerPermissionName)) {
+            final String authorizationMessage = "User has no authority to be a checker for: " + function;
+            throw new NoAuthorizationException(authorizationMessage);
         }
     }
 

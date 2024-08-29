@@ -18,6 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -83,7 +85,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDto findUserById(Long userId) {
         return this.userRepository.findById(userId)
-                .map(u -> new UserDto(u.getId(), u.getFirstName(), u.getLastName(), u.getUsername(), u.getDesignation(), u.getCellPhone(), u.isActive(), u.isAdmin(), 0L))
+                .map(u -> new UserDto(u.getId(), u.getFirstName(), u.getLastName(), u.getUsername(), u.getDesignation(), u.getTown(), u.getCellPhone(), u.isActive(), u.isAdmin(), 0L))
                 .orElseThrow(() -> new UserNotFoundException("No user found with Id"));
     }
 
@@ -107,20 +109,21 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<UserDto> getAllUsers() {
-        return this.userRepository.findAll().stream().map(u -> new UserDto(u.getId(), u.getFirstName(), u.getLastName(), u.getUsername(), u.getDesignation(), u.getCellPhone(), u.isActive(), u.isAdmin(), 0L)).toList();
+        return this.userRepository.findAll().stream().map(u -> new UserDto(u.getId(), u.getFirstName(), u.getLastName(), u.getUsername(), u.getDesignation(), u.getTown(), u.getCellPhone(), u.isActive(), u.isAdmin(), 0L)).toList();
     }
 
     @Override
     public AppUser currentUser() {
-        AppUser u = null;
+        AppUser currentUser = null;
         final var context = SecurityContextHolder.getContext();
-        final var authentication = context.getAuthentication();
-
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            String currentUserName = authentication.getName();
-            u = this.findUserByUsername(currentUserName);
+        if (context != null) {
+            final var authentication = context.getAuthentication();
+            if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+                    String currentUserName = authentication.getName();
+                    currentUser = this.findUserByUsername(currentUserName);
+            }
         }
-        return u;
+        return currentUser;
     }
 
 

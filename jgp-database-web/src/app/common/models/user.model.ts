@@ -1,7 +1,6 @@
 export class User {
     id: number;
     username: string;
-    password: string;
     profile: UserProfile;
     work: UserWork;
     contacts: UserContacts;
@@ -10,8 +9,8 @@ export class User {
 }
 
 export class UserProfile {
-    name: string;
-    surname: string;
+    firstName: string;
+    lastName: string;
     birthday: Object;
     gender: string;
     image: string;

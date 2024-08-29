@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @PutMapping("{userId}")
-    public ResponseEntity<ApiResponseDto> createUser(@PathVariable("userId") Long userId, @Valid @RequestBody UserDto newUser){
+    public ResponseEntity<ApiResponseDto> updateUser(@PathVariable("userId") Long userId, @Valid @RequestBody UserDto newUser){
         this.userService.updateUser(userId, newUser);
         return new ResponseEntity<>(new ApiResponseDto(true, "User updated !!"), HttpStatus.OK);
     }

@@ -17,7 +17,7 @@ export const routes: Routes = [
         path: 'clients',
         loadComponent: () => import('./clients/clients.component').then(c => c.ClientsComponent),
         canActivate: [AuthGuard],
-        data: { breadcrumb: 'Clients' }
+        data: { breadcrumb: 'Project Participants' }
       },
       {
         path: 'data-list',
