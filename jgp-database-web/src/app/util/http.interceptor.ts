@@ -10,9 +10,9 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   const authService: AuthService = inject(AuthService)
   const forceChangePassword: string = localStorage.getItem(authService.FORCE_PASS_CHANGE)!;
  
-  if(forceChangePassword && 'true' == forceChangePassword){
+  /*if(forceChangePassword && 'true' == forceChangePassword){
     authService.redirectToChangePassword()
-  }
+  }*/
   if (token != null) {
     req = req.clone({
       setHeaders: { Authorization: `Bearer ${token}`}

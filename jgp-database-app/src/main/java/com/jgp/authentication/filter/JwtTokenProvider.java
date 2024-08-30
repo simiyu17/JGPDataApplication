@@ -54,7 +54,7 @@ public class JwtTokenProvider {
                 .subject(user.getUsername())
                 .claim("user_id", user.getId())
                 .claim("user_full_name", user.getUserFullName())
-                .claim("roles", new HashSet<>(Collections.singletonList(user.getRole())))
+                .claim("roles", new HashSet<>(Collections.singletonList("USER")))
                 .claim("force_change_password", user.isForceChangePass())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))

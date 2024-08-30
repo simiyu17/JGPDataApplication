@@ -1,5 +1,6 @@
 package com.jgp.authentication.api;
 
+import com.jgp.authentication.dto.UserDetailedDto;
 import com.jgp.authentication.dto.UserDto;
 import com.jgp.authentication.dto.UserPassChangeDto;
 import com.jgp.authentication.service.UserService;
@@ -34,12 +35,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAvailableUsers(){
+    public ResponseEntity<List<UserDetailedDto>> getAvailableUsers(){
         return new ResponseEntity<>(this.userService.getAllUsers(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto> createUser(@Valid @RequestBody UserDto newUser){
+    public ResponseEntity<ApiResponseDto> createUser(@Valid @RequestBody UserDetailedDto newUser){
         this.userService.createUser(newUser);
         return new ResponseEntity<>(new ApiResponseDto(true, "User created !!"), HttpStatus.CREATED);
     }
@@ -51,7 +52,7 @@ public class UserController {
     }
 
     @GetMapping("{userId}")
-    public ResponseEntity<UserDto> getUser(@PathVariable("userId") Long userId){
+    public ResponseEntity<UserDetailedDto> getUser(@PathVariable("userId") Long userId){
         return new ResponseEntity<>(this.userService.findUserById(userId), HttpStatus.OK);
     }
 }

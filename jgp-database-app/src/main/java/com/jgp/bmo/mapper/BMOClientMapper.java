@@ -14,6 +14,7 @@ public interface BMOClientMapper {
     @Mapping(target = "partnerId", expression = "java(null != bmoClientData.getPartner() ? bmoClientData.getPartner().getId() : null)")
     @Mapping(target = "clientId", expression = "java(null != bmoClientData.getClient() ? bmoClientData.getClient().getId() : null)")
     @Mapping(target = "clientName", expression = "java(null != bmoClientData.getClient() ? bmoClientData.getClient().getBusinessName() : null)")
+    @Mapping(target = "dateFormSubmitted", expression = "java(bmoClientData.getDateFormSubmitted())")
     BMOClientDto toDto(BMOClientData bmoClientData);
 
     List<BMOClientDto> toDto(List<BMOClientData> bmoClientDataList);

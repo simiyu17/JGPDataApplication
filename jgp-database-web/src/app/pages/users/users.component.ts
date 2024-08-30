@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { User } from '../../common/models/user.model';
-import { UsersService } from '@services/users.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserDialogComponent } from './user-dialog/user-dialog.component'; 
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
@@ -19,6 +18,7 @@ import { MatCardModule } from '@angular/material/card';
 import { DatePipe, NgClass } from '@angular/common';
 import { ContentHeaderComponent } from '../../theme/components/content-header/content-header.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { UserService } from '@services/user.service';
 
 @Component({
   selector: 'app-users',
@@ -45,8 +45,7 @@ import { MatDividerModule } from '@angular/material/divider';
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
-  encapsulation: ViewEncapsulation.None,
-  providers: [UsersService]
+  encapsulation: ViewEncapsulation.None
 })
 export class UsersComponent implements OnInit {
   public users: User[] | null;
@@ -54,8 +53,9 @@ export class UsersComponent implements OnInit {
   public page: any;
   public showSearch: boolean = false;
   public viewType: string = 'grid';
+  public isDeleted: boolean = false;
 
-  constructor(public dialog: MatDialog, public usersService: UsersService) { }
+  constructor(public dialog: MatDialog, public userService: UserService) { }
 
   ngOnInit() {
     this.getUsers();
@@ -63,16 +63,16 @@ export class UsersComponent implements OnInit {
 
   public getUsers(): void {
     this.users = null; //for show spinner each time
-    this.usersService.getUsers().subscribe(users => this.users = users);
+    this.userService.getAvailableUsers().subscribe(users => this.users = users);
   }
   public addUser(user: User) {
-    this.usersService.addUser(user).subscribe(user => this.getUsers());
+    //this.userService.createUser(user).subscribe(user => this.getUsers());
   }
   public updateUser(user: User) {
-    this.usersService.updateUser(user).subscribe(user => this.getUsers());
+    //this.userService.updateUser(user).subscribe(user => this.getUsers());
   }
   public deleteUser(user: User) {
-    this.usersService.deleteUser(user.id).subscribe(user => this.getUsers());
+    
   }
 
   public changeView(viewType: string) {
@@ -93,10 +93,8 @@ export class UsersComponent implements OnInit {
     let dialogRef = this.dialog.open(UserDialogComponent, {
       data: user
     });
-    dialogRef.afterClosed().subscribe(user => {
-      if (user) {
-        (user.id) ? this.updateUser(user) : this.addUser(user);
-      }
+    dialogRef.afterClosed().subscribe(() => {
+      this.getUsers();
     });
     this.showSearch = false;
   }

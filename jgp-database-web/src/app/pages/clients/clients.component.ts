@@ -15,10 +15,8 @@ import { MatSort } from '@angular/material/sort';
     ContentHeaderComponent
   ],
   templateUrl: './clients.component.html',
-  styleUrl: './clients.component.scss',
-  providers: [
-    TablesService
-  ]
+  styleUrl: './clients.component.scss'
+ 
 })
 export class ClientsComponent {
 
@@ -28,7 +26,7 @@ export class ClientsComponent {
   public dataSource: any;
 
   clients: any
-  constructor(private tablesService: TablesService, private clientService: ClientService) { }
+  constructor(private clientService: ClientService) { }
 
   getAvailableClients() {
     this.clientService.getAvailableClients()

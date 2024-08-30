@@ -5,6 +5,7 @@ import com.jgp.authentication.domain.AppUser;
 import com.jgp.authentication.domain.AppUserRepository;
 import com.jgp.authentication.dto.AuthRequestDto;
 import com.jgp.authentication.dto.AuthResponseDto;
+import com.jgp.authentication.dto.UserDetailedDto;
 import com.jgp.authentication.dto.UserDto;
 import com.jgp.authentication.dto.UserPassChangeDto;
 import com.jgp.authentication.exception.UserNotAuthenticatedException;
@@ -42,9 +43,9 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     @Override
-    public void createUser(UserDto userDto) {
+    public void createUser(UserDetailedDto userDto) {
         try {
-            final var partner = this.partnerRepository.findById(userDto.partnerId())
+            final var partner = this.partnerRepository.findById(userDto.work().partnerId())
                     .orElseThrow(() -> new PartnerNotFoundException(CommonUtil.NO_RESOURCE_FOUND_WITH_ID));
             this.userRepository.save(AppUser.createUser(partner, userDto, passwordEncoder));
         }catch (Exception e){
@@ -83,9 +84,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDto findUserById(Long userId) {
+    public UserDetailedDto findUserById(Long userId) {
         return this.userRepository.findById(userId)
-                .map(u -> new UserDto(u.getId(), u.getFirstName(), u.getLastName(), u.getUsername(), u.getDesignation(), u.getTown(), u.getCellPhone(), u.isActive(), u.isAdmin(), 0L))
+                .map(AppUser::toDto)
                 .orElseThrow(() -> new UserNotFoundException("No user found with Id"));
     }
 
@@ -108,8 +109,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        return this.userRepository.findAll().stream().map(u -> new UserDto(u.getId(), u.getFirstName(), u.getLastName(), u.getUsername(), u.getDesignation(), u.getTown(), u.getCellPhone(), u.isActive(), u.isAdmin(), 0L)).toList();
+    public List<UserDetailedDto> getAllUsers() {
+        return this.userRepository.findAll().stream().map(AppUser::toDto).toList();
     }
 
     @Override

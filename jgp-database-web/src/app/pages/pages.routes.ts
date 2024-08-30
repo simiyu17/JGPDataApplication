@@ -32,6 +32,12 @@ export const routes: Routes = [
         data: { breadcrumb: 'Users' }
       },
       {
+        path: 'partners',
+        loadComponent: () => import('./partners/partners.component').then(c => c.PartnersComponent),
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Partners' }
+      },
+      {
         path: 'ui',
         loadChildren: () => import('./ui/ui.routes').then(p => p.routes),
         data: { breadcrumb: 'UI' }

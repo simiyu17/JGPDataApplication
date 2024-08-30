@@ -1,6 +1,7 @@
 package com.jgp.authentication.domain;
 
 
+import com.jgp.authentication.dto.UserDetailedDto;
 import com.jgp.authentication.dto.UserDto;
 import com.jgp.authentication.exception.NoAuthorizationException;
 import com.jgp.patner.domain.Partner;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -49,6 +51,10 @@ public class AppUser extends BaseEntity implements PlatformUser{
 
     private String town;
 
+    private String gender;
+
+    private String image;
+
     private String cellPhone;
 
 
@@ -56,8 +62,6 @@ public class AppUser extends BaseEntity implements PlatformUser{
 
     @Setter
     private boolean forceChangePass;
-
-    private boolean isAdmin;
 
     @Transient
     private String resetPass;
@@ -74,7 +78,7 @@ public class AppUser extends BaseEntity implements PlatformUser{
     }
 
     private AppUser(Partner partner, String firstName, String lastName, String username,
-                    String designation, String town, String cellPhone, boolean isActive, boolean forceChangePass, boolean isAdmin, PasswordEncoder encoder) {
+                    String designation, String town, String gender, String image, String cellPhone, boolean isActive, boolean forceChangePass, PasswordEncoder encoder) {
         this.partner = partner;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -84,20 +88,19 @@ public class AppUser extends BaseEntity implements PlatformUser{
         this.cellPhone = cellPhone;
         this.isActive = isActive;
         this.forceChangePass = forceChangePass;
-        this.isAdmin = isAdmin;
         this.town = town;
-    }
-
-    public String getRole() {
-        return isAdmin ? "Admin" : "User";
+        this.gender = gender;
+        this.image = image;
     }
 
     public String getUserFullName(){
         return String.format("%s, %s", this.firstName, this.lastName);
     }
 
-    public static AppUser createUser(Partner partner, UserDto userDto, PasswordEncoder encoder){
-        return new AppUser(partner, userDto.firstName(), userDto.lastName(), userDto.username(), userDto.designation(), userDto.town(), userDto.cellPhone(), userDto.isActive(), true, userDto.isAdmin(), encoder);
+    public static AppUser createUser(Partner partner, UserDetailedDto userDto, PasswordEncoder encoder){
+        return new AppUser(partner, userDto.profile().firstName(), userDto.profile().lastName(),
+                userDto.contacts().username(), userDto.work().designation(), userDto.contacts().town(),
+                userDto.profile().gender(), userDto.profile().image(), userDto.contacts().cellPhone(), true, true, encoder);
     }
 
     public void updateUser(UserDto userDto){
@@ -119,9 +122,12 @@ public class AppUser extends BaseEntity implements PlatformUser{
         if(userDto.isActive() != this.isActive){
             this.isActive = userDto.isActive();
         }
-        if(userDto.isAdmin() != this.isAdmin){
-            this.isAdmin = userDto.isAdmin();
-        }
+    }
+
+    public UserDetailedDto toDto(){
+        return new UserDetailedDto(getId(), new UserDetailedDto.UserProfileDto(this.firstName, this.lastName, this.gender, this.image),
+                new UserDetailedDto.UserWorkDto(Objects.nonNull(this.partner) ? this.partner.getPartnerName() : "", Objects.nonNull(this.partner) ? this.partner.getId() : null, this.getDesignation()),
+                new UserDetailedDto.UserContactsDto(this.username, this.cellPhone, this.town));
     }
 
     public void updateRoles(final Set<Role> allRoles) {

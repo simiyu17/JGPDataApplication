@@ -26,7 +26,7 @@ public class CurrentUserServiceImpl implements UserDetailsService {
         if(Objects.isNull(appUser)){
             return null;
         }
-        final var grantedAuthorities = new HashSet<GrantedAuthority>(Collections.singleton(new SimpleGrantedAuthority(appUser.getRole())));
+        final var grantedAuthorities = new HashSet<GrantedAuthority>(Collections.singleton(new SimpleGrantedAuthority("USER")));
         return new org.springframework.security.core.userdetails.User(appUser.getUsername(), appUser.getPassword(), grantedAuthorities);
     }
 
