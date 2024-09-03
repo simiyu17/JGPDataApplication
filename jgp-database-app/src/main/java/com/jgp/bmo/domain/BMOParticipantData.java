@@ -1,7 +1,7 @@
 package com.jgp.bmo.domain;
 
 
-import com.jgp.client.domain.Client;
+import com.jgp.participant.domain.Participant;
 import com.jgp.patner.domain.Partner;
 import com.jgp.shared.domain.BaseEntity;
 import jakarta.persistence.Column;
@@ -18,16 +18,16 @@ import java.time.LocalDate;
 
 @Getter
 @Entity
-@Table(name = "bmo_client_data")
-public class BMOClientData extends BaseEntity {
+@Table(name = "bmo_participants_data")
+public class BMOParticipantData extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "partner_id")
     private Partner partner;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
-    private Client client;
+    @JoinColumn(name = "participant_id")
+    private Participant client;
 
     @Column(name = "form_submitted_on")
     private LocalDate dateFormSubmitted;
@@ -58,10 +58,10 @@ public class BMOClientData extends BaseEntity {
 
     private transient Integer rowIndex;
 
-    public BMOClientData() {
+    public BMOParticipantData() {
     }
 
-    public BMOClientData(Partner partner, Client client, LocalDate dateFormSubmitted, Boolean isApplicantEligible, Integer tasAttended, Integer taSessionsAttended, Boolean isRecommendedForFinance, LocalDate decisionDate, String fiBusinessReferred, LocalDate dateRecordedByPartner, LocalDate dateRecordedToJGPDB, Integer rowIndex) {
+    public BMOParticipantData(Partner partner, Participant client, LocalDate dateFormSubmitted, Boolean isApplicantEligible, Integer tasAttended, Integer taSessionsAttended, Boolean isRecommendedForFinance, LocalDate decisionDate, String fiBusinessReferred, LocalDate dateRecordedByPartner, LocalDate dateRecordedToJGPDB, Integer rowIndex) {
         this.partner = partner;
         this.client = client;
         this.dateFormSubmitted = dateFormSubmitted;
@@ -84,7 +84,7 @@ public class BMOClientData extends BaseEntity {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        BMOClientData bmoData = (BMOClientData) o;
+        BMOParticipantData bmoData = (BMOParticipantData) o;
 
         return new EqualsBuilder()
                 .appendSuper(super.equals(o)).append(getId(), bmoData.getId())

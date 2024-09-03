@@ -1,6 +1,6 @@
 package com.jgp.bmo.service;
 
-import com.jgp.bmo.domain.BMOClientData;
+import com.jgp.bmo.domain.BMOParticipantData;
 import com.jgp.bmo.domain.BMOClientDataRepository;
 import com.jgp.bmo.dto.BMOClientDto;
 import com.jgp.bmo.mapper.BMOClientMapper;
@@ -25,7 +25,7 @@ public class BMOClientDataServiceImpl implements BMOClientDataService {
     private final BMOClientMapper bmoClientMapper;
 
     @Override
-    public void createBMOData(List<BMOClientData> bmoDataListRequest) {
+    public void createBMOData(List<BMOParticipantData> bmoDataListRequest) {
         this.bmoDataRepository.saveAll(bmoDataListRequest);
     }
 

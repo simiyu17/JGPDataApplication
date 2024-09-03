@@ -1,11 +1,11 @@
 package com.jgp.infrastructure.bulkimport.importhandler;
 
 import com.jgp.authentication.service.UserService;
-import com.jgp.bmo.domain.BMOClientData;
+import com.jgp.bmo.domain.BMOParticipantData;
 import com.jgp.bmo.service.BMOClientDataService;
-import com.jgp.client.domain.Client;
-import com.jgp.client.dto.ClientDto;
-import com.jgp.client.service.ClientService;
+import com.jgp.participant.domain.Participant;
+import com.jgp.participant.dto.ParticipantDto;
+import com.jgp.participant.service.ParticipantService;
 import com.jgp.infrastructure.bulkimport.constants.BMOConstants;
 import com.jgp.infrastructure.bulkimport.constants.TemplatePopulateImportConstants;
 import com.jgp.infrastructure.bulkimport.data.Count;
@@ -31,9 +31,9 @@ import java.util.Objects;
 public class BMOImportHandler implements ImportHandler {
 
     private final BMOClientDataService bmoDataService;
-    private final ClientService clientService;
+    private final ParticipantService clientService;
     private final UserService userService;
-    List<BMOClientData> bmoDataList;
+    List<BMOParticipantData> bmoDataList;
     private Workbook workbook;
     private List<String> statuses;
 
@@ -60,7 +60,7 @@ public class BMOImportHandler implements ImportHandler {
     }
 
 
-    private BMOClientData readBMOData(Row row) {
+    private BMOParticipantData readBMOData(Row row) {
         String status = ImportHandlerUtils.readAsString(BMOConstants.STATUS_COL, row);
         LocalDate appFormSubmittedDate = ImportHandlerUtils.readAsDate(BMOConstants.APPLICATION_FORM_SUBMITTED_DATE_COL, row);
         Boolean isApplicantEligible = "YES".equals(ImportHandlerUtils.readAsString(BMOConstants.IS_APPLICANT_ELIGIBLE_COL, row));
@@ -73,14 +73,14 @@ public class BMOImportHandler implements ImportHandler {
         LocalDate recordedToJGPDBOnDate = ImportHandlerUtils.readAsDate(BMOConstants.DATE_RECORDED_TO_JGP_DB_COL, row);
 
         statuses.add(status);
-        return new BMOClientData(Objects.nonNull(userService.currentUser()) ? userService.currentUser().getPartner() : null,
-                getClient(row),
+        return new BMOParticipantData(Objects.nonNull(userService.currentUser()) ? userService.currentUser().getPartner() : null,
+                getParticipant(row),
                 appFormSubmittedDate, isApplicantEligible, numberOfTAsAttended,
                 taSessionsAttended, isRecommendedForFinance, pipelineDecisionDate,
                 referredFIBusiness, dateRecordedByPartner, recordedToJGPDBOnDate, row.getRowNum());
     }
 
-    private Client getClient(Row row){
+    private Participant getParticipant(Row row){
         String businessName = ImportHandlerUtils.readAsString(BMOConstants.BUSINESS_NAME_COL, row);
         String jgpId = ImportHandlerUtils.readAsString(BMOConstants.JGP_ID_COL, row);
         if (null == jgpId){
@@ -111,7 +111,7 @@ public class BMOImportHandler implements ImportHandler {
         final var personWithDisability = ImportHandlerUtils.readAsString(BMOConstants.PERSON_WITH_DISABILITY_COL, row);
         final var refugeeStatus = ImportHandlerUtils.readAsString(BMOConstants.REFUGEE_STATUS_COL, row);
 
-        final var clientDto = ClientDto.builder()
+        final var clientDto = ParticipantDto.builder()
                 .phoneNumber(phoneNumber).bestMonthlyRevenue(bestMonthlyRevenue).bmoMembership(bmoMembership)
                 .hasBMOMembership(null != bmoMembership).businessLocation(businessLocation).businessName(businessName)
                 .ownerGender(gender).ownerAge(age).industrySector(industrySector).businessSegment(businessSegment)

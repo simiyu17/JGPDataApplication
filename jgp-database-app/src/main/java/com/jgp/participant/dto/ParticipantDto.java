@@ -1,11 +1,11 @@
-package com.jgp.client.dto;
+package com.jgp.participant.dto;
 
 import lombok.Builder;
 
 import java.math.BigDecimal;
 
 @Builder
-public record ClientDto(
+public record ParticipantDto(
          String businessName,
 
          String jgpId,

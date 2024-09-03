@@ -1,6 +1,6 @@
-package com.jgp.client.domain;
+package com.jgp.participant.domain;
 
-import com.jgp.client.dto.ClientDto;
+import com.jgp.participant.dto.ParticipantDto;
 import com.jgp.shared.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,8 +13,8 @@ import java.math.BigDecimal;
 
 @Getter
 @Entity
-@Table(name = "clients")
-public class Client extends BaseEntity {
+@Table(name = "participants")
+public class Participant extends BaseEntity {
 
     @Column(name = "business_name")
     private String businessName;
@@ -85,10 +85,13 @@ public class Client extends BaseEntity {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    public Client() {
+    @Column(name = "is_eligible")
+    private Boolean isEligible;
+
+    public Participant() {
     }
 
-    private Client(String businessName, String jgpId, String phoneNumber, String ownerGender, Integer ownerAge, String businessLocation, String industrySector, String businessSegment, Boolean isBusinessRegistered, String registrationNumber, Boolean hasBMOMembership, String bmoMembership, BigDecimal bestMonthlyRevenue, BigDecimal worstMonthlyRevenue, Integer totalRegularEmployees, Integer youthRegularEmployees, Integer totalCasualEmployees, Integer youthCasualEmployees, String sampleRecords, String taNeeds, String personWithDisability, String refugeeStatus, Boolean isActive) {
+    private Participant(String businessName, String jgpId, String phoneNumber, String ownerGender, Integer ownerAge, String businessLocation, String industrySector, String businessSegment, Boolean isBusinessRegistered, String registrationNumber, Boolean hasBMOMembership, String bmoMembership, BigDecimal bestMonthlyRevenue, BigDecimal worstMonthlyRevenue, Integer totalRegularEmployees, Integer youthRegularEmployees, Integer totalCasualEmployees, Integer youthCasualEmployees, String sampleRecords, String taNeeds, String personWithDisability, String refugeeStatus, Boolean isActive) {
         this.businessName = businessName;
         this.jgpId = jgpId;
         this.phoneNumber = phoneNumber;
@@ -114,8 +117,8 @@ public class Client extends BaseEntity {
         this.isActive = isActive;
     }
 
-    public static Client createClient(ClientDto dto){
-        return new Client(dto.businessName(), dto.jgpId(), dto.phoneNumber(), dto.ownerGender(),
+    public static Participant createClient(ParticipantDto dto){
+        return new Participant(dto.businessName(), dto.jgpId(), dto.phoneNumber(), dto.ownerGender(),
                 dto.ownerAge(), dto.businessLocation(), dto.industrySector(), dto.businessSegment(),
                 dto.isBusinessRegistered(), dto.registrationNumber(), dto.hasBMOMembership(),
                 dto.bmoMembership(), dto.bestMonthlyRevenue(), dto.worstMonthlyRevenue(),
@@ -130,7 +133,7 @@ public class Client extends BaseEntity {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        Client client = (Client) o;
+        Participant client = (Participant) o;
 
         return new EqualsBuilder()
                 .appendSuper(super.equals(o)).append(getId(), client.getId())

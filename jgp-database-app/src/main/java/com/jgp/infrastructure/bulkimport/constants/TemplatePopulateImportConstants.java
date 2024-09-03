@@ -26,4 +26,5 @@ public class TemplatePopulateImportConstants {
 
     // Entity Types
     public static final String BMO_ENTITY = "BMO_ENTITY";
+    public static final String LOAN_ENTITY = "LOAN_ENTITY";
 }

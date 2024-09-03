@@ -1,7 +1,7 @@
-package com.jgp.client.api;
+package com.jgp.participant.api;
 
-import com.jgp.client.domain.Client;
-import com.jgp.client.service.ClientService;
+import com.jgp.participant.domain.Participant;
+import com.jgp.participant.service.ParticipantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,13 +19,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @RequestMapping("api/v1/clients")
-public class ClientController {
+public class ParticipantController {
 
-    private final ClientService clientService;
+    private final ParticipantService clientService;
 
     @GetMapping
-    public ResponseEntity<List<Client>> getAvailableClients(@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
-                                                                   @RequestParam(name = "pageSize", defaultValue = "200") Integer pageSize){
+    public ResponseEntity<List<Participant>> getAvailableClients(@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
+                                                                 @RequestParam(name = "pageSize", defaultValue = "200") Integer pageSize){
         final var sortedByDateCreated =
                 PageRequest.of(pageNumber - 1, pageSize, Sort.by("dateCreated").descending());
         return new ResponseEntity<>(this.clientService.availableClients(sortedByDateCreated), HttpStatus.OK);

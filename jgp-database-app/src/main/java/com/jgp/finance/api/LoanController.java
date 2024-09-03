@@ -1,7 +1,9 @@
-package com.jgp.bmo.api;
+package com.jgp.finance.api;
 
 import com.jgp.bmo.dto.BMOClientDto;
 import com.jgp.bmo.service.BMOClientDataService;
+import com.jgp.finance.dto.LoanDto;
+import com.jgp.finance.service.LoanService;
 import com.jgp.shared.dto.ApiResponseDto;
 import com.jgp.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
@@ -23,31 +25,30 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Validated
-@RequestMapping("api/v1/bmos")
-public class BMOClientController {
+@RequestMapping("api/v1/loans")
+public class LoanController {
 
-    private final BMOClientDataService bmoDataService;
+    private final LoanService loanService;
 
     @GetMapping
-    public ResponseEntity<List<BMOClientDto>> getAvailableBMODataRecords(@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
-                                                                          @RequestParam(name = "pageSize", defaultValue = "200") Integer pageSize){
+    public ResponseEntity<List<LoanDto>> getAvailableLoanRecords(@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
+                                                                 @RequestParam(name = "pageSize", defaultValue = "200") Integer pageSize){
         final var sortedByDateCreated =
                 PageRequest.of(pageNumber - 1, pageSize, Sort.by("dateCreated").descending());
-        return new ResponseEntity<>(this.bmoDataService.getBMODataRecords(sortedByDateCreated), HttpStatus.OK);
+        return new ResponseEntity<>(this.loanService.getLoans(sortedByDateCreated), HttpStatus.OK);
     }
 
     @PostMapping("upload-template")
-    public ResponseEntity<ApiResponseDto> createBMOParticipantData(@RequestParam("excelFile") MultipartFile excelFile) {
+    public ResponseEntity<ApiResponseDto> uploadLoansData(@RequestParam("excelFile") MultipartFile excelFile) {
         if (excelFile.isEmpty()) {
             return new ResponseEntity<>(new ApiResponseDto(false, CommonUtil.NO_FILE_TO_UPLOAD), HttpStatus.BAD_REQUEST);
         }
-        this.bmoDataService.uploadBMOData(excelFile);
+        this.loanService.uploadBulkLoanData(excelFile);
         return new ResponseEntity<>(new ApiResponseDto(true, CommonUtil.RESOURCE_CREATED), HttpStatus.CREATED);
     }
 
-    @GetMapping("{bmoId}")
-    public ResponseEntity<BMOClientDto> getBMOParticipantData(@PathVariable("bmoId") Long bmoId){
-        return new ResponseEntity<>(this.bmoDataService.findBMODataById(bmoId), HttpStatus.OK);
+    @GetMapping("{loanId}")
+    public ResponseEntity<LoanDto> getLoan(@PathVariable("loanId") Long loanId){
+        return new ResponseEntity<>(this.loanService.findLoanById(loanId), HttpStatus.OK);
     }
-
 }

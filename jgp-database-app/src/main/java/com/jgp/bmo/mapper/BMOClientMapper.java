@@ -1,6 +1,6 @@
 package com.jgp.bmo.mapper;
 
-import com.jgp.bmo.domain.BMOClientData;
+import com.jgp.bmo.domain.BMOParticipantData;
 import com.jgp.bmo.dto.BMOClientDto;
 import java.util.List;
 import org.mapstruct.Mapper;
@@ -15,7 +15,7 @@ public interface BMOClientMapper {
     @Mapping(target = "clientId", expression = "java(null != bmoClientData.getClient() ? bmoClientData.getClient().getId() : null)")
     @Mapping(target = "clientName", expression = "java(null != bmoClientData.getClient() ? bmoClientData.getClient().getBusinessName() : null)")
     @Mapping(target = "dateFormSubmitted", expression = "java(bmoClientData.getDateFormSubmitted())")
-    BMOClientDto toDto(BMOClientData bmoClientData);
+    BMOClientDto toDto(BMOParticipantData bmoClientData);
 
-    List<BMOClientDto> toDto(List<BMOClientData> bmoClientDataList);
+    List<BMOClientDto> toDto(List<BMOParticipantData> bmoClientDataList);
 }
