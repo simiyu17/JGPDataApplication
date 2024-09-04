@@ -78,6 +78,8 @@ public class Loan extends BaseEntity {
     @Column(name = "unique_values")
     private String uniqueValues;
 
+    private transient Integer rowIndex;
+
     public Loan() {
     }
 
@@ -87,7 +89,7 @@ public class Loan extends BaseEntity {
                 LocalDate dateDisbursed, BigDecimal loanAmountAccessed,
                 Integer loanDuration, BigDecimal loanOutStandingAmount,
                 LocalDate dateRecordedByPartner, String uniqueValues,
-                LocalDate dateAddedToDB) {
+                LocalDate dateAddedToDB, Integer rowIndex) {
         this.partner = partner;
         this.participant = participant;
         this.loanNumber = loanNumber;
@@ -102,6 +104,7 @@ public class Loan extends BaseEntity {
         this.dateRecordedByPartner = dateRecordedByPartner;
         this.uniqueValues = uniqueValues;
         this.dateAddedToDB = dateAddedToDB;
+        this.rowIndex = rowIndex;
     }
 
     @Getter
