@@ -14,7 +14,7 @@ export const routes: Routes = [
         data: { breadcrumb: 'Dashboard' }
       },
       {
-        path: 'clients',
+        path: 'participants',
         loadComponent: () => import('./clients/clients.component').then(c => c.ClientsComponent),
         canActivate: [AuthGuard],
         data: { breadcrumb: 'Project Participants' }
@@ -24,6 +24,12 @@ export const routes: Routes = [
         loadComponent: () => import('./data/data-list/data-list.component').then(c => c.DataListComponent),
         canActivate: [AuthGuard],
         data: { breadcrumb: 'Data Management' }
+      },
+      {
+        path: 'lending-data',
+        loadComponent: () => import('./lending-data/lending-data.component').then(c => c.LendingDataComponent),
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Lending Data Management' }
       },
       {
         path: 'users',

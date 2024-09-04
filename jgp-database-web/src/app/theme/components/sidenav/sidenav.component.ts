@@ -5,6 +5,7 @@ import { Settings, SettingsService } from '@services/settings.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MatDividerModule } from '@angular/material/divider';
 import { VerticalMenuComponent } from '../menu/vertical-menu/vertical-menu.component';
+import { AuthService } from '@services/auth.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -22,12 +23,14 @@ import { VerticalMenuComponent } from '../menu/vertical-menu/vertical-menu.compo
 export class SidenavComponent implements OnInit {
   public menuItems: Array<any>;
   public settings: Settings;
-  constructor(public settingsService: SettingsService, public menuService: MenuService) {
+  currentUser: any = {}
+  constructor(public settingsService: SettingsService, public menuService: MenuService, private authService: AuthService) {
     this.settings = this.settingsService.settings;
   }
 
   ngOnInit() {
     this.menuItems = this.menuService.getVerticalMenuItems();
+    this.currentUser = this.authService.currentUser()
   }
 
   public closeSubMenus() {

@@ -25,7 +25,8 @@ import { AuthService } from '@services/auth.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class UserMenuComponent implements OnInit {
-  public userImage = "img/users/user.jpg";
+  public userImage = "img/users/default-user.jpg";
+  currentUser: any = {}
   constructor(private authService: AuthService) { }
 
   doLogout(): void {
@@ -33,6 +34,7 @@ export class UserMenuComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.currentUser = this.authService.currentUser()
   }
 
 }

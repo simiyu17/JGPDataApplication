@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -54,6 +55,9 @@ public class JwtTokenProvider {
                 .subject(user.getUsername())
                 .claim("user_id", user.getId())
                 .claim("user_full_name", user.getUserFullName())
+                .claim("user_email", user.getUsername())
+                .claim("user_position", user.getDesignation())
+                .claim("user_registration", user.getDateCreated().format(DateTimeFormatter.ofPattern("MMM, yyyy")))
                 .claim("roles", new HashSet<>(Collections.singletonList("USER")))
                 .claim("force_change_password", user.isForceChangePass())
                 .issuedAt(new Date(System.currentTimeMillis()))

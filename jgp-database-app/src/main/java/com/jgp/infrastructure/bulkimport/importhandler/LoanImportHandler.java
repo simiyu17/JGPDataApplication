@@ -48,7 +48,7 @@ public class LoanImportHandler implements ImportHandler {
     }
 
     public void readExcelFile() {
-        Sheet loanSheet = workbook.getSheet(TemplatePopulateImportConstants.BMO_SHEET_NAME);
+        Sheet loanSheet = workbook.getSheet(TemplatePopulateImportConstants.LOAN_SHEET_NAME);
         Integer noOfEntries = ImportHandlerUtils.getNumberOfRows(loanSheet, TemplatePopulateImportConstants.FIRST_COLUMN_INDEX);
         for (int rowIndex = 1; rowIndex <= noOfEntries; rowIndex++) {
             Row row;

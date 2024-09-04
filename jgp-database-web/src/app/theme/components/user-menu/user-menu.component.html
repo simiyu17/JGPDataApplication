@@ -7,21 +7,21 @@
         <mat-card fxLayout="row" fxLayoutAlign="space-around center" class="user-info p-0">
             <img [src]="userImage" alt="user-image">
             <div fxLayout="column" fxLayoutAlign="center center">
-                <h2>Emilio Verdines</h2>
-                <h3 class="secondary-text-color">Web developer</h3>
-                <p class="secondary-text-color">Member since May. 2016</p>
+                <h2>{{currentUser.name}}</h2>
+                <h3 class="secondary-text-color">{{currentUser.desgnation}}</h3>
+                <p class="secondary-text-color">User since {{currentUser.registration}}</p>
             </div>
         </mat-card>  
         <mat-divider></mat-divider>
-        <a mat-menu-item routerLink="/profile/projects"> 
+        <a mat-menu-item routerLink="/"> 
             <mat-icon>person</mat-icon>
             <span>Profile</span> 
         </a>
-        <a mat-menu-item routerLink="/profile/user-info"> 
+        <a mat-menu-item routerLink="/"> 
             <mat-icon>edit</mat-icon>
             <span>Edit Profile</span> 
         </a>
-        <a mat-menu-item routerLink="settings"> 
+        <a mat-menu-item routerLink="/"> 
             <mat-icon>settings</mat-icon>
             <span>Settings</span> 
         </a>
@@ -29,7 +29,7 @@
             <mat-icon>lock</mat-icon>
             <span>Lock screen</span> 
         </a>
-        <a mat-menu-item routerLink="help"> 
+        <a mat-menu-item routerLink="/"> 
             <mat-icon>help</mat-icon>
             <span>Help</span> 
         </a>

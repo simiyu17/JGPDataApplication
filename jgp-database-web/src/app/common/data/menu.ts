@@ -2,11 +2,12 @@ import { Menu } from "../models/menu.model";
 
 export const verticalMenuItems = [
     new Menu(1, 'Dashboard', '/', null, 'dashboard', null, false, 0),
-    new Menu(2, 'Project Participants', '/clients', null, 'supervisor_account', null, false, 0),
+    new Menu(2, 'Project Participants', '/participants', null, 'supervisor_account', null, false, 0),
     new Menu(3, 'Partners', '/partners', null, 'supervisor_account', null, false, 0),
     new Menu(4, 'Users', '/users', null, 'supervisor_account', null, false, 0),
     new Menu(5, 'Data Management', null, null, 'computer', null, true, 0),
-    new Menu(6, 'Data Entry', '/data-list', null, 'keyboard', null, false, 5)
+    new Menu(6, 'BMO Participants Data', '/data-list', null, 'keyboard', null, false, 5),
+    new Menu(7, 'Lending Data', '/lending-data', null, 'keyboard', null, false, 5)
     /*new Menu(5, 'Cards', '/ui/cards', null, 'card_membership', null, false, 3),
     new Menu(6, 'Lists', '/ui/lists', null, 'list', null, false, 3),
     new Menu(7, 'Grids', '/ui/grids', null, 'grid_on', null, false, 3),
@@ -69,11 +70,12 @@ export const verticalMenuItems = [
 
 export const horizontalMenuItems = [
     new Menu(1, 'Dashboard', '/', null, 'dashboard', null, false, 0),
-    new Menu(2, 'Project Participants', '/clients', null, 'supervisor_account', null, false, 0),
+    new Menu(2, 'Project Participants', '/participants', null, 'supervisor_account', null, false, 0),
     new Menu(3, 'Partners', '/partners', null, 'supervisor_account', null, false, 0),
     new Menu(4, 'Users', '/users', null, 'supervisor_account', null, false, 0),
     new Menu(5, 'Data Management', null, null, 'computer', null, true, 0),
-    new Menu(6, 'Data Entry', '/data-list', null, 'keyboard', null, false, 5)
+    new Menu(6, 'BMO Participants Data', '/data-list', null, 'keyboard', null, false, 5),
+    new Menu(7, 'Lending Data', '/lending-data', null, 'keyboard', null, false, 5)
     /*new Menu(5, 'Cards', '/ui/cards', null, 'card_membership', null, false, 3),
     new Menu(6, 'Lists', '/ui/lists', null, 'list', null, false, 3),
     new Menu(7, 'Grids', '/ui/grids', null, 'grid_on', null, false, 3),
