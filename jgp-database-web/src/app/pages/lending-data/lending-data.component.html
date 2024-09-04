@@ -1,0 +1,70 @@
+<app-content-header 
+    [icon]="'keyboard'" 
+    [title]="'Lending Data'" 
+    [hideBreadcrumb]="false"
+    [hasBgImage]="true" 
+    [class]="'pb-4'"></app-content-header>
+
+<div fxLayout="column" fxLayout.gt-sm="row wrap" class="p-2">
+    <div fxFlex="100" class="p-2"> 
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-title>Lending Data Upload</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="pt-3">
+                <app-data-upload />
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxFlex="100" class="p-2">
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-title>New Lending Data</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="pt-3">
+                <div fxLayout="column" class="p-2">
+                    <div class="p-2">
+                        <mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+                            <ng-container matColumnDef="participantName">
+                                <mat-header-cell *matHeaderCellDef> Business Name </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.participantName}} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="loanNumber">
+                                <mat-header-cell *matHeaderCellDef> Loan Number </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.loanNumber}} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="pipeLineSource">
+                                <mat-header-cell *matHeaderCellDef> PipeLine Source </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.pipeLineSource}} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="loanAmountAccessed">
+                                <mat-header-cell *matHeaderCellDef> Amount Accessed </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.loanAmountAccessed}} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="loanOutStandingAmount">
+                                <mat-header-cell *matHeaderCellDef> Outstanding Amount </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.loanOutStandingAmount}} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="loanDuration">
+                                <mat-header-cell *matHeaderCellDef> Loan Duration </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.loanDuration}} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="dateApplied">
+                                <mat-header-cell *matHeaderCellDef> Date Applied </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.dateApplied}} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="loanQuality">
+                                <mat-header-cell *matHeaderCellDef> Quality </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.loanQuality}} </mat-cell>
+                            </ng-container>
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        </mat-table>
+                        <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div> 
+              
+</div>

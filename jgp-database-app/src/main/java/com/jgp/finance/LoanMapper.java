@@ -13,6 +13,7 @@ import java.util.List;
 public interface LoanMapper {
 
     @Mapping(target = "participantName", expression = "java(null != loan.getParticipant() ? loan.getParticipant().getBusinessName() : null)")
+    @Mapping(target = "loanNumber", expression = "java(null != loan.getLoanNumber() ? loan.getLoanNumber() : null)")
     @Mapping(target = "loanStatus", expression = "java(null != loan.getLoanStatus() ? loan.getLoanStatus().getName() : null)")
     @Mapping(target = "loanQuality", expression = "java(null != loan.getLoanQuality() ? loan.getLoanQuality().getName() : null)")
     LoanDto toDto(Loan loan);
