@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { DashboardService } from '@services/dashboard.service';
+import { HighLevelSummaryDto } from '../dto/highLevelSummaryDto';
 
 @Component({
   selector: 'app-tiles',
@@ -14,6 +16,25 @@ import { FlexLayoutModule } from '@ngbracket/ngx-layout';
   templateUrl: './tiles.component.html',
   styleUrl: './tiles.component.scss'
 })
-export class TilesComponent {
+export class TilesComponent implements OnInit{
+
+  highLevelSummary?: HighLevelSummaryDto
+  constructor(private dashBoardService: DashboardService){
+
+  }
+
+  getHighLevelSummary() {
+    this.dashBoardService.getHighLevelSummary()
+      .subscribe({
+        next: (response) => {
+          this.highLevelSummary = response;
+        },
+        error: (error) => { }
+      });
+  }
+
+  ngOnInit(): void {
+    this.getHighLevelSummary();
+  }
 
 }
