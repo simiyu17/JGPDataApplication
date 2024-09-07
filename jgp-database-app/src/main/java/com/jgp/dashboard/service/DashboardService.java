@@ -8,5 +8,9 @@ public interface DashboardService {
 
     HighLevelSummaryDto getHighLevelSummary();
 
-    List<DataPointDto> getLoanDisbursedByGenderSummary();
+    List<DataPointDto> getLoanDisbursedByGenderSummary(Long partnerId);
+
+    List<DataPointDto> getBusinessOwnersTrainedByGenderSummary(Long partnerId);
+
+    List<DataPointDto> getLoanDisbursedByPipelineSourceSummary(Long partnerId);
 }
