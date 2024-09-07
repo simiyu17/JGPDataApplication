@@ -26,20 +26,24 @@
         </mat-card>
     </div>
     <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-indigo">
-            <div class="py-2 px-3" fxLayoutAlign="space-between center">
-                <p>Loan Statuses</p>
-                <div fxLayoutAlign="center center">
-                    <mat-icon class="icon-sm mx-1">trending_down</mat-icon>
-                    <span>-11%</span>
-                </div>
-            </div>          
-            <div class="w-100 h-100p">
-                <ngx-charts-bar-vertical
-                    [scheme]="colorScheme"
-                    [results]="refunds"                      
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center center">                
+                <mat-card-title>Loans Quality</mat-card-title>
+            </mat-card-header>
+            <div class="w-100 h-300p">
+                <ngx-charts-bar-horizontal
+                    [scheme]="chartSColorScheme"
+                    [results]="loansDisbursedByQuality"
+                    [gradient]="gradient"
+                    [xAxis]="loansDisbursedByQualityShowXAxis"
+                    [yAxis]="loansDisbursedByQualityShowYAxis"
+                    [legend]="loansDisbursedByQualityShowLegend"
+                    [showXAxisLabel]="loansDisbursedByQualityShowXAxisLabel"
+                    [showYAxisLabel]="loansDisbursedByQualityShowYAxisLabel"
+                    [xAxisLabel]="loansDisbursedByQualityYAxisLabel"
+                    [yAxisLabel]="loansDisbursedByQualityXAxisLabel"
                     (select)="onSelect($event)">
-                </ngx-charts-bar-vertical>                     
+                </ngx-charts-bar-horizontal>         
             </div>
         </mat-card>
     </div>    

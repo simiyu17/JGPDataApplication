@@ -41,4 +41,9 @@ public class DashboardController {
     public ResponseEntity<List<DataPointDto>> getLoansDisbursedByPipelineSummary(@RequestParam(value = "partner-id", required = false) Long partnerId){
         return new ResponseEntity<>(this.dashboardService.getLoanDisbursedByPipelineSourceSummary(partnerId), HttpStatus.OK);
     }
+
+    @GetMapping("loans-disbursed-by-quality")
+    public ResponseEntity<List<DataPointDto>> getLoansDisbursedByQualitySummary(@RequestParam(value = "partner-id", required = false) Long partnerId){
+        return new ResponseEntity<>(this.dashboardService.getLoansDisbursedByQualitySummary(partnerId), HttpStatus.OK);
+    }
 }

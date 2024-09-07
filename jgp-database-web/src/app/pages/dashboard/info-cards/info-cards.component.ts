@@ -7,6 +7,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PieChartComponent } from "../pie-chart/pie-chart.component"; 
 import { DashboardService } from '@services/dashboard.service';
 import { DiskSpaceComponent } from "../disk-space/disk-space.component";
+import { multi, single } from '@data/charts.data';
 
 @Component({
   selector: 'app-info-cards',
@@ -48,8 +49,18 @@ export class InfoCardsComponent implements OnInit {
   public loansDisbursedByPipelineShowLegend: boolean = false;
   public loansDisbursedByPipelineShowLabels: boolean = true;
   public loansDisbursedByPipelineExplodeSlices: boolean = false;
-  public loansDisbursedByPipelineDoughnut: boolean = true;
+  public loansDisbursedByPipelineDoughnut: boolean = false;
   public loansDisbursedByPipelineChartTitle: string = 'Loan Disbursed by Pipeline Source';
+
+  public loansDisbursedByQuality: any[];
+  public loansDisbursedByQualityShowXAxis: boolean = true;
+  public loansDisbursedByQualityShowYAxis: boolean = true;
+  public loansDisbursedByQualityShowLegend: boolean = false;
+  public loansDisbursedByQualityShowXAxisLabel: boolean = true;
+  public loansDisbursedByQualityShowYAxisLabel: boolean = true;
+  public loansDisbursedByQualityXAxisLabel: string = 'Quality';
+  public loansDisbursedByQualityYAxisLabel: string = 'Amount Disbursed';
+  public loansDisbursedByQualityChartTitle: string = 'Loan Disbursed by Pipeline Source';
 
   public businessesTainedByGender: any[];
   public businessesTainedByGenderShowLegend: boolean = false;
@@ -58,7 +69,12 @@ export class InfoCardsComponent implements OnInit {
   public businessesTainedByGenderDoughnut: boolean = true;
   public businessesTainedByGenderChartTitle: string = 'Business Trained By Gender';
 
-  constructor(private dashBoardService: DashboardService){}
+  public gradient = false;
+
+
+  constructor(private dashBoardService: DashboardService){
+    Object.assign(this, { single, multi });
+  }
 
   ngOnInit() {
     this.orders = orders;
@@ -70,6 +86,7 @@ export class InfoCardsComponent implements OnInit {
     this.getLoansDisbursedByGenderSummary();
     this.getLoansDisbursedByPipelineSummary();
     this.getBusinessesTrainedByGenderSummary();
+    this.getLoansDisbursedByQualitySummary();
   }
 
   getLoansDisbursedByGenderSummary() {
@@ -87,6 +104,16 @@ export class InfoCardsComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.loansDisbursedByPipeline = response;
+        },
+        error: (error) => { }
+      });
+  }
+
+  getLoansDisbursedByQualitySummary() {
+    this.dashBoardService.getLoansDisbursedByQualitySummary()
+      .subscribe({
+        next: (response) => {
+          this.loansDisbursedByQuality = response;
         },
         error: (error) => { }
       });

@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -76,6 +77,20 @@ public class DashboardServiceImpl implements DashboardService {
         return this.namedParameterJdbcTemplate.query(sqlBuilder.toString(), parameters, rm);
     }
 
+    @Override
+    public List<DataPointDto> getLoansDisbursedByQualitySummary(Long partnerId) {
+        final DataPointMapper rm = new DataPointMapper(DECIMAL_DATA_POINT_TYPE);
+        MapSqlParameterSource parameters = new MapSqlParameterSource("partnerId", partnerId);
+        parameters.addValue("partnerId", partnerId);
+        var sqlBuilder = new StringBuilder(DataPointMapper.LOANS_DISBURSED_BY_QUALITY_SCHEMA);
+        if (Objects.nonNull(partnerId)){
+            sqlBuilder.append("where l.partner_id = :partnerId ");
+        }
+        sqlBuilder.append("group by 1;");
+
+        return this.namedParameterJdbcTemplate.query(sqlBuilder.toString(), parameters, rm);
+    }
+
     private static final class HighLevelSummaryMapper implements RowMapper<HighLevelSummaryDto> {
 
         public static final String SCHEMA = """
@@ -123,6 +138,12 @@ public class DashboardServiceImpl implements DashboardService {
                 from loans l\s
                 """;
 
+        public static final String LOANS_DISBURSED_BY_QUALITY_SCHEMA = """
+                select l.loan_quality as dataKey, sum(l.loan_amount_accessed) as dataValue,\s
+                SUM(l.loan_amount_accessed) * 100.0 / SUM(SUM(l.loan_amount_accessed)) OVER () AS percentage\s
+                from loans l\s
+                """;
+
         private final String valueDataType;
 
         public DataPointMapper(String valueDataType) {
@@ -136,11 +157,11 @@ public class DashboardServiceImpl implements DashboardService {
             while (rs.next()){
                 final var dataKey = rs.getString("dataKey");
                 if (INTEGER_DATA_POINT_TYPE.equals(this.valueDataType)){
-                    dataPoints.add(new DataPointDto(dataKey, String.valueOf(rs.getInt("dataValue")), String.valueOf(rs.getBigDecimal("percentage"))));
+                    dataPoints.add(new DataPointDto(StringUtils.capitalize(dataKey), String.valueOf(rs.getInt("dataValue")), String.valueOf(rs.getBigDecimal("percentage"))));
                 } else if (DECIMAL_DATA_POINT_TYPE.equals(this.valueDataType)) {
-                    dataPoints.add(new DataPointDto(dataKey, String.valueOf(rs.getBigDecimal("dataValue")), String.valueOf(rs.getBigDecimal("percentage"))));
+                    dataPoints.add(new DataPointDto(StringUtils.capitalize(dataKey), String.valueOf(rs.getBigDecimal("dataValue")), String.valueOf(rs.getBigDecimal("percentage"))));
                 }else {
-                    dataPoints.add(new DataPointDto(dataKey, rs.getString("dataValue"), String.valueOf(rs.getBigDecimal("percentage"))));
+                    dataPoints.add(new DataPointDto(StringUtils.capitalize(dataKey), rs.getString("dataValue"), String.valueOf(rs.getBigDecimal("percentage"))));
                 }
             }
             return dataPoints;
