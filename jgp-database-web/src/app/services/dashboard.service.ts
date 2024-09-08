@@ -33,4 +33,8 @@ export class DashboardService {
       return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-disbursed-by-quality`);
     }
 
+    getTaNeedsByGenderSummary(): Observable<any> {
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/ta-needs-by-gender`);
+    }
+
 }

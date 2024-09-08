@@ -37,7 +37,7 @@ export class PieChartComponent {
 
   ngAfterViewChecked() {
     if (this.previousWidthOfResizedDiv != this.resizedDiv.nativeElement.clientWidth) {
-      setTimeout(() => this.data = [...this.data]);
+      //setTimeout(() => this.data = [...this.data]);
     }
     this.previousWidthOfResizedDiv = this.resizedDiv.nativeElement.clientWidth;
   }

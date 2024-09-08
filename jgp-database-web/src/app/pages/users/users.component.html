@@ -41,7 +41,7 @@
                                 @if (user.profile.image) {
                                     <img [src]="user.profile.image" class="transition mb-2" [class.blocked]="isDeleted">
                                 } @else {
-                                    <img src="assets/img/users/default-user.jpg" class="transition mb-2" [class.blocked]="isDeleted">  
+                                    <img [src]="userImage" class="transition mb-2" [class.blocked]="isDeleted">  
                                 }
                                 @if (isDeleted) {
                                     <mat-icon class="warn-color block-icon">block</mat-icon>
@@ -129,7 +129,7 @@
                                 @if (user.profile.image) {
                                     <img [src]="user.profile.image" class="transition mb-2" [class.blocked]="isDeleted">
                                 } @else {
-                                    <img src="assets/img/users/default-user.jpg" class="transition mb-2" [class.blocked]="isDeleted">  
+                                    <img [src]="userImage" class="transition mb-2" [class.blocked]="isDeleted">  
                                 }
                                 @if (isDeleted) {   
                                     <mat-icon class="warn-color block-icon">block</mat-icon>

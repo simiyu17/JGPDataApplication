@@ -2,6 +2,7 @@ package com.jgp.dashboard.api;
 
 import com.jgp.dashboard.dto.DataPointDto;
 import com.jgp.dashboard.dto.HighLevelSummaryDto;
+import com.jgp.dashboard.dto.SeriesDataPointDto;
 import com.jgp.dashboard.service.DashboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,5 +46,10 @@ public class DashboardController {
     @GetMapping("loans-disbursed-by-quality")
     public ResponseEntity<List<DataPointDto>> getLoansDisbursedByQualitySummary(@RequestParam(value = "partner-id", required = false) Long partnerId){
         return new ResponseEntity<>(this.dashboardService.getLoansDisbursedByQualitySummary(partnerId), HttpStatus.OK);
+    }
+
+    @GetMapping("ta-needs-by-gender")
+    public ResponseEntity<List<SeriesDataPointDto>> getTaNeedsByGenderSummary(@RequestParam(value = "partner-id", required = false) Long partnerId){
+        return new ResponseEntity<>(this.dashboardService.getTaNeedsByGenderSummary(partnerId), HttpStatus.OK);
     }
 }

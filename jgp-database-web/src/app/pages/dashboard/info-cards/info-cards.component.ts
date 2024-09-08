@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { customers, orders, products, refunds } from '@data/dashboard-data';
@@ -23,7 +23,7 @@ import { multi, single } from '@data/charts.data';
   templateUrl: './info-cards.component.html',
   styleUrl: './info-cards.component.scss'
 })
-export class InfoCardsComponent implements OnInit {
+export class InfoCardsComponent implements OnInit, AfterViewChecked {
   public orders: any[];
   public products: any[];
   public customers: any[];
@@ -44,6 +44,7 @@ export class InfoCardsComponent implements OnInit {
   public loansDisbursedByGenderExplodeSlices: boolean = false;
   public loansDisbursedByGenderDoughnut: boolean = true;
   public loansDisbursedByGenderChartTitle: string = 'Loan Disbursed by Gender';
+
 
   public loansDisbursedByPipeline: any[];
   public loansDisbursedByPipelineShowLegend: boolean = false;
@@ -71,6 +72,19 @@ export class InfoCardsComponent implements OnInit {
 
   public gradient = false;
 
+  public single: any[];
+  public multi: any[];
+  public TANeedsByGender: any[]
+  public TANeedsByGenderShowXAxis = true;
+  public TANeedsByGenderShowYAxis = true;
+  public TANeedsByGenderShowLegend = false;
+  public TANeedsByGenderShowXAxisLabel = true;
+  public TANeedsByGenderXAxisLabel = 'TA Needs';
+  public TANeedsByGenderShowYAxisLabel = true;
+  public TANeedsByGenderYAxisLabel = 'Number Of Participants';
+  public TANeedsByGenderChartTitle: string = 'TA Needs By Gender';
+
+
 
   constructor(private dashBoardService: DashboardService){
     Object.assign(this, { single, multi });
@@ -87,6 +101,7 @@ export class InfoCardsComponent implements OnInit {
     this.getLoansDisbursedByPipelineSummary();
     this.getBusinessesTrainedByGenderSummary();
     this.getLoansDisbursedByQualitySummary();
+    this.getTaNeedsByGenderSummary();
   }
 
   getLoansDisbursedByGenderSummary() {
@@ -129,6 +144,16 @@ export class InfoCardsComponent implements OnInit {
       });
   }
 
+  getTaNeedsByGenderSummary() {
+    this.dashBoardService.getTaNeedsByGenderSummary()
+      .subscribe({
+        next: (response) => {
+          this.TANeedsByGender = response;
+        },
+        error: (error) => { }
+      });
+  }
+
 
 
   public onSelect(event: any) {
@@ -166,5 +191,6 @@ export class InfoCardsComponent implements OnInit {
     }
     this.previousWidthOfResizedDiv = this.resizedDiv.nativeElement.clientWidth;
   }
+
 
 }

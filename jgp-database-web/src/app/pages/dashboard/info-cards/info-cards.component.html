@@ -1,6 +1,6 @@
 <div fxLayout="row wrap" #resizedDiv>
     <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-purple">
+        <mat-card class="p-0 gradient-purple" #loansDisbursedByGenderChart>
             <app-pie-chart 
             [data]="loansDisbursedByGender" 
             [showLegend]="loansDisbursedByGenderShowLegend" 
@@ -28,10 +28,10 @@
     <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
-                <mat-card-title>Loans Quality</mat-card-title>
+                <mat-card-title>Loans Disbursed By Quality</mat-card-title>
             </mat-card-header>
             <div class="w-100 h-300p">
-                <ngx-charts-bar-horizontal
+                <ngx-charts-bar-vertical
                     [scheme]="chartSColorScheme"
                     [results]="loansDisbursedByQuality"
                     [gradient]="gradient"
@@ -42,22 +42,53 @@
                     [showYAxisLabel]="loansDisbursedByQualityShowYAxisLabel"
                     [xAxisLabel]="loansDisbursedByQualityYAxisLabel"
                     [yAxisLabel]="loansDisbursedByQualityXAxisLabel"
-                    (select)="onSelect($event)">
-                </ngx-charts-bar-horizontal>         
+                    (select)="onSelect($event)"
+                />         
             </div>
         </mat-card>
     </div>    
     <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-amber">
-            <app-pie-chart 
-            [data]="businessesTainedByGender" 
-            [showLegend]="businessesTainedByGenderShowLegend" 
-            [colorScheme]="chartSColorScheme" 
-            [showLabels]="businessesTainedByGenderShowLabels" 
-            [explodeSlices]="businessesTainedByGenderExplodeSlices" 
-            [doughnut]="businessesTainedByGenderDoughnut" 
-            [chartTitle]="businessesTainedByGenderChartTitle" 
-            />
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center center">                
+                <mat-card-title>{{TANeedsByGenderChartTitle}}</mat-card-title>
+            </mat-card-header>
+            <div class="w-100 h-300p">
+                <ngx-charts-bar-vertical-2d
+                    [scheme]="chartSColorScheme"
+                    [results]="TANeedsByGender"
+                    [gradient]="gradient"
+                    [xAxis]="TANeedsByGenderShowXAxis"
+                    [yAxis]="TANeedsByGenderShowYAxis"
+                    [legend]="TANeedsByGenderShowLegend"
+                    [showXAxisLabel]="TANeedsByGenderShowXAxisLabel"
+                    [showYAxisLabel]="TANeedsByGenderShowYAxisLabel"
+                    [xAxisLabel]="TANeedsByGenderXAxisLabel"
+                    [yAxisLabel]="TANeedsByGenderYAxisLabel"
+                    (select)="onSelect($event)">
+                </ngx-charts-bar-vertical-2d>        
+            </div>
         </mat-card>
-    </div>    
+    </div>   
+    <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center center">                
+                <mat-card-title>TA Training By Industry Sector</mat-card-title>
+            </mat-card-header>
+            <div class="w-100 h-300p">
+                <ngx-charts-bar-vertical
+                    [scheme]="chartSColorScheme"
+                    [results]="loansDisbursedByQuality"
+                    [gradient]="gradient"
+                    [xAxis]="loansDisbursedByQualityShowXAxis"
+                    [yAxis]="loansDisbursedByQualityShowYAxis"
+                    [legend]="loansDisbursedByQualityShowLegend"
+                    [showXAxisLabel]="loansDisbursedByQualityShowXAxisLabel"
+                    [showYAxisLabel]="loansDisbursedByQualityShowYAxisLabel"
+                    [xAxisLabel]="loansDisbursedByQualityYAxisLabel"
+                    [yAxisLabel]="loansDisbursedByQualityXAxisLabel"
+                    (select)="onSelect($event)"
+                />         
+            </div>
+        </mat-card>
+    </div>  
 </div>

@@ -5,9 +5,13 @@ import com.jgp.dashboard.dto.HighLevelSummaryDto;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
+import com.jgp.dashboard.dto.SeriesDataPointDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -91,6 +95,20 @@ public class DashboardServiceImpl implements DashboardService {
         return this.namedParameterJdbcTemplate.query(sqlBuilder.toString(), parameters, rm);
     }
 
+    @Override
+    public List<SeriesDataPointDto> getTaNeedsByGenderSummary(Long partnerId) {
+        final SeriesDataPointMapper rm = new SeriesDataPointMapper();
+        MapSqlParameterSource parameters = new MapSqlParameterSource("partnerId", partnerId);
+        parameters.addValue("partnerId", partnerId);
+        var sqlBuilder = new StringBuilder(SeriesDataPointMapper.TA_NEEDS_BY_GENDER_SCHEMA);
+        if (Objects.nonNull(partnerId)){
+            sqlBuilder.append("where bpd.partner_id = :partnerId ");
+        }
+        sqlBuilder.append("group by 1, 2;");
+
+        return this.namedParameterJdbcTemplate.query(sqlBuilder.toString(), parameters, rm);
+    }
+
     private static final class HighLevelSummaryMapper implements RowMapper<HighLevelSummaryDto> {
 
         public static final String SCHEMA = """
@@ -156,7 +174,7 @@ public class DashboardServiceImpl implements DashboardService {
             var dataPoints = new ArrayList<DataPointDto>();
             while (rs.next()){
                 final var dataKey = rs.getString("dataKey");
-                if (INTEGER_DATA_POINT_TYPE.equals(this.valueDataType)){
+                if (DashboardServiceImpl.INTEGER_DATA_POINT_TYPE.equals(this.valueDataType)){
                     dataPoints.add(new DataPointDto(StringUtils.capitalize(dataKey), String.valueOf(rs.getInt("dataValue")), String.valueOf(rs.getBigDecimal("percentage"))));
                 } else if (DECIMAL_DATA_POINT_TYPE.equals(this.valueDataType)) {
                     dataPoints.add(new DataPointDto(StringUtils.capitalize(dataKey), String.valueOf(rs.getBigDecimal("dataValue")), String.valueOf(rs.getBigDecimal("percentage"))));
@@ -167,4 +185,46 @@ public class DashboardServiceImpl implements DashboardService {
             return dataPoints;
         }
     }
+
+private static final class SeriesDataPointMapper implements ResultSetExtractor<List<SeriesDataPointDto>> {
+
+    public static final String TA_NEEDS_BY_GENDER_SCHEMA = """
+                SELECT unnest(string_to_array(p.ta_needs, ',')) AS name, p.owner_gender as seriesName, COUNT(*) AS value\s
+                FROM participants p inner join bmo_participants_data bpd on bpd.participant_id = p.id\s
+               \s""";
+
+    @Override
+    public List<SeriesDataPointDto> extractData(ResultSet rs) throws SQLException, DataAccessException {
+        var dataPoints = new ArrayList<SeriesDataPointDto>();
+        var dataPointsMap = new HashMap<String, Map<String, Integer>>();
+        while (rs.next()){
+            final var taName = rs.getString("name");
+            final var seriesName = rs.getString("seriesName");
+            final var value = rs.getInt("value");
+
+            if (dataPointsMap.containsKey(taName)){
+                var genderMap = dataPointsMap.get(taName);
+                if (genderMap.containsKey(seriesName)){
+                    genderMap.put(seriesName, value + genderMap.get(seriesName));
+                }else {
+                    genderMap.put(seriesName, value);
+                }
+            }else {
+                var genderMap = new HashMap<String, Integer>();
+                genderMap.put(seriesName, value);
+                dataPointsMap.put(taName, genderMap);
+            }
+        }
+        for (Map.Entry<String, Map<String, Integer>> entry: dataPointsMap.entrySet()){
+            var series = new HashSet<DataPointDto>();
+            for (Map.Entry<String, Integer> seriesEntry: entry.getValue().entrySet()){
+                series.add(new DataPointDto(StringUtils.capitalize(seriesEntry.getKey()), seriesEntry.getValue().toString(), ""));
+            }
+            dataPoints.add(new SeriesDataPointDto(StringUtils.capitalize(entry.getKey()), series));
+        }
+        return dataPoints;
+    }
+}
+
+
 }

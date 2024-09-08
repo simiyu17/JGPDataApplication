@@ -2,6 +2,8 @@ package com.jgp.dashboard.service;
 
 import com.jgp.dashboard.dto.DataPointDto;
 import com.jgp.dashboard.dto.HighLevelSummaryDto;
+import com.jgp.dashboard.dto.SeriesDataPointDto;
+
 import java.util.List;
 
 public interface DashboardService {
@@ -15,4 +17,6 @@ public interface DashboardService {
     List<DataPointDto> getLoanDisbursedByPipelineSourceSummary(Long partnerId);
 
     List<DataPointDto> getLoansDisbursedByQualitySummary(Long partnerId);
+
+    List<SeriesDataPointDto> getTaNeedsByGenderSummary(Long partnerId);
 }
