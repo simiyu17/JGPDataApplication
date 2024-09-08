@@ -1,76 +1,94 @@
 <div fxLayout="row wrap" #resizedDiv>
-    <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-purple">
-            <div class="py-2 px-3" fxLayoutAlign="space-between center">
-                <p>Dummy profit</p>
-                <div fxLayoutAlign="center center">
-                    <mat-icon class="icon-sm mx-1">trending_up</mat-icon>
-                    <span>38%</span>
-                </div>
-            </div>         
-            <div class="w-100 h-100p">
-                <ngx-charts-bar-vertical
-                    [scheme]="colorScheme"
-                    [results]="products"                      
-                    (select)="onSelect($event)">
-                </ngx-charts-bar-vertical>                   
-            </div>
+    <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
+        <mat-card class="p-0 gradient-purple" #loansDisbursedByGenderChart>
+            <app-pie-chart 
+            [data]="loansDisbursedByGender" 
+            [showLegend]="loansDisbursedByGenderShowLegend" 
+            [colorScheme]="chartSColorScheme" 
+            [showLabels]="loansDisbursedByGenderShowLabels" 
+            [explodeSlices]="loansDisbursedByGenderExplodeSlices" 
+            [doughnut]="loansDisbursedByGenderDoughnut" 
+            [chartTitle]="loansDisbursedByGenderChartTitle" 
+            />
         </mat-card>
     </div>
-    <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
         <mat-card class="p-0 gradient-teal">
-            <div class="py-2 px-3" fxLayoutAlign="space-between center">
-                <p>Dummy orders</p>
-                <div fxLayoutAlign="center center">
-                    <mat-icon class="icon-sm mx-1">trending_up</mat-icon>
-                    <span>16%</span>
-                </div>
-            </div>          
-            <div class="w-100 h-100p">
-                <ngx-charts-line-chart
-                    [scheme]="colorScheme"
-                    [results]="orders"                      
-                    [autoScale]="autoScale"
-                    (select)="onSelect($event)">
-                </ngx-charts-line-chart>                  
-            </div>
+            <app-pie-chart 
+            [data]="loansDisbursedByPipeline" 
+            [showLegend]="loansDisbursedByPipelineShowLegend" 
+            [colorScheme]="chartSColorScheme" 
+            [showLabels]="loansDisbursedByPipelineShowLabels" 
+            [explodeSlices]="loansDisbursedByPipelineExplodeSlices" 
+            [doughnut]="loansDisbursedByPipelineDoughnut" 
+            [chartTitle]="loansDisbursedByPipelineChartTitle" 
+            />
         </mat-card>
     </div>
-    <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-indigo">
-            <div class="py-2 px-3" fxLayoutAlign="space-between center">
-                <p>Dummy</p>
-                <div fxLayoutAlign="center center">
-                    <mat-icon class="icon-sm mx-1">trending_down</mat-icon>
-                    <span>-11%</span>
-                </div>
-            </div>          
-            <div class="w-100 h-100p">
+    <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center center">                
+                <mat-card-title>Loans Disbursed By Quality</mat-card-title>
+            </mat-card-header>
+            <div class="w-100 h-300p">
                 <ngx-charts-bar-vertical
-                    [scheme]="colorScheme"
-                    [results]="refunds"                      
-                    (select)="onSelect($event)">
-                </ngx-charts-bar-vertical>                     
+                    [scheme]="chartSColorScheme"
+                    [results]="loansDisbursedByQuality"
+                    [gradient]="gradient"
+                    [xAxis]="loansDisbursedByQualityShowXAxis"
+                    [yAxis]="loansDisbursedByQualityShowYAxis"
+                    [legend]="loansDisbursedByQualityShowLegend"
+                    [showXAxisLabel]="loansDisbursedByQualityShowXAxisLabel"
+                    [showYAxisLabel]="loansDisbursedByQualityShowYAxisLabel"
+                    [xAxisLabel]="loansDisbursedByQualityYAxisLabel"
+                    [yAxisLabel]="loansDisbursedByQualityXAxisLabel"
+                    (select)="onSelect($event)"
+                />         
             </div>
         </mat-card>
     </div>    
-    <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-amber">
-            <div class="py-2 px-3" fxLayoutAlign="space-between center">
-                <p>Dummy Clients</p>
-                <div fxLayoutAlign="center center">
-                    <mat-icon class="icon-sm mx-1">trending_up</mat-icon>
-                    <span>17%</span>
-                </div>
-            </div>         
-            <div class="w-100 h-100p">
-                <ngx-charts-line-chart
-                    [scheme]="colorScheme"
-                    [results]="customers"                      
-                    [autoScale]="autoScale"
+    <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center center">                
+                <mat-card-title>{{TANeedsByGenderChartTitle}}</mat-card-title>
+            </mat-card-header>
+            <div class="w-100 h-300p">
+                <ngx-charts-bar-vertical-2d
+                    [scheme]="chartSColorScheme"
+                    [results]="TANeedsByGender"
+                    [gradient]="gradient"
+                    [xAxis]="TANeedsByGenderShowXAxis"
+                    [yAxis]="TANeedsByGenderShowYAxis"
+                    [legend]="TANeedsByGenderShowLegend"
+                    [showXAxisLabel]="TANeedsByGenderShowXAxisLabel"
+                    [showYAxisLabel]="TANeedsByGenderShowYAxisLabel"
+                    [xAxisLabel]="TANeedsByGenderXAxisLabel"
+                    [yAxisLabel]="TANeedsByGenderYAxisLabel"
                     (select)="onSelect($event)">
-                </ngx-charts-line-chart>                    
+                </ngx-charts-bar-vertical-2d>        
             </div>
         </mat-card>
-    </div>    
+    </div>   
+    <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center center">                
+                <mat-card-title>TA Training By Industry Sector</mat-card-title>
+            </mat-card-header>
+            <div class="w-100 h-300p">
+                <ngx-charts-bar-vertical
+                    [scheme]="chartSColorScheme"
+                    [results]="loansDisbursedByQuality"
+                    [gradient]="gradient"
+                    [xAxis]="loansDisbursedByQualityShowXAxis"
+                    [yAxis]="loansDisbursedByQualityShowYAxis"
+                    [legend]="loansDisbursedByQualityShowLegend"
+                    [showXAxisLabel]="loansDisbursedByQualityShowXAxisLabel"
+                    [showYAxisLabel]="loansDisbursedByQualityShowYAxisLabel"
+                    [xAxisLabel]="loansDisbursedByQualityYAxisLabel"
+                    [yAxisLabel]="loansDisbursedByQualityXAxisLabel"
+                    (select)="onSelect($event)"
+                />         
+            </div>
+        </mat-card>
+    </div>  
 </div>

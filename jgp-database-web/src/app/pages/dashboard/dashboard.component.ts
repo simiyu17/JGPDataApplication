@@ -5,8 +5,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { TilesComponent } from './tiles/tiles.component';
 import { InfoCardsComponent } from './info-cards/info-cards.component';
-import { DiskSpaceComponent } from './disk-space/disk-space.component';
-import { TodoComponent } from './todo/todo.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 
 @Component({
@@ -19,8 +17,6 @@ import { AnalyticsComponent } from './analytics/analytics.component';
     MatProgressBarModule,
     TilesComponent,
     InfoCardsComponent,
-    DiskSpaceComponent,
-    TodoComponent,
     AnalyticsComponent
   ],
   templateUrl: './dashboard.component.html',

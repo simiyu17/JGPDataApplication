@@ -18,7 +18,7 @@ import { HighLevelSummaryDto } from '../dto/highLevelSummaryDto';
 })
 export class TilesComponent implements OnInit{
 
-  highLevelSummary?: HighLevelSummaryDto
+  highLevelSummary: HighLevelSummaryDto = {businessesTrained: 0, businessesLoaned: 0, amountDisbursed: 0, outStandingAmount: 0}
   constructor(private dashBoardService: DashboardService){
 
   }

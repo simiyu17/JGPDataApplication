@@ -14,6 +14,27 @@ export class DashboardService {
 
 
     getHighLevelSummary(): Observable<any> {
-        return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/high-level-summary`);
-      }
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/high-level-summary`);
+    }
+
+    getLoansDisbursedByGenderSummary(): Observable<any> {
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-disbursed-by-gender`);
+    }
+
+    getBusinessesTrainedByGenderSummary(): Observable<any> {
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/businesses-trained-by-gender`);
+    }
+
+    getLoansDisbursedByPipelineSummary(): Observable<any> {
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-disbursed-by-pipeline`);
+    }
+
+    getLoansDisbursedByQualitySummary(): Observable<any> {
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-disbursed-by-quality`);
+    }
+
+    getTaNeedsByGenderSummary(): Observable<any> {
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/ta-needs-by-gender`);
+    }
+
 }

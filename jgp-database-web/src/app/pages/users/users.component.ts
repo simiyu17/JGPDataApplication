@@ -54,6 +54,7 @@ export class UsersComponent implements OnInit {
   public showSearch: boolean = false;
   public viewType: string = 'grid';
   public isDeleted: boolean = false;
+  public userImage = "img/users/default-user.jpg";
 
   constructor(public dialog: MatDialog, public userService: UserService) { }
 
