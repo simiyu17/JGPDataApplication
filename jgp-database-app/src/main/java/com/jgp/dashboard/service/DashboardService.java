@@ -19,4 +19,6 @@ public interface DashboardService {
     List<DataPointDto> getLoansDisbursedByQualitySummary(Long partnerId);
 
     List<SeriesDataPointDto> getTaNeedsByGenderSummary(Long partnerId);
+
+    List<DataPointDto> getTaTrainingBySectorSummary(Long partnerId);
 }

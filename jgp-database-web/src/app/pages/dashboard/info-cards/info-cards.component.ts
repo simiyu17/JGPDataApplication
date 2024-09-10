@@ -85,6 +85,16 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
   public TANeedsByGenderChartTitle: string = 'TA Needs By Gender';
 
 
+  public taTrainedBySector: any[];
+  public taTrainedBySectorShowXAxis: boolean = true;
+  public taTrainedBySectorShowYAxis: boolean = true;
+  public taTrainedBySectorShowLegend: boolean = false;
+  public taTrainedBySectorShowXAxisLabel: boolean = true;
+  public taTrainedBySectorShowYAxisLabel: boolean = true;
+  public taTrainedBySectorXAxisLabel: string = 'Industry Sectors';
+  public taTrainedBySectorYAxisLabel: string = 'Number Of Participants';
+  public taTrainedBySectorChartTitle: string = 'TA Training By Industry Sector';
+
 
   constructor(private dashBoardService: DashboardService){
     Object.assign(this, { single, multi });
@@ -102,6 +112,7 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
     this.getBusinessesTrainedByGenderSummary();
     this.getLoansDisbursedByQualitySummary();
     this.getTaNeedsByGenderSummary();
+    this.getTaTrainingBySectorSummary();
   }
 
   getLoansDisbursedByGenderSummary() {
@@ -149,6 +160,16 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
       .subscribe({
         next: (response) => {
           this.TANeedsByGender = response;
+        },
+        error: (error) => { }
+      });
+  }
+
+  getTaTrainingBySectorSummary() {
+    this.dashBoardService.getTaTrainingBySectorSummary()
+      .subscribe({
+        next: (response) => {
+          this.taTrainedBySector = response;
         },
         error: (error) => { }
       });

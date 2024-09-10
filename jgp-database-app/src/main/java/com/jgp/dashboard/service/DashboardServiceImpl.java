@@ -109,6 +109,20 @@ public class DashboardServiceImpl implements DashboardService {
         return this.namedParameterJdbcTemplate.query(sqlBuilder.toString(), parameters, rm);
     }
 
+    @Override
+    public List<DataPointDto> getTaTrainingBySectorSummary(Long partnerId) {
+        final DataPointMapper rm = new DataPointMapper(DECIMAL_DATA_POINT_TYPE);
+        MapSqlParameterSource parameters = new MapSqlParameterSource("partnerId", partnerId);
+        parameters.addValue("partnerId", partnerId);
+        var sqlBuilder = new StringBuilder(DataPointMapper.BUSINESSES_TRAINED_BY_SECTOR_SCHEMA);
+        if (Objects.nonNull(partnerId)){
+            sqlBuilder.append("where l.partner_id = :partnerId ");
+        }
+        sqlBuilder.append("group by 1;");
+
+        return this.namedParameterJdbcTemplate.query(sqlBuilder.toString(), parameters, rm);
+    }
+
     private static final class HighLevelSummaryMapper implements RowMapper<HighLevelSummaryDto> {
 
         public static final String SCHEMA = """
@@ -160,6 +174,13 @@ public class DashboardServiceImpl implements DashboardService {
                 select l.loan_quality as dataKey, sum(l.loan_amount_accessed) as dataValue,\s
                 SUM(l.loan_amount_accessed) * 100.0 / SUM(SUM(l.loan_amount_accessed)) OVER () AS percentage\s
                 from loans l\s
+                """;
+
+        public static final String BUSINESSES_TRAINED_BY_SECTOR_SCHEMA = """
+                select p.industry_sector as dataKey, count(p.id) as dataValue,\s
+                count(p.id) * 100.0 / count(count(p.id)) OVER () AS percentage\s
+                from participants p inner join bmo_participants_data bpd on bpd.participant_id = p.id\s
+                inner join partners p2 on p2.id = bpd.partner_id\s
                 """;
 
         private final String valueDataType;

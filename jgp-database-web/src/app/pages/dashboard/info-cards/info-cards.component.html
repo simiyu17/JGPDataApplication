@@ -72,20 +72,20 @@
     <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
-                <mat-card-title>TA Training By Industry Sector</mat-card-title>
+                <mat-card-title>{{taTrainedBySectorChartTitle}}</mat-card-title>
             </mat-card-header>
             <div class="w-100 h-300p">
-                <ngx-charts-bar-vertical
+                <ngx-charts-bar-horizontal
                     [scheme]="chartSColorScheme"
-                    [results]="loansDisbursedByQuality"
+                    [results]="taTrainedBySector"
                     [gradient]="gradient"
-                    [xAxis]="loansDisbursedByQualityShowXAxis"
-                    [yAxis]="loansDisbursedByQualityShowYAxis"
-                    [legend]="loansDisbursedByQualityShowLegend"
-                    [showXAxisLabel]="loansDisbursedByQualityShowXAxisLabel"
-                    [showYAxisLabel]="loansDisbursedByQualityShowYAxisLabel"
-                    [xAxisLabel]="loansDisbursedByQualityYAxisLabel"
-                    [yAxisLabel]="loansDisbursedByQualityXAxisLabel"
+                    [xAxis]="taTrainedBySectorShowXAxis"
+                    [yAxis]="taTrainedBySectorShowYAxis"
+                    [legend]="taTrainedBySectorShowLegend"
+                    [showXAxisLabel]="taTrainedBySectorShowXAxisLabel"
+                    [showYAxisLabel]="taTrainedBySectorShowYAxisLabel"
+                    [xAxisLabel]="taTrainedBySectorYAxisLabel"
+                    [yAxisLabel]="taTrainedBySectorXAxisLabel"
                     (select)="onSelect($event)"
                 />         
             </div>

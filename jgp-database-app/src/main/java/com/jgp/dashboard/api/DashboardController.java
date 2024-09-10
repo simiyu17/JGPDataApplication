@@ -52,4 +52,9 @@ public class DashboardController {
     public ResponseEntity<List<SeriesDataPointDto>> getTaNeedsByGenderSummary(@RequestParam(value = "partner-id", required = false) Long partnerId){
         return new ResponseEntity<>(this.dashboardService.getTaNeedsByGenderSummary(partnerId), HttpStatus.OK);
     }
+
+    @GetMapping("ta-training-by-sector")
+    public ResponseEntity<List<DataPointDto>> getTaTrainingBySectorSummary(@RequestParam(value = "partner-id", required = false) Long partnerId){
+        return new ResponseEntity<>(this.dashboardService.getTaTrainingBySectorSummary(partnerId), HttpStatus.OK);
+    }
 }

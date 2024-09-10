@@ -37,4 +37,8 @@ export class DashboardService {
       return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/ta-needs-by-gender`);
     }
 
+    getTaTrainingBySectorSummary(): Observable<any> {
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/ta-training-by-sector`);
+    }
+
 }
