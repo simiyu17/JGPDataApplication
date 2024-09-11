@@ -21,13 +21,13 @@ import java.util.List;
 @RequestMapping("api/v1/clients")
 public class ParticipantController {
 
-    private final ParticipantService clientService;
+    private final ParticipantService participantService;
 
     @GetMapping
     public ResponseEntity<List<Participant>> getAvailableClients(@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
                                                                  @RequestParam(name = "pageSize", defaultValue = "200") Integer pageSize){
         final var sortedByDateCreated =
                 PageRequest.of(pageNumber - 1, pageSize, Sort.by("dateCreated").descending());
-        return new ResponseEntity<>(this.clientService.availableClients(sortedByDateCreated), HttpStatus.OK);
+        return new ResponseEntity<>(this.participantService.availableClients(sortedByDateCreated), HttpStatus.OK);
     }
 }

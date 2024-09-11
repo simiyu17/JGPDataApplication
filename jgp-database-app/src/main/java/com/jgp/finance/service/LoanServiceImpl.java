@@ -1,6 +1,6 @@
 package com.jgp.finance.service;
 
-import com.jgp.finance.LoanMapper;
+import com.jgp.finance.mapper.LoanMapper;
 import com.jgp.finance.domain.Loan;
 import com.jgp.finance.domain.LoanRepository;
 import com.jgp.finance.dto.LoanDto;
