@@ -39,7 +39,7 @@
                         <div fxFlex="35" fxLayout="column" fxLayoutAlign="center center" class="bg-primary" [ngClass]="(isDeleted) ? '' : 'gradient-blue'">
                             <div class="user-img">
                                 @if (user.profile.image) {
-                                    <img [src]="user.profile.image" class="transition mb-2" [class.blocked]="isDeleted">
+                                    <img [src]="userImage" class="transition mb-2" [class.blocked]="isDeleted">
                                 } @else {
                                     <img [src]="userImage" class="transition mb-2" [class.blocked]="isDeleted">  
                                 }
@@ -127,7 +127,7 @@
                         <div fxFlex="20" fxFlex.xs="30" fxLayout="column" fxLayoutAlign="center center" class="bg-primary" [ngClass]="(isDeleted) ? '' : 'gradient-blue'">
                             <div class="user-img">
                                 @if (user.profile.image) {
-                                    <img [src]="user.profile.image" class="transition mb-2" [class.blocked]="isDeleted">
+                                    <img [src]="userImage" class="transition mb-2" [class.blocked]="isDeleted">
                                 } @else {
                                     <img [src]="userImage" class="transition mb-2" [class.blocked]="isDeleted">  
                                 }

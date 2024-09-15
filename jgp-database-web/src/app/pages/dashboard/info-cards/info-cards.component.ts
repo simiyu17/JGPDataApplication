@@ -84,6 +84,37 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
   public TANeedsByGenderYAxisLabel = 'Number Of Participants';
   public TANeedsByGenderChartTitle: string = 'TA Needs By Gender';
 
+ 
+  public trainingByPartnerByGender: any[]
+  public trainingByPartnerByGenderShowXAxis = true;
+  public trainingByPartnerByGenderShowYAxis = true;
+  public trainingByPartnerByGenderShowLegend = false;
+  public trainingByPartnerByGenderShowXAxisLabel = true;
+  public trainingByPartnerByGenderXAxisLabel = 'Partners';
+  public trainingByPartnerByGenderShowYAxisLabel = true;
+  public trainingByPartnerByGenderYAxisLabel = 'Number';
+  public trainingByPartnerByGenderChartTitle: string = 'Training By Partner By Gender';
+
+
+  public taTrainedBySector: any[];
+  public taTrainedBySectorShowXAxis: boolean = true;
+  public taTrainedBySectorShowYAxis: boolean = true;
+  public taTrainedBySectorShowLegend: boolean = false;
+  public taTrainedBySectorShowXAxisLabel: boolean = true;
+  public taTrainedBySectorShowYAxisLabel: boolean = true;
+  public taTrainedBySectorXAxisLabel: string = 'Industry Sectors';
+  public taTrainedBySectorYAxisLabel: string = 'Number Of Participants';
+  public taTrainedBySectorChartTitle: string = 'TA Training By Industry Sector';
+
+  public accessedVSOutStandingAmount: any[]
+  public accessedVSOutStandingAmountShowXAxis = true;
+  public accessedVSOutStandingAmountShowYAxis = true;
+  public accessedVSOutStandingAmountShowLegend = false;
+  public accessedVSOutStandingAmountShowXAxisLabel = true;
+  public accessedVSOutStandingAmountXAxisLabel = 'Partners';
+  public accessedVSOutStandingAmountShowYAxisLabel = true;
+  public accessedVSOutStandingAmountYAxisLabel = 'Amount';
+  public accessedVSOutStandingAmountChartTitle: string = 'Accessed Vs OutStanding By Partner';
 
 
   constructor(private dashBoardService: DashboardService){
@@ -102,6 +133,9 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
     this.getBusinessesTrainedByGenderSummary();
     this.getLoansDisbursedByQualitySummary();
     this.getTaNeedsByGenderSummary();
+    this.getTaTrainingBySectorSummary();
+    this.getTrainingByPartnerByGenderSummary();
+    this.getLoansAccessedVsOutStandingByPartnerSummary();
   }
 
   getLoansDisbursedByGenderSummary() {
@@ -154,6 +188,35 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
       });
   }
 
+  getTaTrainingBySectorSummary() {
+    this.dashBoardService.getTaTrainingBySectorSummary()
+      .subscribe({
+        next: (response) => {
+          this.taTrainedBySector = response;
+        },
+        error: (error) => { }
+      });
+  }
+
+  getTrainingByPartnerByGenderSummary() {
+    this.dashBoardService.getTrainingByPartnerByGenderSummary()
+      .subscribe({
+        next: (response) => {
+          this.trainingByPartnerByGender = response;
+        },
+        error: (error) => { }
+      });
+  }
+
+  getLoansAccessedVsOutStandingByPartnerSummary() {
+    this.dashBoardService.getLoansAccessedVsOutStandingByPartnerSummary()
+      .subscribe({
+        next: (response) => {
+          this.accessedVSOutStandingAmount = response;
+        },
+        error: (error) => { }
+      });
+  }
 
 
   public onSelect(event: any) {

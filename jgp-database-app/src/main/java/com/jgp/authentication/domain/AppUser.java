@@ -35,7 +35,7 @@ import java.util.Set;
 @Getter
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "email_address" }, name = "EMAIL_UNIQUE")})
-public class AppUser extends BaseEntity implements PlatformUser{
+public class AppUser extends BaseEntity implements PlatformUser {
 
 	private String firstName;
 

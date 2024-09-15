@@ -94,8 +94,15 @@ public class LoanImportHandler implements ImportHandler {
             return existingClient.get();
         }
 
-        final var clientDto = ParticipantDto.builder().businessLocation("Nairobi").businessName(businessName)
-                .ownerGender("Other").ownerAge(999).isBusinessRegistered(true).jgpId(jgpId)
+        final var phoneNumber = ImportHandlerUtils.readAsString(LoanConstants.BUSINESS_PHONE_NUMBER_COL, row);
+        final var gender = ImportHandlerUtils.readAsString(LoanConstants.GENDER_COL, row);
+        final var age = ImportHandlerUtils.readAsInt(LoanConstants.AGE_COL, row);
+        final var businessLocation = ImportHandlerUtils.readAsString(LoanConstants.BUSINESS_LOCATION_COL, row);
+        final var industrySector = ImportHandlerUtils.readAsString(LoanConstants.INDUSTRY_SECTOR_COL, row);
+        final var businessSegment = ImportHandlerUtils.readAsString(LoanConstants.BUSINESS_SEGMENT_COL, row);
+        final var clientDto = ParticipantDto.builder().businessLocation(businessLocation).businessName(businessName)
+                .ownerGender(gender).ownerAge(age).isBusinessRegistered(true).jgpId(jgpId)
+                .phoneNumber(phoneNumber).industrySector(industrySector).businessSegment(businessSegment)
                 .build();
         return this.clientService.createClient(clientDto);
     }

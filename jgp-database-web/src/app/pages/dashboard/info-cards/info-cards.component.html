@@ -1,5 +1,5 @@
 <div fxLayout="row wrap" #resizedDiv>
-    <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
         <mat-card class="p-0 gradient-purple" #loansDisbursedByGenderChart>
             <app-pie-chart 
             [data]="loansDisbursedByGender" 
@@ -12,7 +12,7 @@
             />
         </mat-card>
     </div>
-    <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
         <mat-card class="p-0 gradient-teal">
             <app-pie-chart 
             [data]="loansDisbursedByPipeline" 
@@ -25,7 +25,7 @@
             />
         </mat-card>
     </div>
-    <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
                 <mat-card-title>Loans Disbursed By Quality</mat-card-title>
@@ -47,7 +47,7 @@
             </div>
         </mat-card>
     </div>    
-    <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
                 <mat-card-title>{{TANeedsByGenderChartTitle}}</mat-card-title>
@@ -69,23 +69,89 @@
             </div>
         </mat-card>
     </div>   
-    <div fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
-                <mat-card-title>TA Training By Industry Sector</mat-card-title>
+                <mat-card-title>{{trainingByPartnerByGenderChartTitle}}</mat-card-title>
             </mat-card-header>
             <div class="w-100 h-300p">
-                <ngx-charts-bar-vertical
+                <ngx-charts-bar-vertical-2d
                     [scheme]="chartSColorScheme"
-                    [results]="loansDisbursedByQuality"
+                    [results]="trainingByPartnerByGender"
                     [gradient]="gradient"
-                    [xAxis]="loansDisbursedByQualityShowXAxis"
-                    [yAxis]="loansDisbursedByQualityShowYAxis"
-                    [legend]="loansDisbursedByQualityShowLegend"
-                    [showXAxisLabel]="loansDisbursedByQualityShowXAxisLabel"
-                    [showYAxisLabel]="loansDisbursedByQualityShowYAxisLabel"
-                    [xAxisLabel]="loansDisbursedByQualityYAxisLabel"
-                    [yAxisLabel]="loansDisbursedByQualityXAxisLabel"
+                    [xAxis]="trainingByPartnerByGenderShowXAxis"
+                    [yAxis]="trainingByPartnerByGenderShowYAxis"
+                    [legend]="trainingByPartnerByGenderShowLegend"
+                    [showXAxisLabel]="trainingByPartnerByGenderShowXAxisLabel"
+                    [showYAxisLabel]="trainingByPartnerByGenderShowYAxisLabel"
+                    [xAxisLabel]="trainingByPartnerByGenderXAxisLabel"
+                    [yAxisLabel]="trainingByPartnerByGenderYAxisLabel"
+                    (select)="onSelect($event)" 
+                />        
+            </div>
+        </mat-card>
+    </div> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center center">                
+                <mat-card-title>{{taTrainedBySectorChartTitle}}</mat-card-title>
+            </mat-card-header>
+            <div class="w-100 h-300p">
+                <ngx-charts-bar-horizontal
+                    [scheme]="chartSColorScheme"
+                    [results]="taTrainedBySector"
+                    [gradient]="gradient"
+                    [xAxis]="taTrainedBySectorShowXAxis"
+                    [yAxis]="taTrainedBySectorShowYAxis"
+                    [legend]="taTrainedBySectorShowLegend"
+                    [showXAxisLabel]="taTrainedBySectorShowXAxisLabel"
+                    [showYAxisLabel]="taTrainedBySectorShowYAxisLabel"
+                    [xAxisLabel]="taTrainedBySectorYAxisLabel"
+                    [yAxisLabel]="taTrainedBySectorXAxisLabel"
+                    (select)="onSelect($event)"
+                />         
+            </div>
+        </mat-card>
+    </div>  
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center center">                
+                <mat-card-title>{{accessedVSOutStandingAmountChartTitle}}</mat-card-title>
+            </mat-card-header>
+            <div class="w-100 h-300p">
+                <ngx-charts-bar-vertical-2d
+                    [scheme]="chartSColorScheme"
+                    [results]="accessedVSOutStandingAmount"
+                    [gradient]="gradient"
+                    [xAxis]="accessedVSOutStandingAmountShowXAxis"
+                    [yAxis]="accessedVSOutStandingAmountShowYAxis"
+                    [legend]="accessedVSOutStandingAmountShowLegend"
+                    [showXAxisLabel]="accessedVSOutStandingAmountShowXAxisLabel"
+                    [showYAxisLabel]="accessedVSOutStandingAmountShowYAxisLabel"
+                    [xAxisLabel]="accessedVSOutStandingAmountXAxisLabel"
+                    [yAxisLabel]="accessedVSOutStandingAmountYAxisLabel"
+                    (select)="onSelect($event)" 
+                />        
+            </div>
+        </mat-card>
+    </div> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center center">                
+                <mat-card-title>{{taTrainedBySectorChartTitle}}</mat-card-title>
+            </mat-card-header>
+            <div class="w-100 h-300p">
+                <ngx-charts-bar-horizontal
+                    [scheme]="chartSColorScheme"
+                    [results]="taTrainedBySector"
+                    [gradient]="gradient"
+                    [xAxis]="taTrainedBySectorShowXAxis"
+                    [yAxis]="taTrainedBySectorShowYAxis"
+                    [legend]="taTrainedBySectorShowLegend"
+                    [showXAxisLabel]="taTrainedBySectorShowXAxisLabel"
+                    [showYAxisLabel]="taTrainedBySectorShowYAxisLabel"
+                    [xAxisLabel]="taTrainedBySectorYAxisLabel"
+                    [yAxisLabel]="taTrainedBySectorXAxisLabel"
                     (select)="onSelect($event)"
                 />         
             </div>

@@ -4,8 +4,11 @@ import com.jgp.participant.dto.ParticipantDto;
 import com.jgp.shared.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -26,7 +29,8 @@ public class Participant extends BaseEntity {
     private String phoneNumber;
 
     @Column(name = "owner_gender")
-    private String ownerGender;
+    @Enumerated(EnumType.STRING)
+    private Gender ownerGender;
 
     @Column(name = "owner_age")
     private Integer ownerAge;
@@ -91,7 +95,7 @@ public class Participant extends BaseEntity {
     public Participant() {
     }
 
-    private Participant(String businessName, String jgpId, String phoneNumber, String ownerGender, Integer ownerAge, String businessLocation, String industrySector, String businessSegment, Boolean isBusinessRegistered, String registrationNumber, Boolean hasBMOMembership, String bmoMembership, BigDecimal bestMonthlyRevenue, BigDecimal worstMonthlyRevenue, Integer totalRegularEmployees, Integer youthRegularEmployees, Integer totalCasualEmployees, Integer youthCasualEmployees, String sampleRecords, String taNeeds, String personWithDisability, String refugeeStatus, Boolean isActive) {
+    private Participant(String businessName, String jgpId, String phoneNumber, Gender ownerGender, Integer ownerAge, String businessLocation, String industrySector, String businessSegment, Boolean isBusinessRegistered, String registrationNumber, Boolean hasBMOMembership, String bmoMembership, BigDecimal bestMonthlyRevenue, BigDecimal worstMonthlyRevenue, Integer totalRegularEmployees, Integer youthRegularEmployees, Integer totalCasualEmployees, Integer youthCasualEmployees, String sampleRecords, String taNeeds, String personWithDisability, String refugeeStatus, Boolean isActive) {
         this.businessName = businessName;
         this.jgpId = jgpId;
         this.phoneNumber = phoneNumber;
@@ -118,13 +122,42 @@ public class Participant extends BaseEntity {
     }
 
     public static Participant createClient(ParticipantDto dto){
-        return new Participant(dto.businessName(), dto.jgpId(), dto.phoneNumber(), dto.ownerGender(),
+        String gender = dto.ownerGender();
+        if ("M".equalsIgnoreCase(gender)){
+            gender = "MALE";
+        }
+        if ("F".equalsIgnoreCase(gender)){
+            gender = "FEMALE";
+        }
+        Participant.Gender genderEnum = null;
+        try {
+            genderEnum = StringUtils.isBlank(gender) ? Participant.Gender.OTHER : Participant.Gender.valueOf(gender.toUpperCase());
+        }catch (Exception e){
+            genderEnum = Participant.Gender.OTHER;
+        }
+        return new Participant(dto.businessName(), dto.jgpId(), dto.phoneNumber(), genderEnum,
                 dto.ownerAge(), dto.businessLocation(), dto.industrySector(), dto.businessSegment(),
                 dto.isBusinessRegistered(), dto.registrationNumber(), dto.hasBMOMembership(),
                 dto.bmoMembership(), dto.bestMonthlyRevenue(), dto.worstMonthlyRevenue(),
                 dto.totalRegularEmployees(), dto.youthRegularEmployees(), dto.totalCasualEmployees(),
                 dto.youthCasualEmployees(), dto.sampleRecords(), dto.taNeeds(),
                 dto.personWithDisability(), dto.refugeeStatus(), Boolean.TRUE);
+    }
+
+
+    @Getter
+    public enum Gender {
+
+        MALE("Male"),
+        FEMALE("Female"),
+        OTHER("Other");
+
+        private final String name;
+
+        Gender(String name) {
+            this.name = name;
+        }
+
     }
 
     @Override

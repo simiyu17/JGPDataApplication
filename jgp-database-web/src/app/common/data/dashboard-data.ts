@@ -177,7 +177,7 @@ export const disk_space = [
 
 export const analytics = [
     {
-        name: 'Company 1',
+        name: 'Partner 1',
         series: [
             {
                 name: '2010',
@@ -214,7 +214,7 @@ export const analytics = [
         ]
     },
     {
-        name: 'Company 2',
+        name: 'Partner 2',
         series: [
             {
                 name: '2010',
@@ -251,7 +251,7 @@ export const analytics = [
         ]
     },
     {
-        name: 'Company 3',
+        name: 'Partner 3',
         series: [
             {
                 name: '2010',

@@ -6,6 +6,7 @@ import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { TilesComponent } from './tiles/tiles.component';
 import { InfoCardsComponent } from './info-cards/info-cards.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
+import { DashboardService } from '@services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,4 +25,7 @@ import { AnalyticsComponent } from './analytics/analytics.component';
 })
 export class DashboardComponent {
 
+  constructor(private dashBoardService: DashboardService){
+    
+  }
 }
