@@ -123,6 +123,24 @@ public class DashboardServiceImpl implements DashboardService {
         return this.namedParameterJdbcTemplate.query(sqlBuilder.toString(), parameters, rm);
     }
 
+    @Override
+    public List<SeriesDataPointDto> getTrainingByPartnerByGenderSummary() {
+        final SeriesDataPointMapper rm = new SeriesDataPointMapper();
+        return this.namedParameterJdbcTemplate.query(SeriesDataPointMapper.TRAINING_BY_PARTNER_BY_GENDER_SCHEMA + "group by 1, 2;", rm);
+    }
+
+    @Override
+    public List<SeriesDataPointDto> getLastThreeYearsAccessedLoanPerPartnerSummary() {
+        final SeriesDataPointMapper rm = new SeriesDataPointMapper();
+        return this.namedParameterJdbcTemplate.query(SeriesDataPointMapper.ACCESSED_AMOUNT_BY_PARTNER_BY_YEAR_SCHEMA, rm);
+    }
+
+    @Override
+    public List<SeriesDataPointDto> getLoansAccessedVsOutStandingByPartnerSummary() {
+        final SeriesDataPointMapper rm = new SeriesDataPointMapper();
+        return this.namedParameterJdbcTemplate.query(SeriesDataPointMapper.LOAN_AMOUNT_ACCESSED_VS_OUTSTANDING_PER_PARTNER_BY_YEAR_SCHEMA, rm);
+    }
+
     private static final class HighLevelSummaryMapper implements RowMapper<HighLevelSummaryDto> {
 
         public static final String SCHEMA = """
@@ -213,6 +231,36 @@ private static final class SeriesDataPointMapper implements ResultSetExtractor<L
                 SELECT unnest(string_to_array(p.ta_needs, ',')) AS name, p.owner_gender as seriesName, COUNT(*) AS value\s
                 FROM participants p inner join bmo_participants_data bpd on bpd.participant_id = p.id\s
                \s""";
+
+    public static final String TRAINING_BY_PARTNER_BY_GENDER_SCHEMA = """
+                SELECT p2.partner_name AS name, p.owner_gender as seriesName, COUNT(*) AS value
+                             FROM participants p inner join bmo_participants_data bpd on bpd.participant_id = p.id\s
+                             inner join partners p2 on p2.id  = bpd.partner_id\s
+               \s""";
+
+    public static final String ACCESSED_AMOUNT_BY_PARTNER_BY_YEAR_SCHEMA = """
+             SELECT p.partner_name as name,\s
+             EXTRACT(YEAR FROM l.date_disbursed) AS seriesName,\s
+             SUM(l.loan_amount_accessed) AS value\s
+             FROM loans l inner join partners p on p.id = l.partner_id\s
+             WHERE EXTRACT(YEAR FROM l.date_disbursed) >= EXTRACT(YEAR FROM current_date) - 2\s
+             GROUP BY 1, 2\s
+             ORDER BY 2 ASC;
+            """;
+
+    public static final String LOAN_AMOUNT_ACCESSED_VS_OUTSTANDING_PER_PARTNER_BY_YEAR_SCHEMA = """
+             SELECT p.partner_name AS name,\s
+             'ACCESSED' as seriesName, SUM(l.loan_amount_accessed) AS value
+              FROM loans l\s
+              inner join partners p on p.id  = l.partner_id
+              group by 1, 2
+              union\s
+              SELECT p.partner_name AS name,\s
+             'OUT-STANDING' as seriesName, SUM(l.loan_outstanding_amount) AS value
+              FROM loans l\s
+              inner join partners p on p.id  = l.partner_id
+              group by 1, 2;
+            """;
 
     @Override
     public List<SeriesDataPointDto> extractData(ResultSet rs) throws SQLException, DataAccessException {

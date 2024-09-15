@@ -41,4 +41,16 @@ export class DashboardService {
       return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/ta-training-by-sector`);
     }
 
+    getTrainingByPartnerByGenderSummary(): Observable<any> {
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/training-by-partner-by-gender`);
+    }
+
+    getLastThreeYearsAccessedLoanPerPartnerSummary(): Observable<any> {
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loan-accessed-per-partner-for-last-three-years`);
+    }
+
+    getLoansAccessedVsOutStandingByPartnerSummary(): Observable<any> {
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-accessed-vs-out-standing-per-partner`);
+    }
+
 }

@@ -1,0 +1,14 @@
+package com.jgp.authentication.domain;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+public interface RoleRepository extends JpaRepository<Role, Long> {
+
+    @Query("SELECT COUNT(a) FROM AppUser a JOIN a.roles r WHERE r.id = :roleId AND a.isActive = true")
+    Integer getCountOfRolesAssociatedWithUsers(@Param("roleId") Long roleId);
+
+    @Query("SELECT role FROM Role role WHERE LOWER(role.roleName) = LOWER(:roleName)")
+    Role getRoleByName(@Param("roleName") String roleName);
+}

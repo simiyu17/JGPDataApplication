@@ -57,4 +57,19 @@ public class DashboardController {
     public ResponseEntity<List<DataPointDto>> getTaTrainingBySectorSummary(@RequestParam(value = "partner-id", required = false) Long partnerId){
         return new ResponseEntity<>(this.dashboardService.getTaTrainingBySectorSummary(partnerId), HttpStatus.OK);
     }
+
+    @GetMapping("training-by-partner-by-gender")
+    public ResponseEntity<List<SeriesDataPointDto>> getTrainingByPartnerByGenderSummary(){
+        return new ResponseEntity<>(this.dashboardService.getTrainingByPartnerByGenderSummary(), HttpStatus.OK);
+    }
+
+    @GetMapping("loan-accessed-per-partner-for-last-three-years")
+    public ResponseEntity<List<SeriesDataPointDto>> getLastThreeYearsAccessedLoanPerPartnerSummary(){
+        return new ResponseEntity<>(this.dashboardService.getLastThreeYearsAccessedLoanPerPartnerSummary(), HttpStatus.OK);
+    }
+
+    @GetMapping("loans-accessed-vs-out-standing-per-partner")
+    public ResponseEntity<List<SeriesDataPointDto>> getLoansAccessedVsOutStandingByPartnerSummary(){
+        return new ResponseEntity<>(this.dashboardService.getLoansAccessedVsOutStandingByPartnerSummary(), HttpStatus.OK);
+    }
 }

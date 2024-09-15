@@ -14,11 +14,14 @@ import lombok.Getter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
 @Entity
-@Table(name = "user_roles", uniqueConstraints = { @UniqueConstraint(columnNames = { "role_name" }, name = "unq_name") })
+@Table(name = "user_roles", uniqueConstraints = { @UniqueConstraint(columnNames = { "role_name" }, name = "UNIQUE_ROLE") })
 public class Role extends BaseEntity {
 
     @Column(name = "role_name")
@@ -43,6 +46,15 @@ public class Role extends BaseEntity {
         return new Role(roleDto.roleName(), roleDto.description());
     }
 
+    public void updateRole(final RoleDto roleDto){
+        if (!Objects.equals(roleDto.roleName(), this.roleName)){
+            this.roleName = roleDto.roleName();
+        }
+        if (!Objects.equals(roleDto.description(), this.description)){
+            this.description = roleDto.description();
+        }
+    }
+
     public boolean updatePermission(final Permission permission, final boolean isSelected) {
         boolean changed = false;
         if (isSelected) {
@@ -52,6 +64,10 @@ public class Role extends BaseEntity {
         }
 
         return changed;
+    }
+
+    public void updatePermissions(final Set<Permission> permissions) {
+         this.permissions = permissions;
     }
 
     private boolean addPermission(final Permission permission) {
