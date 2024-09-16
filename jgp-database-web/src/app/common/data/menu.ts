@@ -4,10 +4,12 @@ export const verticalMenuItems = [
     new Menu(1, 'Dashboard', '/', null, 'dashboard', null, false, 0),
     new Menu(2, 'Project Participants', '/participants', null, 'supervisor_account', null, false, 0),
     new Menu(3, 'Partners', '/partners', null, 'supervisor_account', null, false, 0),
-    new Menu(4, 'Users', '/users', null, 'supervisor_account', null, false, 0),
-    new Menu(5, 'Data Management', null, null, 'computer', null, true, 0),
-    new Menu(6, 'BMO Participants Data', '/data-list', null, 'keyboard', null, false, 5),
-    new Menu(7, 'Lending Data', '/lending-data', null, 'keyboard', null, false, 5)
+    new Menu(4, 'Data Management', null, null, 'computer', null, true, 0),
+    new Menu(5, 'BMO Participants Data', '/data-list', null, 'keyboard', null, false, 4),
+    new Menu(6, 'Lending Data', '/lending-data', null, 'keyboard', null, false, 4),
+    new Menu(7, 'User Management', null, null, 'computer', null, true, 0),
+    new Menu(8, 'Users', '/users', null, 'supervisor_account', null, false, 7),
+    new Menu(9, 'User Roles', '/user-roles', null, 'supervisor_account', null, false, 7)
     /*new Menu(5, 'Cards', '/ui/cards', null, 'card_membership', null, false, 3),
     new Menu(6, 'Lists', '/ui/lists', null, 'list', null, false, 3),
     new Menu(7, 'Grids', '/ui/grids', null, 'grid_on', null, false, 3),
@@ -72,10 +74,12 @@ export const horizontalMenuItems = [
     new Menu(1, 'Dashboard', '/', null, 'dashboard', null, false, 0),
     new Menu(2, 'Project Participants', '/participants', null, 'supervisor_account', null, false, 0),
     new Menu(3, 'Partners', '/partners', null, 'supervisor_account', null, false, 0),
-    new Menu(4, 'Users', '/users', null, 'supervisor_account', null, false, 0),
-    new Menu(5, 'Data Management', null, null, 'computer', null, true, 0),
-    new Menu(6, 'BMO Participants Data', '/data-list', null, 'keyboard', null, false, 5),
-    new Menu(7, 'Lending Data', '/lending-data', null, 'keyboard', null, false, 5)
+    new Menu(4, 'Data Management', null, null, 'computer', null, true, 0),
+    new Menu(5, 'BMO Participants Data', '/data-list', null, 'keyboard', null, false, 4),
+    new Menu(6, 'Lending Data', '/lending-data', null, 'keyboard', null, false, 4),
+    new Menu(7, 'User Management', null, null, 'computer', null, true, 0),
+    new Menu(8, 'Users', '/users', null, 'supervisor_account', null, false, 7),
+    new Menu(9, 'User Roles', '/user-roles', null, 'supervisor_account', null, false, 7)
     /*new Menu(5, 'Cards', '/ui/cards', null, 'card_membership', null, false, 3),
     new Menu(6, 'Lists', '/ui/lists', null, 'list', null, false, 3),
     new Menu(7, 'Grids', '/ui/grids', null, 'grid_on', null, false, 3),

@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { analytics } from '@data/dashboard-data';
-import { DashboardService } from '@services/dashboard.service';
+import { DashboardService } from '@services/dashboard/dashboard.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @Component({

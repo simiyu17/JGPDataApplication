@@ -10,6 +10,7 @@ export class UserProfile {
     lastName: string;
     gender: string;
     image: string;
+    userRoles: string[]
 }
 
 export class UserWork {

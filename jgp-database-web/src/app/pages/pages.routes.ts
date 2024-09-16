@@ -38,6 +38,12 @@ export const routes: Routes = [
         data: { breadcrumb: 'Users' }
       },
       {
+        path: 'user-roles',
+        loadComponent: () => import('./user-role/user-role.component').then(c => c.UserRoleComponent),
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'User Roles' }
+      },
+      {
         path: 'partners',
         loadComponent: () => import('./partners/partners.component').then(c => c.PartnersComponent),
         canActivate: [AuthGuard],

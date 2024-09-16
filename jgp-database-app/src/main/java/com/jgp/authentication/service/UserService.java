@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface UserService {
 
-    void createUser(UserDetailedDto user);
+    void createUser(UserDetailedDto userDto);
 
-    void updateUser(Long userId, UserDto user);
+    void updateUser(Long userId, UserDetailedDto userDto);
 
     void updateUserPassword(UserPassChangeDto userPassChangeDto);
 

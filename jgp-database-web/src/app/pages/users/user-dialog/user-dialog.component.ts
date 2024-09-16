@@ -14,10 +14,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { MatSelectModule } from '@angular/material/select';
-import { GlobalService } from '@services/global.service';
-import { UserService } from '@services/user.service';
+import { GlobalService } from '@services/shared/global.service';
+import { UserService } from '@services/users/user.service';
 import { PartnerDto } from '../../../dto/Partner';
-import { PartnerService } from '@services/partners.service';
+import { PartnerService } from '@services/data-management/partners.service';
+import { UserRoleService } from '@services/users/userroles.service';
 
 @Component({
   selector: 'app-user-dialog',
@@ -47,17 +48,21 @@ export class UserDialogComponent implements OnInit {
   public passwordHide: boolean = true;
 
   partners: PartnerDto[] = [];
+  allUserRoles: any;
   constructor(public dialogRef: MatDialogRef<UserDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public user: User,
               public fb: FormBuilder, private gs: GlobalService, 
-              private userService: UserService, private partnerService: PartnerService) {
+              private userService: UserService, 
+              private partnerService: PartnerService, 
+              private userRolesService: UserRoleService) {
     this.createUserForm = this.fb.group({
       id: null,
       profile: this.fb.group({
         firstName: null,
         lastName: null,
         gender: null,
-        image: null
+        image: null,
+        userRoles: null,
       }),
       work: this.fb.group({
         partnerId: null,
@@ -71,7 +76,17 @@ export class UserDialogComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  getAvailableUserRoles() {
+    this.userRolesService.getAvailableUserRoles()
+      .subscribe({
+        next: (response) => {
+          this.allUserRoles = response;
+        },
+        error: (error) => { }
+      });
+  }
+
+  getAvailablePartners() {
     this.partnerService.getAvailablePartners()
         .subscribe({
           next: (response) => {
@@ -81,6 +96,11 @@ export class UserDialogComponent implements OnInit {
             this.gs.openSnackBar(`An error occured ${error.error.detail}`, "Dismiss");
           }
         });
+  }
+
+  ngOnInit() {
+    this.getAvailablePartners();
+    this.getAvailableUserRoles();
     if (this.user) {
       this.createUserForm.setValue(this.user);
     }

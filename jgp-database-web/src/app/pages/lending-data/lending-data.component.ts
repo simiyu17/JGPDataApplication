@@ -9,7 +9,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { ContentHeaderComponent } from '../../theme/components/content-header/content-header.component';
 import { DataUploadComponent } from './data-upload/data-upload.component';
-import { LoanService } from '@services/loan.service';
+import { LoanService } from '@services/data-management/loan.service';
 
 @Component({
   selector: 'app-lending-data',

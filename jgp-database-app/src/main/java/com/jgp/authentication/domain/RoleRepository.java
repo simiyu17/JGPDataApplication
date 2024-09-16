@@ -15,5 +15,5 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     Role getRoleByName(@Param("roleName") String roleName);
 
     @Query("SELECT role FROM Role role WHERE LOWER(role.roleName) IN :roleNames")
-    List<Role> getRolesByNames(@Param("roleName") List<String> roleNames);
+    List<Role> getRolesByNames(@Param("roleNames") List<String> roleNames);
 }

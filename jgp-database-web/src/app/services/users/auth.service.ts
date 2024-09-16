@@ -1,17 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GlobalService } from './global.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { UserRole } from '../dto/UserRole';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { GlobalService } from '@services/shared/global.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  USER_ROLE: UserRole = UserRole.NONE;
   AUTH_TOKEN_KEY: string = 'auth_token';
   USER_FULL_NAME: string = 'user_full_name';
   USER_EMAIL: string = 'user_email';

@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GlobalService } from './global.service';
+import { GlobalService } from '../shared/global.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { PartnerDto } from '../dto/Partner';
+import { PartnerDto } from '../../dto/Partner';
 
 @Injectable({
   providedIn: 'root'

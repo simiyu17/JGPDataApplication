@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GlobalService } from './global.service';
+import { GlobalService } from '../shared/global.service';
 import { Observable } from 'rxjs';
-import { UserDto } from '../dto/UserDto';
+import { UserDto } from '../../dto/UserDto';
 
 @Injectable({
   providedIn: 'root'

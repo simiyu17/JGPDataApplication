@@ -1,1 +1,36 @@
-<p>edit-role works!</p>
+<h1 mat-dialog-title>
+    @if (userRole && userRole.id) { 
+        <span>Edit</span>
+    } @else {
+        <span>Add</span>
+    } 
+     User Role 
+</h1>
+<div mat-dialog-content>
+    <form [formGroup]="userRoleForm" class="user-role-form">      
+                <div fxLayout="column" class="form-field-outer">
+                    <mat-form-field class="w-100">
+                        <mat-label>Role Name</mat-label>
+                        <input matInput formControlName="roleName">
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <mat-label>Description</mat-label>
+                        <input matInput formControlName="description">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Role Permissions</mat-label>
+                        <mat-select formControlName="permissions" multiple>
+                            @for (permission of allPermissions; track $index) {
+                                <mat-option [value]="permission.code">{{ permission.code }}</mat-option>
+                            }
+                          
+                        </mat-select>
+                      </mat-form-field>
+                </div>
+            
+    </form>
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
+    <button mat-raised-button color="primary" (click)="onSubmitEditUserRole()" [mat-dialog-close]="userRoleForm.value" [disabled]="!userRoleForm.valid">{{ userRole && userRole.id ? 'Update' : 'Save' }}</button>
+    <button mat-raised-button color="warn" (click)="close()">Cancel</button>
+</div>

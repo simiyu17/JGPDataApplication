@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ContentHeaderComponent } from '../../theme/components/content-header/content-header.component';
-import { ClientService } from '@services/clients.service';
+import { ClientService } from '@services/data-management/clients.service';
 import { MatSort } from '@angular/material/sort';
 
 @Component({

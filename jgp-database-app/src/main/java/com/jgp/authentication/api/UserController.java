@@ -3,6 +3,7 @@ package com.jgp.authentication.api;
 import com.jgp.authentication.dto.UserDetailedDto;
 import com.jgp.authentication.dto.UserDto;
 import com.jgp.authentication.dto.UserPassChangeDto;
+import com.jgp.authentication.service.RoleService;
 import com.jgp.authentication.service.UserService;
 import com.jgp.shared.dto.ApiResponseDto;
 import jakarta.validation.Valid;
@@ -27,6 +28,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
     @PutMapping("change-password")
     public ResponseEntity<ApiResponseDto> changePassword(@Valid @RequestBody UserPassChangeDto changePasswordDto){
@@ -46,15 +48,15 @@ public class UserController {
     }
 
     @PutMapping("{userId}")
-    public ResponseEntity<ApiResponseDto> updateUser(@PathVariable("userId") Long userId, @Valid @RequestBody UserDto newUser){
-        this.userService.updateUser(userId, newUser);
+    public ResponseEntity<ApiResponseDto> updateUser(@PathVariable("userId") Long userId, @Valid @RequestBody UserDetailedDto userDto){
+        this.userService.updateUser(userId, userDto);
         return new ResponseEntity<>(new ApiResponseDto(true, "User updated !!"), HttpStatus.OK);
     }
 
     @PutMapping("{userId}/update-roles")
-    public ResponseEntity<ApiResponseDto> updateUserRoles(@PathVariable("userId") Long userId, @Valid @RequestBody UserDto newUser){
-        this.userService.updateUser(userId, newUser);
-        return new ResponseEntity<>(new ApiResponseDto(true, "User updated !!"), HttpStatus.OK);
+    public ResponseEntity<ApiResponseDto> updateUserRoles(@PathVariable("userId") Long userId, @RequestBody List<String> roleNames){
+        this.userService.updateUserRoles(userId, roleNames);
+        return new ResponseEntity<>(new ApiResponseDto(true, "User Roles updated !!"), HttpStatus.OK);
     }
 
     @GetMapping("{userId}")

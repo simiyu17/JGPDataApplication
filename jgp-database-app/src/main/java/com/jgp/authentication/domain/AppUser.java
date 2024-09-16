@@ -2,7 +2,6 @@ package com.jgp.authentication.domain;
 
 
 import com.jgp.authentication.dto.UserDetailedDto;
-import com.jgp.authentication.dto.UserDto;
 import com.jgp.authentication.exception.NoAuthorizationException;
 import com.jgp.patner.domain.Partner;
 import com.jgp.shared.domain.BaseEntity;
@@ -28,9 +27,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -72,7 +73,7 @@ public class AppUser extends BaseEntity implements PlatformUser {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "appuser_role", joinColumns = @JoinColumn(name = "appuser_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public AppUser() {
     }
@@ -103,29 +104,27 @@ public class AppUser extends BaseEntity implements PlatformUser {
                 userDto.profile().gender(), userDto.profile().image(), userDto.contacts().cellPhone(), true, true, encoder);
     }
 
-    public void updateUser(UserDto userDto){
-        if(!StringUtils.equals(userDto.firstName(), this.firstName)){
-            this.firstName = userDto.firstName();
+    public void updateUser(UserDetailedDto userDto){
+        if(!StringUtils.equals(userDto.profile().firstName(), this.firstName)){
+            this.firstName = userDto.profile().firstName();
         }
-        if(!StringUtils.equals(userDto.lastName(), this.lastName)){
-            this.lastName = userDto.firstName();
+        if(!StringUtils.equals(userDto.profile().lastName(), this.lastName)){
+            this.lastName = userDto.profile().firstName();
         }
-        if(!StringUtils.equals(userDto.designation(), this.designation)){
-            this.designation = userDto.designation();
+        if(!StringUtils.equals(userDto.work().designation(), this.designation)){
+            this.designation = userDto.work().designation();
         }
-        if(!StringUtils.equals(userDto.town(), this.town)){
-            this.town = userDto.town();
+        if(!StringUtils.equals(userDto.contacts().town(), this.town)){
+            this.town = userDto.contacts().town();
         }
-        if(!StringUtils.equals(userDto.cellPhone(), this.cellPhone)){
-            this.cellPhone = userDto.cellPhone();
-        }
-        if(userDto.isActive() != this.isActive){
-            this.isActive = userDto.isActive();
+        if(!StringUtils.equals(userDto.contacts().cellPhone(), this.cellPhone)){
+            this.cellPhone = userDto.contacts().cellPhone();
         }
     }
 
     public UserDetailedDto toDto(){
-        return new UserDetailedDto(getId(), new UserDetailedDto.UserProfileDto(this.firstName, this.lastName, this.gender, this.image),
+        return new UserDetailedDto(getId(),
+                new UserDetailedDto.UserProfileDto(this.firstName, this.lastName, this.gender, this.image, this.roles.stream().map(Role::getRoleName).collect(Collectors.toSet())),
                 new UserDetailedDto.UserWorkDto(Objects.nonNull(this.partner) ? this.partner.getPartnerName() : "", Objects.nonNull(this.partner) ? this.partner.getId() : null, this.getDesignation()),
                 new UserDetailedDto.UserContactsDto(this.username, this.cellPhone, this.town));
     }

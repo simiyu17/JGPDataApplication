@@ -27,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -49,7 +50,10 @@ public class UserServiceImpl implements UserService{
         try {
             final var partner = this.partnerRepository.findById(userDto.work().partnerId())
                     .orElseThrow(() -> new PartnerNotFoundException(CommonUtil.NO_RESOURCE_FOUND_WITH_ID));
-            this.userRepository.save(AppUser.createUser(partner, userDto, passwordEncoder));
+            var user = this.userRepository.save(AppUser.createUser(partner, userDto, passwordEncoder));
+            if (!userDto.profile().userRoles().isEmpty()){
+                this.updateUserRoles(user.getId(), new ArrayList<>(userDto.profile().userRoles()));
+            }
         }catch (Exception e){
             throw new IllegalArgumentException(e);
         }
@@ -58,12 +62,15 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     @Override
-    public void updateUser(Long userId, UserDto user) {
+    public void updateUser(Long userId, UserDetailedDto userDto) {
         var currentUser = this.userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("No user found with Id"));
         try {
-            currentUser.updateUser(user);
+            currentUser.updateUser(userDto);
             this.userRepository.save(currentUser);
+            if (!userDto.profile().userRoles().isEmpty()){
+                this.updateUserRoles(userId, new ArrayList<>(userDto.profile().userRoles()));
+            }
         }catch (Exception e){
             throw new IllegalArgumentException(e);
         }

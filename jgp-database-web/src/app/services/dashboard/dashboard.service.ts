@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GlobalService } from './global.service';
 import { Router } from '@angular/router';
+import { GlobalService } from '@services/shared/global.service';
 import { Observable } from 'rxjs';
-import { HighLevelSummaryDto } from '../pages/dashboard/dto/highLevelSummaryDto';
 
 @Injectable({
   providedIn: 'root'

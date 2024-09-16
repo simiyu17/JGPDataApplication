@@ -39,7 +39,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public void createRole(RoleDto roleDto) {
-        this.roleRepository.save(Role.createRole(roleDto));
+        var role = this.roleRepository.save(Role.createRole(roleDto));
+        if (!roleDto.permissions().isEmpty()){
+            this.updateRolePermissions(role.getId(), new ArrayList<>(roleDto.permissions()));
+        }
     }
 
     @Override
@@ -108,7 +111,7 @@ public class RoleServiceImpl implements RoleService {
             final String name = rs.getString("name");
             final String description = rs.getString("description");
 
-            return new RoleDto(id, name, description);
+            return new RoleDto(id, name, description, new HashSet<>());
         }
     }
 }
