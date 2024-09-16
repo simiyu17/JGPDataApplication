@@ -51,6 +51,12 @@ public class UserController {
         return new ResponseEntity<>(new ApiResponseDto(true, "User updated !!"), HttpStatus.OK);
     }
 
+    @PutMapping("{userId}/update-roles")
+    public ResponseEntity<ApiResponseDto> updateUserRoles(@PathVariable("userId") Long userId, @Valid @RequestBody UserDto newUser){
+        this.userService.updateUser(userId, newUser);
+        return new ResponseEntity<>(new ApiResponseDto(true, "User updated !!"), HttpStatus.OK);
+    }
+
     @GetMapping("{userId}")
     public ResponseEntity<UserDetailedDto> getUser(@PathVariable("userId") Long userId){
         return new ResponseEntity<>(this.userService.findUserById(userId), HttpStatus.OK);

@@ -26,4 +26,6 @@ public interface UserService {
     List<UserDetailedDto> getAllUsers();
 
     AppUser currentUser();
+
+    void updateUserRoles(Long userId, List<String> roleNames);
 }

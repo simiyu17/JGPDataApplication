@@ -27,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,6 +40,7 @@ public class UserServiceImpl implements UserService{
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final PartnerRepository partnerRepository;
+    private final RoleService roleService;
 
 
     @Transactional
@@ -68,6 +70,7 @@ public class UserServiceImpl implements UserService{
 
     }
 
+    @Transactional
     @Override
     public void updateUserPassword(UserPassChangeDto userPassChangeDto) {
         if (!StringUtils.equals(userPassChangeDto.newPass(), userPassChangeDto.passConfirm())){
@@ -125,6 +128,15 @@ public class UserServiceImpl implements UserService{
             }
         }
         return currentUser;
+    }
+
+    @Transactional
+    @Override
+    public void updateUserRoles(Long userId, List<String> roleNames) {
+        final var user =  this.userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("No user found with Id"));
+        user.updateRoles(new HashSet<>(this.roleService.retrieveRolesByNames(roleNames)));
+        this.userRepository.save(user);
     }
 
 

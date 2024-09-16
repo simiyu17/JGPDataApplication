@@ -131,10 +131,7 @@ public class AppUser extends BaseEntity implements PlatformUser {
     }
 
     public void updateRoles(final Set<Role> allRoles) {
-        if (!allRoles.isEmpty()) {
-            this.roles.clear();
             this.roles = allRoles;
-        }
     }
 
     @Override
