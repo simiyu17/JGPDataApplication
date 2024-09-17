@@ -14,6 +14,9 @@ export class AuthService {
   USER_FULL_NAME: string = 'user_full_name';
   USER_EMAIL: string = 'user_email';
   USER_POSITION: string = 'user_position';
+  USER_PARTNER_ID: string = 'user_partner_id';
+  USER_PARTNER_NAME: string = 'user_partner_name';
+  USER_PARTNER_TYPE: string = 'user_partner_type';
   USER_REGISTRATION: string = 'user_registration';
   FORCE_PASS_CHANGE: string = 'force_change_password';
   jwtService: JwtHelperService = new JwtHelperService();
@@ -38,6 +41,9 @@ export class AuthService {
       this.setLocalStorageValue(this.USER_FULL_NAME, this.decodeAuthToken()[this.USER_FULL_NAME]);
       this.setLocalStorageValue(this.USER_EMAIL, this.decodeAuthToken()[this.USER_EMAIL]);
       this.setLocalStorageValue(this.USER_POSITION, this.decodeAuthToken()[this.USER_POSITION]);
+      this.setLocalStorageValue(this.USER_PARTNER_ID, this.decodeAuthToken()[this.USER_PARTNER_ID]);
+      this.setLocalStorageValue(this.USER_PARTNER_NAME, this.decodeAuthToken()[this.USER_PARTNER_NAME]);
+      this.setLocalStorageValue(this.USER_PARTNER_TYPE, this.decodeAuthToken()[this.USER_PARTNER_TYPE]);
       this.setLocalStorageValue(this.USER_REGISTRATION, this.decodeAuthToken()[this.USER_REGISTRATION]);
       this.setLocalStorageValue(this.FORCE_PASS_CHANGE, this.decodeAuthToken()[this.FORCE_PASS_CHANGE]);
     }
@@ -72,6 +78,9 @@ export class AuthService {
       name: this.getLocalStorageValue(this.USER_FULL_NAME),
       email: this.getLocalStorageValue(this.USER_EMAIL),
       desgnation: this.getLocalStorageValue(this.USER_POSITION),
+      partnerId: this.getLocalStorageValue(this.USER_PARTNER_ID),
+      partner: this.getLocalStorageValue(this.USER_PARTNER_NAME),
+      partnerType: this.getLocalStorageValue(this.USER_PARTNER_TYPE),
       registration: this.getLocalStorageValue(this.USER_REGISTRATION)
     }
   }

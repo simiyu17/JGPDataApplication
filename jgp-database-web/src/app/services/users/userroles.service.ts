@@ -28,7 +28,7 @@ export class UserRoleService {
     return this.httpClient.put(`${this.globalService.BASE_API_URL}/roles/${roleId}/update-permissions`, JSON.stringify(permissions));
   }
 
-  getUserRoleById(roleId: number): Observable<any> {
+  getUserRoleById(roleId: number | string | null): Observable<any> {
     return this.httpClient.get(`${this.globalService.BASE_API_URL}/roles/${roleId}`);
   }
 

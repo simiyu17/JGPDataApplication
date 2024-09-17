@@ -18,3 +18,8 @@ INSERT INTO permission (entity_name, action_name, code)VALUES('USER_ROLE', 'DELE
 INSERT INTO permission (entity_name, action_name, code)VALUES('USER_ROLE', 'ADD_PERMISSIONS', 'USER_ROLE_ADD_PERMISSIONS');
 INSERT INTO permission (entity_name, action_name, code)VALUES('USER_ROLE', 'REMOVE_PERMISSIONS', 'USER_ROLE_REMOVE_PERMISSIONS');
 INSERT INTO permission (entity_name, action_name, code)VALUES('DASHBOARD', 'VIEW', 'DASHBOARD_VIEW');
+INSERT INTO permission (entity_name, action_name, code)VALUES('DASHBOARD', 'VIEW', 'MY_PARTNER_DASHBOARD_VIEW');
+INSERT INTO permission (entity_name, action_name, code)VALUES('PARTNERS', 'VIEW', 'PARTNERS_VIEW');
+INSERT INTO permission (entity_name, action_name, code)VALUES('PARTNERS', 'CREATE', 'PARTNERS_CREATE');
+INSERT INTO permission (entity_name, action_name, code)VALUES('PARTNERS', 'UPDATE', 'PARTNERS_UPDATE');
+INSERT INTO permission (entity_name, action_name, code)VALUES('PARTNERS', 'DELETE', 'PARTNERS_DELETE');

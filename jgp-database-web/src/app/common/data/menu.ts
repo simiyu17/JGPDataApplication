@@ -9,7 +9,8 @@ export const verticalMenuItems = [
     new Menu(6, 'Lending Data', '/lending-data', null, 'keyboard', null, false, 4),
     new Menu(7, 'User Management', null, null, 'computer', null, true, 0),
     new Menu(8, 'Users', '/users', null, 'supervisor_account', null, false, 7),
-    new Menu(9, 'User Roles', '/user-roles', null, 'supervisor_account', null, false, 7)
+    new Menu(9, 'User Roles', '/user-roles', null, 'supervisor_account', null, false, 7),
+    new Menu(10, 'My Partner Dashboard', '/my-partner-dashboard', null, 'supervisor_account', null, false, 0),
     /*new Menu(5, 'Cards', '/ui/cards', null, 'card_membership', null, false, 3),
     new Menu(6, 'Lists', '/ui/lists', null, 'list', null, false, 3),
     new Menu(7, 'Grids', '/ui/grids', null, 'grid_on', null, false, 3),
@@ -79,7 +80,8 @@ export const horizontalMenuItems = [
     new Menu(6, 'Lending Data', '/lending-data', null, 'keyboard', null, false, 4),
     new Menu(7, 'User Management', null, null, 'computer', null, true, 0),
     new Menu(8, 'Users', '/users', null, 'supervisor_account', null, false, 7),
-    new Menu(9, 'User Roles', '/user-roles', null, 'supervisor_account', null, false, 7)
+    new Menu(9, 'User Roles', '/user-roles', null, 'supervisor_account', null, false, 7),
+    new Menu(10, 'My Partner Dashboard', '/my-partner-dashboard', null, 'supervisor_account', null, false, 0)
     /*new Menu(5, 'Cards', '/ui/cards', null, 'card_membership', null, false, 3),
     new Menu(6, 'Lists', '/ui/lists', null, 'list', null, false, 3),
     new Menu(7, 'Grids', '/ui/grids', null, 'grid_on', null, false, 3),

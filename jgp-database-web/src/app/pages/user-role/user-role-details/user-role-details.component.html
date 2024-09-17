@@ -1,0 +1,20 @@
+<app-content-header 
+    [icon]="'keyboard'" 
+    [title]="'Data'" 
+    [hideBreadcrumb]="false"
+    [hasBgImage]="true" 
+    [class]="'pb-4'"></app-content-header>
+
+    @if (userRole | async; as userRole){
+        <div fxLayout="column" fxLayout.gt-sm="row wrap" class="p-2">
+            <div fxFlex="100" class="p-2"> 
+                {{userRole.roleName}}
+            </div>
+            <div fxFlex="100" class="p-2">
+                
+            </div> 
+                      
+        </div>
+
+    }
+

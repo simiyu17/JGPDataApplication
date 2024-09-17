@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { PagesComponent } from './pages.component';
 import { AuthGuard } from '../util/AuthGuard';
+import { userRoleResolver } from '../resolvers/user-role.resolver';
 
 export const routes: Routes = [
   {
@@ -10,6 +11,12 @@ export const routes: Routes = [
       {
         path: '',
         loadComponent: () => import('./dashboard/dashboard.component').then(c => c.DashboardComponent),
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Dashboard' }
+      },
+      {
+        path: 'my-partner-dashboard',
+        loadComponent: () => import('./dashboard/my-dashboard/my-dashboard.component').then(c => c.MyDashboardComponent),
         canActivate: [AuthGuard],
         data: { breadcrumb: 'Dashboard' }
       },
@@ -41,7 +48,22 @@ export const routes: Routes = [
         path: 'user-roles',
         loadComponent: () => import('./user-role/user-role.component').then(c => c.UserRoleComponent),
         canActivate: [AuthGuard],
-        data: { breadcrumb: 'User Roles' }
+        data: { breadcrumb: 'User Roles' },
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./user-role/user-role.component').then(c => c.UserRoleComponent),
+            canActivate: [AuthGuard],
+            data: { breadcrumb: 'User Roles' }
+          },
+          {
+            path: ':id',
+            loadComponent: () => import('./user-role/user-role-details/user-role-details.component').then(c => c.UserRoleDetailsComponent),
+            canActivate: [AuthGuard],
+            data: { breadcrumb: 'User Role Details' },
+            resolve: {userRole: userRoleResolver}
+          }
+        ]
       },
       {
         path: 'partners',
