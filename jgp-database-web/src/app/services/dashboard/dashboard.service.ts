@@ -12,44 +12,54 @@ export class DashboardService {
     constructor(private httpClient: HttpClient, private globalService: GlobalService, private router: Router) { }
 
 
-    getHighLevelSummary(): Observable<any> {
-      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/high-level-summary`);
+    getHighLevelSummary(partnerId: number | undefined = undefined): Observable<any> {
+      const queryParam = (partnerId ? `?partner-id=${partnerId}` : '');
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/high-level-summary${queryParam}`);
     }
 
-    getLoansDisbursedByGenderSummary(): Observable<any> {
-      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-disbursed-by-gender`);
+    getLoansDisbursedByGenderSummary(partnerId: number | undefined = undefined): Observable<any> {
+      const queryParam = (partnerId ? `?partner-id=${partnerId}` : '');
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-disbursed-by-gender${queryParam}`);
     }
 
-    getBusinessesTrainedByGenderSummary(): Observable<any> {
-      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/businesses-trained-by-gender`);
+    getBusinessesTrainedByGenderSummary(partnerId: number | undefined = undefined): Observable<any> {
+      const queryParam = (partnerId ? `?partner-id=${partnerId}` : '');
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/businesses-trained-by-gender${queryParam}`);
     }
 
-    getLoansDisbursedByPipelineSummary(): Observable<any> {
-      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-disbursed-by-pipeline`);
+    getLoansDisbursedByPipelineSummary(partnerId: number | undefined = undefined): Observable<any> {
+      const queryParam = (partnerId ? `?partner-id=${partnerId}` : '');
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-disbursed-by-pipeline${queryParam}`);
     }
 
-    getLoansDisbursedByQualitySummary(): Observable<any> {
-      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-disbursed-by-quality`);
+    getLoansDisbursedByQualitySummary(partnerId: number | undefined = undefined): Observable<any> {
+      const queryParam = (partnerId ? `?partner-id=${partnerId}` : '');
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-disbursed-by-quality${queryParam}`);
     }
 
-    getTaNeedsByGenderSummary(): Observable<any> {
-      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/ta-needs-by-gender`);
+    getTaNeedsByGenderSummary(partnerId: number | undefined = undefined): Observable<any> {
+      const queryParam = (partnerId ? `?partner-id=${partnerId}` : '');
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/ta-needs-by-gender${queryParam}`);
     }
 
-    getTaTrainingBySectorSummary(): Observable<any> {
-      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/ta-training-by-sector`);
+    getTaTrainingBySectorSummary(partnerId: number | undefined = undefined): Observable<any> {
+      const queryParam = (partnerId ? `?partner-id=${partnerId}` : '');
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/ta-training-by-sector${queryParam}`);
     }
 
-    getTrainingByPartnerByGenderSummary(): Observable<any> {
-      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/training-by-partner-by-gender`);
+    getTrainingByPartnerByGenderSummary(partnerId: number | undefined = undefined): Observable<any> {
+      const queryParam = (partnerId ? `?partner-id=${partnerId}` : '');
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/training-by-partner-by-gender${queryParam}`);
     }
 
-    getLastThreeYearsAccessedLoanPerPartnerSummary(): Observable<any> {
-      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loan-accessed-per-partner-for-last-three-years`);
+    getLastThreeYearsAccessedLoanPerPartnerSummary(partnerId: number | undefined = undefined): Observable<any> {
+      const queryParam = (partnerId ? `?partner-id=${partnerId}` : '');
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loan-accessed-per-partner-for-last-three-years${queryParam}`);
     }
 
-    getLoansAccessedVsOutStandingByPartnerSummary(): Observable<any> {
-      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-accessed-vs-out-standing-per-partner`);
+    getLoansAccessedVsOutStandingByPartnerSummary(partnerId: number | undefined = undefined): Observable<any> {
+      const queryParam = (partnerId ? `?partner-id=${partnerId}` : '');
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-accessed-vs-out-standing-per-partner${queryParam}`);
     }
 
 }

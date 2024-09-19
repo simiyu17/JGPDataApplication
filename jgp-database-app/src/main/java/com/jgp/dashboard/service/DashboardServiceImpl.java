@@ -116,7 +116,7 @@ public class DashboardServiceImpl implements DashboardService {
         parameters.addValue("partnerId", partnerId);
         var sqlBuilder = new StringBuilder(DataPointMapper.BUSINESSES_TRAINED_BY_SECTOR_SCHEMA);
         if (Objects.nonNull(partnerId)){
-            sqlBuilder.append("where l.partner_id = :partnerId ");
+            sqlBuilder.append("where bpd.partner_id = :partnerId ");
         }
         sqlBuilder.append("group by 1;");
 
