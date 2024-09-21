@@ -1,7 +1,7 @@
 package com.jgp.authentication.domain;
 
 
-import com.jgp.authentication.dto.UserDetailedDto;
+import com.jgp.authentication.dto.UserDtoV2;
 import com.jgp.authentication.exception.NoAuthorizationException;
 import com.jgp.patner.domain.Partner;
 import com.jgp.shared.domain.BaseEntity;
@@ -98,35 +98,41 @@ public class AppUser extends BaseEntity implements PlatformUser {
         return String.format("%s, %s", this.firstName, this.lastName);
     }
 
-    public static AppUser createUser(Partner partner, UserDetailedDto userDto, PasswordEncoder encoder){
-        return new AppUser(partner, userDto.profile().firstName(), userDto.profile().lastName(),
-                userDto.contacts().username(), userDto.work().designation(), userDto.contacts().town(),
-                userDto.profile().gender(), userDto.profile().image(), userDto.contacts().cellPhone(), true, true, encoder);
+    public static AppUser createUser(Partner partner, UserDtoV2 userDto, PasswordEncoder encoder){
+        return new AppUser(partner, userDto.firstName(), userDto.lastName(),
+                userDto.username(), userDto.designation(), userDto.town(),
+                userDto.gender(), userDto.image(), userDto.cellPhone(), true, true, encoder);
     }
 
-    public void updateUser(UserDetailedDto userDto){
-        if(!StringUtils.equals(userDto.profile().firstName(), this.firstName)){
-            this.firstName = userDto.profile().firstName();
+    public void updateUser(UserDtoV2 userDto, Partner partner){
+        if(!StringUtils.equals(userDto.firstName(), this.firstName)){
+            this.firstName = userDto.firstName();
         }
-        if(!StringUtils.equals(userDto.profile().lastName(), this.lastName)){
-            this.lastName = userDto.profile().firstName();
+        if(!StringUtils.equals(userDto.lastName(), this.lastName)){
+            this.lastName = userDto.firstName();
         }
-        if(!StringUtils.equals(userDto.work().designation(), this.designation)){
-            this.designation = userDto.work().designation();
+        if(!StringUtils.equals(userDto.gender(), this.gender)){
+            this.gender = userDto.gender();
         }
-        if(!StringUtils.equals(userDto.contacts().town(), this.town)){
-            this.town = userDto.contacts().town();
+        if(!Objects.equals(partner, this.partner)){
+            this.partner = partner;
         }
-        if(!StringUtils.equals(userDto.contacts().cellPhone(), this.cellPhone)){
-            this.cellPhone = userDto.contacts().cellPhone();
+        if(!StringUtils.equals(userDto.designation(), this.designation)){
+            this.designation = userDto.designation();
+        }
+        if(!StringUtils.equals(userDto.town(), this.town)){
+            this.town = userDto.town();
+        }
+        if(!StringUtils.equals(userDto.cellPhone(), this.cellPhone)){
+            this.cellPhone = userDto.cellPhone();
         }
     }
 
-    public UserDetailedDto toDto(){
-        return new UserDetailedDto(getId(),
-                new UserDetailedDto.UserProfileDto(this.firstName, this.lastName, this.gender, this.image, this.roles.stream().map(Role::getRoleName).collect(Collectors.toSet())),
-                new UserDetailedDto.UserWorkDto(Objects.nonNull(this.partner) ? this.partner.getPartnerName() : "", Objects.nonNull(this.partner) ? this.partner.getId() : null, this.getDesignation()),
-                new UserDetailedDto.UserContactsDto(this.username, this.cellPhone, this.town));
+    public UserDtoV2 toDto(){
+        return new UserDtoV2(getId(),
+                this.firstName, this.lastName, this.gender, this.image, this.roles.stream().map(Role::getRoleName).collect(Collectors.toSet()),
+                Objects.nonNull(this.partner) ? this.partner.getPartnerName() : "", Objects.nonNull(this.partner) ? this.partner.getId() : null, this.getDesignation(),
+                this.username, this.cellPhone, this.town);
     }
 
     public void updateRoles(final Set<Role> allRoles) {

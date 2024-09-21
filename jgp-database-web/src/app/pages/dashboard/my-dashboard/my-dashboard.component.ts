@@ -17,11 +17,11 @@ import { DashboardComponent } from "../dashboard.component";
 })
 export class MyDashboardComponent {
 
-  partnerType: string = 'NONE';
+  partnerType: string | undefined = 'NONE';
   constructor(private authService: AuthService){
 
   }
   ngOnInit(): void {
-    this.partnerType = this.authService.currentUser().partnerType === '-' ? 'NONE' : this.authService.currentUser().partnerType;
+    this.partnerType = this.authService.currentUser()?.partnerType === '-' ? 'NONE' : this.authService.currentUser()?.partnerType;
   }
 }

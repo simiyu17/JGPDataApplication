@@ -1,25 +1,13 @@
 export class User {
     id: number;
-    profile: UserProfile;
-    work: UserWork;
-    contacts: UserContacts;
-}
-
-export class UserProfile {
     firstName: string;
     lastName: string;
     gender: string;
     image: string;
-    userRoles: string[]
-}
-
-export class UserWork {
+    userRoles: string[];
     partnerName: string;
     partnerId?: number;
     designation: string;
-}
-
-export class UserContacts {
     username: string;
     cellPhone: string;
     town: string;

@@ -47,13 +47,13 @@ public class PartnerServiceImpl implements PartnerService {
     @Override
     public PartnerDto findPartnerById(Long userId) {
         return this.partnerRepository.findById(userId)
-                .map(p -> new PartnerDto(p.getId(), p.getPartnerName(), p.getType().getName()))
+                .map(p -> new PartnerDto(p.getId(), p.getPartnerName(), p.getType().getName(), p.getType().name()))
                 .orElseThrow(() -> new PartnerNotFoundException(CommonUtil.NO_RESOURCE_FOUND_WITH_ID));
     }
 
     @Override
     public List<PartnerDto> getAllPartners() {
-        return this.partnerRepository.findAll().stream().map(p -> new PartnerDto(p.getId(), p.getPartnerName(), p.getType().getName())).toList();
+        return this.partnerRepository.findAll().stream().map(p -> new PartnerDto(p.getId(), p.getPartnerName(), p.getType().getName(), p.getType().name())).toList();
     }
 
 }

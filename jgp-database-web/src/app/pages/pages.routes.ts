@@ -40,35 +40,19 @@ export const routes: Routes = [
       },
       {
         path: 'users',
-        loadComponent: () => import('./users/users.component').then(c => c.UsersComponent),
+        loadChildren: () => import('./users/user.routes').then(p => p.routes),
         canActivate: [AuthGuard],
         data: { breadcrumb: 'Users' }
       },
       {
         path: 'user-roles',
-        loadComponent: () => import('./user-role/user-role.component').then(c => c.UserRoleComponent),
+        loadChildren: () => import('./user-role/role.routes').then(p => p.routes),
         canActivate: [AuthGuard],
-        data: { breadcrumb: 'User Roles' },
-        children: [
-          {
-            path: '',
-            loadComponent: () => import('./user-role/user-role.component').then(c => c.UserRoleComponent),
-            canActivate: [AuthGuard],
-            data: { breadcrumb: 'User Roles' }
-          },
-          {
-            path: ':id',
-            loadComponent: () => import('./user-role/user-role-details/user-role-details.component').then(c => c.UserRoleDetailsComponent),
-            canActivate: [AuthGuard],
-            data: { breadcrumb: 'User Role Details' },
-            resolve: {userRole: userRoleResolver}
-          }
-        ]
+        data: { breadcrumb: 'User Roles' }
       },
       {
         path: 'partners',
-        loadComponent: () => import('./partners/partners.component').then(c => c.PartnersComponent),
-        canActivate: [AuthGuard],
+        loadChildren: () => import('./partners/partner.routes').then(p => p.routes),
         data: { breadcrumb: 'Partners' }
       },
       {

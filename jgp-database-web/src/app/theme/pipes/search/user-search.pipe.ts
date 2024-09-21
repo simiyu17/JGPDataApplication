@@ -9,7 +9,7 @@ export class UserSearchPipe implements PipeTransform {
     const searchText = new RegExp(args, 'ig');
     if (value) {
       return value.filter((user: any) => {
-        const name = user.profile.firstName || user.contacts.username;
+        const name = user.firstName || user.username;
         return name.search(searchText) !== -1;
       });
     }

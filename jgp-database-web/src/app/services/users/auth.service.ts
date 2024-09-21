@@ -4,14 +4,18 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GlobalService } from '@services/shared/global.service';
+import { CurrentUserCredentials } from '../../dto/CurrentUserCredentials';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  CURRENT_USER_CREDENTIALS: string = 'current_user_credentials';
   AUTH_TOKEN_KEY: string = 'auth_token';
   USER_FULL_NAME: string = 'user_full_name';
+  USER_ROLES: string = 'user_roles';
+  USER_PERMISSIONS: string = 'user_permissions';
   USER_EMAIL: string = 'user_email';
   USER_POSITION: string = 'user_position';
   USER_PARTNER_ID: string = 'user_partner_id';
@@ -27,7 +31,7 @@ export class AuthService {
 
   public setLocalStorageValue = (key : string, value: any): void => localStorage.setItem(key, value)
 
-  public getLocalStorageValue = (key: string): string | null => localStorage.getItem(key);
+  public getLocalStorageValue = (key: string): any => localStorage.getItem(key);
 
   public getAuthToken = (): string | null => this.getLocalStorageValue(this.AUTH_TOKEN_KEY);
 
@@ -38,14 +42,22 @@ export class AuthService {
   public storeUserDetails = (token?: string) : void => {
     if(token){
       this.setLocalStorageValue(this.AUTH_TOKEN_KEY, token);
-      this.setLocalStorageValue(this.USER_FULL_NAME, this.decodeAuthToken()[this.USER_FULL_NAME]);
-      this.setLocalStorageValue(this.USER_EMAIL, this.decodeAuthToken()[this.USER_EMAIL]);
-      this.setLocalStorageValue(this.USER_POSITION, this.decodeAuthToken()[this.USER_POSITION]);
-      this.setLocalStorageValue(this.USER_PARTNER_ID, this.decodeAuthToken()[this.USER_PARTNER_ID]);
-      this.setLocalStorageValue(this.USER_PARTNER_NAME, this.decodeAuthToken()[this.USER_PARTNER_NAME]);
-      this.setLocalStorageValue(this.USER_PARTNER_TYPE, this.decodeAuthToken()[this.USER_PARTNER_TYPE]);
-      this.setLocalStorageValue(this.USER_REGISTRATION, this.decodeAuthToken()[this.USER_REGISTRATION]);
-      this.setLocalStorageValue(this.FORCE_PASS_CHANGE, this.decodeAuthToken()[this.FORCE_PASS_CHANGE]);
+      const userCredentials: CurrentUserCredentials = {
+        accessToken: token,
+        desgnation: this.decodeAuthToken()[this.USER_POSITION],
+        permissions: JSON.stringify(this.decodeAuthToken()[this.USER_PERMISSIONS]),
+        registration: this.decodeAuthToken()[this.USER_REGISTRATION],
+        roles: JSON.stringify(this.decodeAuthToken()[this.USER_ROLES]),
+        username: this.decodeAuthToken()[this.USER_EMAIL],
+        email: this.decodeAuthToken()[this.USER_EMAIL],
+        partnerId: this.decodeAuthToken()[this.USER_PARTNER_ID],
+        partnerName: this.decodeAuthToken()[this.USER_PARTNER_NAME],
+        partnerType: this.decodeAuthToken()[this.USER_PARTNER_TYPE],
+        rememberMe: false,
+        userFullName: this.decodeAuthToken()[this.USER_FULL_NAME],
+        forceChangePassword: this.decodeAuthToken()[this.FORCE_PASS_CHANGE]
+      }
+      this.setLocalStorageValue(this.CURRENT_USER_CREDENTIALS, JSON.stringify(userCredentials));
     }
   };
 
@@ -73,16 +85,11 @@ export class AuthService {
     this.router.navigateByUrl("/login");
   }
 
-  currentUser(): any {
-    return {
-      name: this.getLocalStorageValue(this.USER_FULL_NAME),
-      email: this.getLocalStorageValue(this.USER_EMAIL),
-      desgnation: this.getLocalStorageValue(this.USER_POSITION),
-      partnerId: this.getLocalStorageValue(this.USER_PARTNER_ID),
-      partner: this.getLocalStorageValue(this.USER_PARTNER_NAME),
-      partnerType: this.getLocalStorageValue(this.USER_PARTNER_TYPE),
-      registration: this.getLocalStorageValue(this.USER_REGISTRATION)
+  currentUser(): CurrentUserCredentials | null {
+    if(undefined == this.getLocalStorageValue(this.CURRENT_USER_CREDENTIALS) ){
+      this.doLogout();
     }
+    return JSON.parse(this.getLocalStorageValue(this.CURRENT_USER_CREDENTIALS))
   }
 
 }

@@ -15,6 +15,12 @@ import { GlobalService } from '@services/shared/global.service';
 import { UserRoleDto } from '../../../dto/UserRoleDto';
 import { UserRoleService } from '@services/users/userroles.service';
 import { PermissionsService } from '@services/users/permissions.service';
+import { PartnerDto } from '../../../dto/Partner';
+import { PartnerService } from '@services/data-management/partners.service';
+import { ContentHeaderComponent } from '../../../theme/components/content-header/content-header.component';
+import { MatCardModule } from '@angular/material/card';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-edit-role',
@@ -32,33 +38,47 @@ import { PermissionsService } from '@services/users/permissions.service';
     MatDialogModule,
     MatButtonModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    ContentHeaderComponent,
+    MatCardModule
   ],
   templateUrl: './edit-role.component.html',
   styleUrl: './edit-role.component.scss'
 })
 export class EditRoleComponent implements OnInit {
 
-  public userRoleForm: FormGroup;
+  public editUserRoleForm: FormGroup;
 
   allPermissions: any
-
-  constructor(public dialogRef: MatDialogRef<EditRoleComponent>,
-    @Inject(MAT_DIALOG_DATA) public userRole: UserRoleDto,
+  selectedUserRole: UserRoleDto;
+  constructor(
     public fb: FormBuilder, 
     private userRoleServive: UserRoleService,
     private permissionsServive: PermissionsService,
-  private gs: GlobalService) {
-    this.userRoleForm = this.fb.group({
-    id: null,
-    roleName: [null, Validators.compose([Validators.required])],
-    description: [null, Validators.compose([Validators.required])],
-    permissions: [null, Validators.compose([Validators.required])],
-    });
+    private gs: GlobalService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) {
+      this.editUserRoleForm = this.fb.group({
+      id: null,
+      roleName: [null, Validators.compose([Validators.required])],
+      description: [null, Validators.compose([Validators.required])],
+      permissions: [null, Validators.compose([Validators.required])],
+      });
     }
     
   ngOnInit(): void {
     this.getAvailablePermissions();
+    this.activatedRoute.data.pipe(map(data => data['selectedUserRole']))
+      .subscribe({
+        next: (response) => {
+          this.selectedUserRole = response;
+          this.editUserRoleForm.patchValue({
+            'roleName': this.selectedUserRole.roleName,
+            'description': this.selectedUserRole.description,
+            'permissions': this.selectedUserRole.permissions
+          });
+        }
+      });
   }
 
     getAvailablePermissions() {
@@ -72,37 +92,20 @@ export class EditRoleComponent implements OnInit {
     }
 
     onSubmitEditUserRole(): void {
-      if (this.userRoleForm.valid) {
-        if(this.userRole?.id){
-          this.userRoleServive.updateUserRole(this.userRole.id, this.userRoleForm.value)
+      if (this.editUserRoleForm.valid && this.selectedUserRole.id) {
+          this.userRoleServive.updateUserRole(this.selectedUserRole.id, this.editUserRoleForm.value)
           .subscribe({
             next: (response) => {
               this.gs.openSnackBar("Done sucessfully!!", "Dismiss");
-              this.dialogRef.close();
+              this.router.navigateByUrl(`/user-roles/${this.selectedUserRole.id}/details`);
             },
             error: (error) => {
               this.gs.openSnackBar(`An error occured ${error.error.detail}`, "Dismiss");
             }
           });
-        }else {
-          this.userRoleServive.createUserRole(this.userRoleForm.value)
-          .subscribe({
-            next: (response) => {
-              this.gs.openSnackBar("Done sucessfully!!", "Dismiss");
-              this.dialogRef.close();
-            },
-            error: (error) => {
-              this.gs.openSnackBar(`An error occured ${error.error.detail}`, "Dismiss");
-            }
-          });
-        }
         
       }
     }
 
-
-    close(): void {
-      this.dialogRef.close();
-    }
 
 }

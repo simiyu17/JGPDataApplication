@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { EditRoleComponent } from './edit-role/edit-role.component';
 import { UserRoleService } from '@services/users/userroles.service';
 import { UserRoleDto } from '../../dto/UserRoleDto';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-user-role',
@@ -22,7 +23,8 @@ import { UserRoleDto } from '../../dto/UserRoleDto';
     FlexLayoutModule,
     MatButtonModule,
     MatIconModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    RouterModule
   ],
   templateUrl: './user-role.component.html',
   styleUrl: './user-role.component.scss'

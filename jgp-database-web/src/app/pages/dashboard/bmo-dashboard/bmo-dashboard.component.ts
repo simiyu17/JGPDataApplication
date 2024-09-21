@@ -33,7 +33,7 @@ import { DashboardService } from '@services/dashboard/dashboard.service';
 export class BmoDashboardComponent implements OnInit {
 
   partnerName: string = '';
-  partnerId: number;
+  partnerId: any;
   public autoScale = true;
   @ViewChild('resizedDiv') resizedDiv: ElementRef;
   public previousWidthOfResizedDiv: number = 0;
@@ -68,8 +68,8 @@ export class BmoDashboardComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.partnerName = `${this.authService.currentUser().partner} Dashboard !`;
-    this.partnerId = this.authService.currentUser().partnerId;
+    this.partnerName = `${this.authService.currentUser()?.partnerName} Dashboard !`;
+    this.partnerId = this.authService.currentUser()?.partnerId;
     this.getTaNeedsByGenderSummary();
     this.getTaTrainingBySectorSummary();
   }

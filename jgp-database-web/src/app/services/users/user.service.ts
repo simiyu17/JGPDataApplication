@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GlobalService } from '../shared/global.service';
 import { Observable } from 'rxjs';
-import { UserDto } from '../../dto/UserDto';
+import { User } from '../../common/models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +15,11 @@ export class UserService {
     return this.httpClient.get(`${this.globalService.BASE_API_URL}/users`);
   }
 
-  createUser(user: UserDto): Observable<any> {
+  createUser(user: User): Observable<any> {
     return this.httpClient.post(`${this.globalService.BASE_API_URL}/users`, JSON.stringify(user));
   }
 
-  updateUser(userId: number, user: UserDto): Observable<any> {
+  updateUser(userId: number, user: User): Observable<any> {
     return this.httpClient.put(`${this.globalService.BASE_API_URL}/users/${userId}`, JSON.stringify(user));
   }
 
@@ -27,7 +27,7 @@ export class UserService {
     return this.httpClient.put(`${this.globalService.BASE_API_URL}/users/change-password`, JSON.stringify(userPassDto));
   }
 
-  getUserById(userId: number): Observable<any> {
+  getUserById(userId: number | string | null): Observable<any> {
     return this.httpClient.get(`${this.globalService.BASE_API_URL}/users/${userId}`);
   }
 }

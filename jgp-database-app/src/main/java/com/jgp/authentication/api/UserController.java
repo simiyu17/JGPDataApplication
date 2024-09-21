@@ -1,7 +1,6 @@
 package com.jgp.authentication.api;
 
-import com.jgp.authentication.dto.UserDetailedDto;
-import com.jgp.authentication.dto.UserDto;
+import com.jgp.authentication.dto.UserDtoV2;
 import com.jgp.authentication.dto.UserPassChangeDto;
 import com.jgp.authentication.service.RoleService;
 import com.jgp.authentication.service.UserService;
@@ -37,18 +36,18 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDetailedDto>> getAvailableUsers(){
+    public ResponseEntity<List<UserDtoV2>> getAvailableUsers(){
         return new ResponseEntity<>(this.userService.getAllUsers(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto> createUser(@Valid @RequestBody UserDetailedDto newUser){
+    public ResponseEntity<ApiResponseDto> createUser(@Valid @RequestBody UserDtoV2 newUser){
         this.userService.createUser(newUser);
         return new ResponseEntity<>(new ApiResponseDto(true, "User created !!"), HttpStatus.CREATED);
     }
 
     @PutMapping("{userId}")
-    public ResponseEntity<ApiResponseDto> updateUser(@PathVariable("userId") Long userId, @Valid @RequestBody UserDetailedDto userDto){
+    public ResponseEntity<ApiResponseDto> updateUser(@PathVariable("userId") Long userId, @Valid @RequestBody UserDtoV2 userDto){
         this.userService.updateUser(userId, userDto);
         return new ResponseEntity<>(new ApiResponseDto(true, "User updated !!"), HttpStatus.OK);
     }
@@ -60,7 +59,7 @@ public class UserController {
     }
 
     @GetMapping("{userId}")
-    public ResponseEntity<UserDetailedDto> getUser(@PathVariable("userId") Long userId){
+    public ResponseEntity<UserDtoV2> getUser(@PathVariable("userId") Long userId){
         return new ResponseEntity<>(this.userService.findUserById(userId), HttpStatus.OK);
     }
 }

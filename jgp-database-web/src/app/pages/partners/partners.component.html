@@ -6,17 +6,16 @@
     [hasBgImage]="true" 
     [class]="'pb-5'"></app-content-header>
 
-    <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between center" class="px-2 user-toolbar">
-        <div fxLayout="row">
-            <button mat-icon-button (click)="openPartnerDialog(null)" class="default-contrast">
-                <mat-icon>person_add</mat-icon>
-            </button>
-        </div>
-    </mat-toolbar>
-
-
-
+   
 <div fxLayout="column" class="p-2">
+    <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="end center" class="px-2 user-toolbar">
+        <div class="action-button" fxLayoutGap="25px">
+            <button mat-raised-button color="primary" routerLink="new">
+              <mat-icon>person_add</mat-icon>&nbsp;&nbsp;Create Partner
+            </button>
+          </div>
+    </mat-toolbar>
+   
     <div class="p-2">
         <mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
             <ng-container matColumnDef="partnerName">
@@ -29,7 +28,7 @@
                 <mat-cell *matCellDef="let element"> {{element.type}} </mat-cell>
             </ng-container>
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/partners', row.id, 'details']"></mat-row>
         </mat-table>
         <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
     </div>

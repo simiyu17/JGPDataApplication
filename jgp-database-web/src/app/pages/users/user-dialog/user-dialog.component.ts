@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { User, UserContacts, UserProfile, UserWork } from '../../../common/models/user.model';
+import { User} from '../../../common/models/user.model';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -101,15 +101,6 @@ export class UserDialogComponent implements OnInit {
   ngOnInit() {
     this.getAvailablePartners();
     this.getAvailableUserRoles();
-    if (this.user) {
-      this.createUserForm.setValue(this.user);
-    }
-    else {
-      this.user = new User();
-      this.user.profile = new UserProfile();
-      this.user.work = new UserWork();
-      this.user.contacts = new UserContacts();
-    }
   }
 
   close(): void {

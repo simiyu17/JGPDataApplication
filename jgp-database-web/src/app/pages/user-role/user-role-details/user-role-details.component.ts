@@ -5,33 +5,38 @@ import { ContentHeaderComponent } from '../../../theme/components/content-header
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { map, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { UserRoleDto } from '../../../dto/UserRoleDto';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-user-role-details',
   standalone: true,
   imports: [
-    MatTableModule,
-    MatPaginatorModule,
+    MatCardModule,
     ContentHeaderComponent,
     FlexLayoutModule,
     MatButtonModule,
     MatIconModule,
-    AsyncPipe
+    MatFormFieldModule,
+    AsyncPipe,
+    MatDividerModule,
+    RouterModule
   ],
   templateUrl: './user-role-details.component.html',
   styleUrl: './user-role-details.component.scss'
 })
 export class UserRoleDetailsComponent implements OnInit {
 
-  userRole: Observable<UserRoleDto>;
+  selectedUserRole: Observable<UserRoleDto>;
   constructor(private activatedRoute: ActivatedRoute){}
 
   ngOnInit(): void {
-    this.userRole = this.activatedRoute.data.pipe(map(data => data['userRole']));
+    this.selectedUserRole = this.activatedRoute.data.pipe(map(data => data['selectedUserRole']));
   }
 
 }

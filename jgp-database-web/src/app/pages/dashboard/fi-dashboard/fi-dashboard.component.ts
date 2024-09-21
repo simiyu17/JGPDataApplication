@@ -34,7 +34,7 @@ import { PieChartComponent } from '../pie-chart/pie-chart.component';
 export class FiDashboardComponent implements OnInit {
 
   partnerName: string = '';
-  partnerId: number;
+  partnerId: any;
   public gradient = false;
   public autoScale = true;
   @ViewChild('resizedDiv') resizedDiv: ElementRef;
@@ -72,8 +72,8 @@ export class FiDashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.partnerName = `${this.authService.currentUser().partner} Dashboard !`;
-    this.partnerId = this.authService.currentUser().partnerId;
+    this.partnerName = `${this.authService.currentUser()?.partnerName} Dashboard !`;
+    this.partnerId = this.authService.currentUser()?.partnerId;
     this.getLoansDisbursedByGenderSummary();
     this.getLoansDisbursedByPipelineSummary();
     this.getLoansDisbursedByQualitySummary();

@@ -15,13 +15,17 @@ export class PartnerService {
 
     createPartner(partner: PartnerDto): Observable<any> {
         return this.httpClient.post(`${this.globalService.BASE_API_URL}/partners`, JSON.stringify(partner));
-      }
+    }
 
-      updatePartner(partnerId: number, partner: PartnerDto): Observable<any> {
-        return this.httpClient.put(`${this.globalService.BASE_API_URL}/partners/${partnerId}`, JSON.stringify(partner));
-      }
+    updatePartner(partnerId: number, partner: PartnerDto): Observable<any> {
+      return this.httpClient.put(`${this.globalService.BASE_API_URL}/partners/${partnerId}`, JSON.stringify(partner));
+    }
 
-      getAvailablePartners(): Observable<any> {
-        return this.httpClient.get(`${this.globalService.BASE_API_URL}/partners`);
-      }
+    getAvailablePartners(): Observable<any> {
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/partners`);
+    }
+
+    getPartnerById(partnerId: number | string | null): Observable<any> {
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/partners/${partnerId}`);
+    }
 }
