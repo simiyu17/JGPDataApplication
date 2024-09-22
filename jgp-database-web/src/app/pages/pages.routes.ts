@@ -22,9 +22,15 @@ export const routes: Routes = [
       },
       {
         path: 'participants',
-        loadComponent: () => import('./clients/clients.component').then(c => c.ClientsComponent),
+        loadChildren: () => import('./clients/client.routes').then(p => p.routes),
         canActivate: [AuthGuard],
         data: { breadcrumb: 'Project Participants' }
+      },
+      {
+        path: 'data-upload',
+        loadComponent: () => import('./data/data-uploader/data-uploader.component').then(c => c.DataUploaderComponent),
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Data Upload' }
       },
       {
         path: 'data-list',

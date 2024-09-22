@@ -1,53 +1,57 @@
 package com.jgp.participant.dto;
 
+import com.jgp.bmo.dto.BMOClientDto;
+import com.jgp.finance.dto.LoanDto;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Builder
 public record ParticipantDto(
-         String businessName,
+        String businessName,
 
-         String jgpId,
+        String jgpId,
 
-         String phoneNumber,
+        String phoneNumber,
 
-         String ownerGender,
+        String ownerGender,
 
-         Integer ownerAge,
+        Integer ownerAge,
 
-         String businessLocation,
+        String businessLocation,
 
-         String industrySector,
+        String industrySector,
 
-         String businessSegment,
+        String businessSegment,
 
-         Boolean isBusinessRegistered,
+        Boolean isBusinessRegistered,
 
-         String registrationNumber,
+        String registrationNumber,
 
-         Boolean hasBMOMembership,
+        Boolean hasBMOMembership,
 
-         String bmoMembership,
+        String bmoMembership,
 
-         BigDecimal bestMonthlyRevenue,
+        BigDecimal bestMonthlyRevenue,
 
-         BigDecimal worstMonthlyRevenue,
+        BigDecimal worstMonthlyRevenue,
 
-         Integer totalRegularEmployees,
+        Integer totalRegularEmployees,
 
-         Integer youthRegularEmployees,
+        Integer youthRegularEmployees,
 
-         Integer totalCasualEmployees,
+        Integer totalCasualEmployees,
 
-         Integer youthCasualEmployees,
+        Integer youthCasualEmployees,
 
-         String sampleRecords,
+        String sampleRecords,
 
-         String taNeeds,
+        String taNeeds,
 
-         String personWithDisability,
+        String personWithDisability,
 
-        String refugeeStatus
-) {
+        String refugeeStatus,
+        List<BMOClientDto> bmoClientDtos,
+        List<LoanDto> loanDtos) {
 }

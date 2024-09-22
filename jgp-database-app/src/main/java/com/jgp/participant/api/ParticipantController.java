@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Validated
-@RequestMapping("api/v1/clients")
+@RequestMapping("api/v1/participants")
 public class ParticipantController {
 
     private final ParticipantService participantService;

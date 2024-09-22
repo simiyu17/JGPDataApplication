@@ -1,11 +1,11 @@
 package com.jgp.authentication.dto;
 
-import java.util.Set;
+import java.util.List;
 
 public record RoleDto(
         Long id,
         String roleName,
         String description,
-        Set<String> permissions
+        List<String> permissions
 ) {
 }

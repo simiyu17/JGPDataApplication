@@ -1,4 +1,10 @@
-<app-content-header [icon]="'supervisor_account'" [title]="'Project Participants'" [hideBreadcrumb]="false" [hasBgImage]="true" [class]="'pb-4'"></app-content-header>
+<app-content-header 
+    [icon]="'supervisor_account'" 
+    [title]="'Project Participants'" 
+    [desc]="'View information about the Project Participants.'"
+    [hideBreadcrumb]="false"
+    [hasBgImage]="true" 
+    [class]="'pb-5'"></app-content-header>
 
 <div fxLayout="column" class="p-2">
     <div class="p-2">
@@ -28,7 +34,7 @@
                 <mat-cell *matCellDef="let element"> {{element.industrySector}} </mat-cell>
             </ng-container>
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/participants', row.id, 'details']"></mat-row>
         </mat-table>
         <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
     </div>

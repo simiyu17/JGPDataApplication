@@ -34,7 +34,7 @@
     @if (viewType == 'grid') {    
         <div fxLayout="row wrap"> 
             @for (user of users | UserSearchPipe : searchText | paginate: { itemsPerPage: 6, currentPage: page }; track user.id) {    
-                <div fxFlex="100" fxFlex.gt-md="33.3" fxFlex.md="50" fxFlex.sm="50" class="p-2" [routerLink]="['/users', user.id, 'details']"> 
+                <div fxFlex="100" fxFlex.gt-md="33.3" fxFlex.md="50" fxFlex.sm="50" class="p-2" [routerLink]="['/users', user.id, 'details']" [ngClass]="'user-hover'"> 
                     <mat-card fxLayout="row" class="p-0 user-content">  
                         <div fxFlex="35" fxLayout="column" fxLayoutAlign="center center" class="bg-primary" [ngClass]="(isDeleted) ? '' : 'gradient-blue'">
                             <div class="user-img">
@@ -103,7 +103,7 @@
     @if (viewType == 'list') {  
         <div fxLayout="row wrap">
             @for (user of users | UserSearchPipe : searchText | paginate: { itemsPerPage: 6, currentPage: page }; track user.id) {  
-                <div fxFlex="100" class="p-2" [routerLink]="['/users', user.id, 'details']"> 
+                <div fxFlex="100" class="p-2" [routerLink]="['/users', user.id, 'details']" [ngClass]="'user-hover'"> 
                     <mat-card fxLayout="row" class="p-0 user-content"> 
                         <div fxFlex="20" fxFlex.xs="30" fxLayout="column" fxLayoutAlign="center center" class="bg-primary" [ngClass]="(isDeleted) ? '' : 'gradient-blue'">
                             <div class="user-img">

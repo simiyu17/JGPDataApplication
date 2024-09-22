@@ -4,6 +4,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ContentHeaderComponent } from '../../theme/components/content-header/content-header.component';
 import { ClientService } from '@services/data-management/clients.service';
 import { MatSort } from '@angular/material/sort';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-clients',
@@ -11,7 +12,8 @@ import { MatSort } from '@angular/material/sort';
   imports: [
     MatTableModule,
     MatPaginatorModule,
-    ContentHeaderComponent
+    ContentHeaderComponent,
+    RouterModule
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss'

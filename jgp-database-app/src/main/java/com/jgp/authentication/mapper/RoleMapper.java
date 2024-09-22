@@ -15,6 +15,7 @@ public interface RoleMapper {
     @Mapping(target = "id", expression = "java(role.getId())")
     @Mapping(target = "roleName", expression = "java(role.getRoleName())")
     @Mapping(target = "description", expression = "java(role.getDescription())")
+    @Mapping(target = "permissions", expression = "java(role.getPermissions().stream().map(com.jgp.authentication.domain.Permission::getCode).toList())")
     RoleDto toDto(Role role);
 
     List<RoleDto> toDtoList(List<Role> roles);

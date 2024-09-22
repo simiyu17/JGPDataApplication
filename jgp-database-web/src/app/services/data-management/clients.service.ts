@@ -13,6 +13,10 @@ export class ClientService {
 
 
     getAvailableClients(): Observable<any> {
-        return this.httpClient.get(`${this.globalService.BASE_API_URL}/clients`);
-      }
+        return this.httpClient.get(`${this.globalService.BASE_API_URL}/participants`);
+    }
+
+    getParticipantById(participantId: number | string | null): Observable<any> {
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/participants/${participantId}`);
+    }
 }

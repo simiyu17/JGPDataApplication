@@ -50,6 +50,9 @@ public class RoleServiceImpl implements RoleService {
     public void updateRole(Long roleId, RoleDto roleDto) {
         var role = this.roleRepository.findById(roleId).orElseThrow(() -> new ResourceNotFound(HttpStatus.NOT_FOUND));
         role.updateRole(roleDto);
+        if (!roleDto.permissions().isEmpty()){
+            this.updateRolePermissions(role.getId(), new ArrayList<>(roleDto.permissions()));
+        }
         this.roleRepository.save(role);
     }
 
@@ -111,7 +114,7 @@ public class RoleServiceImpl implements RoleService {
             final String name = rs.getString("name");
             final String description = rs.getString("description");
 
-            return new RoleDto(id, name, description, new HashSet<>());
+            return new RoleDto(id, name, description, new ArrayList<>());
         }
     }
 }

@@ -72,13 +72,14 @@
                       </div>
 
                       <div fxFlexFill>
-                        <span fxFlex="40%">Last Name:</span>
-                        <span fxFlex="60%">{{ selectedUser.lastName }}</span>
-                      </div>
-
-                      <div fxFlexFill>
-                        <span fxFlex="40%">Last Name:</span>
-                        <span fxFlex="60%">{{ selectedUser.lastName }}</span>
+                        <span fxFlex="40%">Attached User Roles:</span>
+                        <div fxFlex="60%">
+                          @for (userRole of selectedUser.userRoles; track $index) {
+                            <span>{{userRole}}</span>
+                          <br>
+                          }
+  
+                        </div>
                       </div>
                     </div>
                     </mat-card-content>
