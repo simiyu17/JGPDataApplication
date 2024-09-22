@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { PagesComponent } from './pages.component';
 import { AuthGuard } from '../util/AuthGuard';
+import { userRoleResolver } from '../resolvers/user-role.resolver';
 
 export const routes: Routes = [
   {
@@ -14,10 +15,22 @@ export const routes: Routes = [
         data: { breadcrumb: 'Dashboard' }
       },
       {
+        path: 'my-partner-dashboard',
+        loadComponent: () => import('./dashboard/my-dashboard/my-dashboard.component').then(c => c.MyDashboardComponent),
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Dashboard' }
+      },
+      {
         path: 'participants',
-        loadComponent: () => import('./clients/clients.component').then(c => c.ClientsComponent),
+        loadChildren: () => import('./clients/client.routes').then(p => p.routes),
         canActivate: [AuthGuard],
         data: { breadcrumb: 'Project Participants' }
+      },
+      {
+        path: 'data-upload',
+        loadComponent: () => import('./data/data-uploader/data-uploader.component').then(c => c.DataUploaderComponent),
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Data Upload' }
       },
       {
         path: 'data-list',
@@ -33,14 +46,19 @@ export const routes: Routes = [
       },
       {
         path: 'users',
-        loadComponent: () => import('./users/users.component').then(c => c.UsersComponent),
+        loadChildren: () => import('./users/user.routes').then(p => p.routes),
         canActivate: [AuthGuard],
         data: { breadcrumb: 'Users' }
       },
       {
-        path: 'partners',
-        loadComponent: () => import('./partners/partners.component').then(c => c.PartnersComponent),
+        path: 'user-roles',
+        loadChildren: () => import('./user-role/role.routes').then(p => p.routes),
         canActivate: [AuthGuard],
+        data: { breadcrumb: 'User Roles' }
+      },
+      {
+        path: 'partners',
+        loadChildren: () => import('./partners/partner.routes').then(p => p.routes),
         data: { breadcrumb: 'Partners' }
       },
       {

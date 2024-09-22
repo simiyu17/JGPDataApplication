@@ -27,6 +27,15 @@
                         <mat-label>Image url</mat-label>
                         <input matInput formControlName="image">
                     </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>User Roles</mat-label>
+                        <mat-select formControlName="userRoles" multiple>
+                            @for (userRole of allUserRoles; track $index) {
+                                <mat-option [value]="userRole.roleName">{{ userRole.roleName }}</mat-option>
+                            }
+                          
+                        </mat-select>
+                      </mat-form-field>
                 </div>
             </mat-tab>
             <mat-tab label="Work" formGroupName="work">

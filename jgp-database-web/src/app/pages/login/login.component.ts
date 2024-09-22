@@ -10,10 +10,9 @@ import { ContentHeaderComponent } from '../../theme/components/content-header/co
 import { MatInputModule } from '@angular/material/input';
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { UserService } from '@services/user.service';
-import { GlobalService } from '@services/global.service';
-import { AuthService } from '@services/auth.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { UserService } from '@services/users/user.service';
+import { GlobalService } from '@services/shared/global.service';
+import { AuthService } from '@services/users/auth.service';
 
 @Component({
   selector: 'app-login',

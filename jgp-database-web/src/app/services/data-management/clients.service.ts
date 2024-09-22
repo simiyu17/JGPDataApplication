@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GlobalService } from './global.service';
+import { GlobalService } from '../shared/global.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -13,6 +13,10 @@ export class ClientService {
 
 
     getAvailableClients(): Observable<any> {
-        return this.httpClient.get(`${this.globalService.BASE_API_URL}/clients`);
-      }
+        return this.httpClient.get(`${this.globalService.BASE_API_URL}/participants`);
+    }
+
+    getParticipantById(participantId: number | string | null): Observable<any> {
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/participants/${participantId}`);
+    }
 }

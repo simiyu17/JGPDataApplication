@@ -18,3 +18,12 @@
 @import "app/theme/styles/theme";
 @import "app/theme/styles/gradients";
 @import "app/theme/styles/rtl";
+
+.mat-mdc-row .mat-mdc-cell {
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  
+  .mat-mdc-row:hover .mat-mdc-cell {
+    background-color: rgb(183, 187, 187);
+  }

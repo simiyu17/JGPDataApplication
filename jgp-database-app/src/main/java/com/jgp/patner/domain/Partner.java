@@ -5,6 +5,8 @@ import com.jgp.patner.dto.PartnerDto;
 import com.jgp.shared.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
@@ -21,30 +23,45 @@ public class Partner extends BaseEntity {
 	private String partnerName;
 
     @Column(name = "type")
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private PartnerType type;
 
     public Partner() {
     }
 
-    private Partner(String partnerName, String type) {
+    private Partner(String partnerName, PartnerType type) {
         this.partnerName = partnerName;
         this.type = type;
     }
 
     public static Partner createPartner(PartnerDto partnerDto){
-        return new Partner(partnerDto.partnerName(), partnerDto.type());
+        return new Partner(partnerDto.partnerName(), PartnerType.valueOf(partnerDto.type()));
     }
 
     public void updatePartner(PartnerDto partnerDto){
         if(!StringUtils.equals(partnerDto.partnerName(), this.partnerName)){
             this.partnerName = partnerDto.partnerName();
         }
-        if(!StringUtils.equals(partnerDto.type(), this.type)){
-            this.type = partnerDto.type();
+        if(!StringUtils.equals(partnerDto.type(), this.type.name())){
+            this.type = PartnerType.valueOf(partnerDto.type());
         }
     }
 
 
+    @Getter
+    public enum PartnerType {
+
+        BMO("BMO"),
+        FI("Financial Intermediary"),
+        JGP("JGP");
+
+        private final String name;
+
+        PartnerType(String name) {
+            this.name = name;
+        }
+
+    }
 
     @Override
     public boolean equals(Object o) {

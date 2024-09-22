@@ -4,8 +4,10 @@ import com.jgp.authentication.domain.Permission;
 import com.jgp.authentication.domain.PermissionRepository;
 import com.jgp.authentication.domain.Role;
 import com.jgp.authentication.domain.RoleRepository;
+import com.jgp.authentication.dto.PermissionDto;
 import com.jgp.authentication.dto.RoleDto;
 import com.jgp.authentication.exception.RoleNotFoundException;
+import com.jgp.authentication.mapper.PermissionMapper;
 import com.jgp.authentication.mapper.RoleMapper;
 import com.jgp.infrastructure.core.domain.JdbcSupport;
 import com.jgp.shared.exception.ResourceNotFound;
@@ -18,9 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -29,12 +33,16 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
     private final RoleMapper roleMapper;
+    private final PermissionMapper permissionMapper;
     private final JdbcTemplate jdbcTemplate;
 
     @Override
     @Transactional
-    public Role createRole(RoleDto roleDto) {
-        return this.roleRepository.save(Role.createRole(roleDto));
+    public void createRole(RoleDto roleDto) {
+        var role = this.roleRepository.save(Role.createRole(roleDto));
+        if (!roleDto.permissions().isEmpty()){
+            this.updateRolePermissions(role.getId(), new ArrayList<>(roleDto.permissions()));
+        }
     }
 
     @Override
@@ -42,6 +50,9 @@ public class RoleServiceImpl implements RoleService {
     public void updateRole(Long roleId, RoleDto roleDto) {
         var role = this.roleRepository.findById(roleId).orElseThrow(() -> new ResourceNotFound(HttpStatus.NOT_FOUND));
         role.updateRole(roleDto);
+        if (!roleDto.permissions().isEmpty()){
+            this.updateRolePermissions(role.getId(), new ArrayList<>(roleDto.permissions()));
+        }
         this.roleRepository.save(role);
     }
 
@@ -65,17 +76,31 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public List<Role> retrieveRolesByNames(List<String> roleNames) {
+        return this.roleRepository.getRolesByNames(roleNames.stream().map(String::toLowerCase).toList());
+    }
+
+    @Override
     public RoleDto retrieveOne(Long roleId) {
         return this.roleMapper.toDto(this.roleRepository.findById(roleId).orElseThrow(() -> new ResourceNotFound(HttpStatus.NOT_FOUND)));
     }
 
     @Override
     public Collection<RoleDto> retrieveAppUserRoles(Long appUserId) {
+        if (Objects.isNull(appUserId)){
+            return retrieveAllRoles();
+        }
         final var roleRowMapper = new RoleRowMapper();
         final String sql = "select " + RoleRowMapper.ROLES_SCHEMA + " inner join appuser_role"
                 + " ar on ar.role_id = r.id where ar.appuser_id= ?";
 
         return this.jdbcTemplate.query(sql, roleRowMapper, appUserId);
+    }
+
+    @Override
+    public Collection<PermissionDto> retrieveRolesPermission(Long roleId) {
+        var role = this.roleRepository.findById(roleId).orElseThrow(() -> new ResourceNotFound(HttpStatus.NOT_FOUND));
+        return this.permissionMapper.toDtoList(new ArrayList<>(role.getPermissions()));
     }
 
     protected static final class RoleRowMapper implements RowMapper<RoleDto> {
@@ -89,7 +114,7 @@ public class RoleServiceImpl implements RoleService {
             final String name = rs.getString("name");
             final String description = rs.getString("description");
 
-            return new RoleDto(id, name, description);
+            return new RoleDto(id, name, description, new ArrayList<>());
         }
     }
 }

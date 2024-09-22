@@ -119,3 +119,13 @@
     bottom: 0;
     left: 0;
 }
+
+.user-hover {
+    border-color: 2px solid black;
+}
+.user-hover:hover {
+    cursor: pointer;
+    border: 1px solid transparent;
+    background-color: rgb(183, 187, 187);
+    border-radius: 5px;
+}

@@ -1,8 +1,7 @@
 package com.jgp.authentication.domain;
 
 
-import com.jgp.authentication.dto.UserDetailedDto;
-import com.jgp.authentication.dto.UserDto;
+import com.jgp.authentication.dto.UserDtoV2;
 import com.jgp.authentication.exception.NoAuthorizationException;
 import com.jgp.patner.domain.Partner;
 import com.jgp.shared.domain.BaseEntity;
@@ -28,9 +27,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -72,7 +73,7 @@ public class AppUser extends BaseEntity implements PlatformUser {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "appuser_role", joinColumns = @JoinColumn(name = "appuser_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public AppUser() {
     }
@@ -97,18 +98,24 @@ public class AppUser extends BaseEntity implements PlatformUser {
         return String.format("%s, %s", this.firstName, this.lastName);
     }
 
-    public static AppUser createUser(Partner partner, UserDetailedDto userDto, PasswordEncoder encoder){
-        return new AppUser(partner, userDto.profile().firstName(), userDto.profile().lastName(),
-                userDto.contacts().username(), userDto.work().designation(), userDto.contacts().town(),
-                userDto.profile().gender(), userDto.profile().image(), userDto.contacts().cellPhone(), true, true, encoder);
+    public static AppUser createUser(Partner partner, UserDtoV2 userDto, PasswordEncoder encoder){
+        return new AppUser(partner, userDto.firstName(), userDto.lastName(),
+                userDto.username(), userDto.designation(), userDto.town(),
+                userDto.gender(), userDto.image(), userDto.cellPhone(), true, true, encoder);
     }
 
-    public void updateUser(UserDto userDto){
+    public void updateUser(UserDtoV2 userDto, Partner partner){
         if(!StringUtils.equals(userDto.firstName(), this.firstName)){
             this.firstName = userDto.firstName();
         }
         if(!StringUtils.equals(userDto.lastName(), this.lastName)){
             this.lastName = userDto.firstName();
+        }
+        if(!StringUtils.equals(userDto.gender(), this.gender)){
+            this.gender = userDto.gender();
+        }
+        if(!Objects.equals(partner, this.partner)){
+            this.partner = partner;
         }
         if(!StringUtils.equals(userDto.designation(), this.designation)){
             this.designation = userDto.designation();
@@ -119,22 +126,17 @@ public class AppUser extends BaseEntity implements PlatformUser {
         if(!StringUtils.equals(userDto.cellPhone(), this.cellPhone)){
             this.cellPhone = userDto.cellPhone();
         }
-        if(userDto.isActive() != this.isActive){
-            this.isActive = userDto.isActive();
-        }
     }
 
-    public UserDetailedDto toDto(){
-        return new UserDetailedDto(getId(), new UserDetailedDto.UserProfileDto(this.firstName, this.lastName, this.gender, this.image),
-                new UserDetailedDto.UserWorkDto(Objects.nonNull(this.partner) ? this.partner.getPartnerName() : "", Objects.nonNull(this.partner) ? this.partner.getId() : null, this.getDesignation()),
-                new UserDetailedDto.UserContactsDto(this.username, this.cellPhone, this.town));
+    public UserDtoV2 toDto(){
+        return new UserDtoV2(getId(),
+                this.firstName, this.lastName, this.gender, this.image, this.roles.stream().map(Role::getRoleName).collect(Collectors.toSet()),
+                Objects.nonNull(this.partner) ? this.partner.getPartnerName() : "", Objects.nonNull(this.partner) ? this.partner.getId() : null, this.getDesignation(),
+                this.username, this.cellPhone, this.town);
     }
 
     public void updateRoles(final Set<Role> allRoles) {
-        if (!allRoles.isEmpty()) {
-            this.roles.clear();
             this.roles = allRoles;
-        }
     }
 
     @Override

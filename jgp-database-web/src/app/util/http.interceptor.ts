@@ -1,8 +1,8 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
-import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
-import { GlobalService } from '@services/global.service';
+import { GlobalService } from '@services/shared/global.service';
+import { AuthService } from '@services/users/auth.service';
 
 export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   const globalService = inject(GlobalService);

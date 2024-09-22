@@ -9,8 +9,8 @@ import { DataUploadComponent } from "../data-upload/data-upload.component";
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { ClientService } from '@services/clients.service';
-import { BMOClientDataService } from '@services/bmo-client-data.service';
+import { ClientService } from '@services/data-management/clients.service';
+import { BMOClientDataService } from '@services/data-management/bmo-client-data.service';
 
 @Component({
   selector: 'app-data-list',

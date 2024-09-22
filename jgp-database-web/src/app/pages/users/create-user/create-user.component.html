@@ -1,0 +1,87 @@
+    
+    <app-content-header 
+    [icon]="'supervisor_account'" 
+    [title]="'Create User'" 
+    [desc]="'Provide information for all required fields to create a user.'"
+    [hideBreadcrumb]="false"
+    [hasBgImage]="true" 
+    [class]="'pb-5'"></app-content-header>
+
+   
+
+
+  <div fxLayout="column" fxLayout.gt-sm="row wrap" class="p-2">
+    <div fxFlex="80" class="p-2"> 
+      <mat-card>
+          <mat-card-header fxLayoutAlign="center">                
+              <mat-card-title>New  User</mat-card-title>
+          </mat-card-header>
+          <mat-card-content fxLayoutAlign="center" class="pt-3">
+              <form [formGroup]="createUserForm" class="partner-form">      
+                  <div fxLayout="row" fxLayoutAlign="center space-between" class="form-field-outer">
+                    <mat-form-field class="w-100">
+                      <mat-label>Name</mat-label>
+                      <input matInput formControlName="firstName">
+                  </mat-form-field>
+                  <mat-form-field class="w-100">
+                      <mat-label>Surname</mat-label>
+                      <input matInput formControlName="lastName">
+                  </mat-form-field>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="center space-between" class="form-field-outer">
+                    <mat-radio-group formControlName="gender">
+                      <mat-radio-button value="male" labelPosition="before">Male</mat-radio-button>
+                      <mat-radio-button value="female" labelPosition="before">Female</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center space-between" class="form-field-outer">
+                <mat-form-field appearance="fill">
+                    <mat-label>User Roles</mat-label>
+                    <mat-select formControlName="userRoles" multiple>
+                        @for (userRole of allUserRoles; track $index) {
+                            <mat-option [value]="userRole.roleName">{{ userRole.roleName }}</mat-option>
+                        }
+                      
+                    </mat-select>
+                  </mat-form-field>
+              </div>
+                <div fxLayout="row" fxLayoutAlign="center space-between" class="form-field-outer">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Partner</mat-label>
+                    <mat-select formControlName="partnerId" required>
+                        @for (partner of partners; track partner) {
+                            <mat-option [value]="partner.id">{{partner.partnerName}}</mat-option>
+                          }
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="w-100">
+                    <mat-label>Position</mat-label>
+                    <input matInput formControlName="designation">
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="center space-between" class="form-field-outer">
+                <mat-form-field class="w-100">
+                  <mat-label>Email</mat-label>
+                  <input matInput formControlName="username">
+              </mat-form-field>
+              <mat-form-field class="w-100">
+                  <mat-label>Phone</mat-label>
+                  <input matInput formControlName="cellPhone">
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center space-between" class="form-field-outer">
+              <mat-form-field class="w-100">
+                <mat-label>Address</mat-label>
+                <input matInput formControlName="town">
+            </mat-form-field>
+          </div>
+                  <div fxLayout="row" fxLayoutAlign="space-between center">
+                      <button mat-raised-button color="primary" (click)="onSubmitCreateUser()" [mat-dialog-close]="createUserForm.value" [disabled]="!createUserForm.valid">Save</button>
+                      <button mat-raised-button color="warn">Cancel</button>
+                  </div>
+              
+              </form>
+          </mat-card-content>
+      </mat-card>
+  </div> 
+</div>

@@ -8,9 +8,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PartnerDto } from '../../dto/Partner';
 import { EditPartnerComponent } from './edit-partner/edit-partner.component';
-import { PartnerService } from '@services/partners.service';
+import { PartnerService } from '@services/data-management/partners.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-partners',
@@ -22,7 +24,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     FlexLayoutModule,
     MatButtonModule,
     MatIconModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    RouterModule,
+    CommonModule
   ],
   templateUrl: './partners.component.html',
   styleUrl: './partners.component.scss'
@@ -39,7 +43,7 @@ export class PartnersComponent implements OnInit{
   public dataSource: any;
 
   partners: any
-  constructor(public dialog: MatDialog, private partnerService: PartnerService) { }
+  constructor(public dialog: MatDialog, private partnerService: PartnerService, private router: Router) { }
 
   getAvailablePartners() {
     this.partnerService.getAvailablePartners()

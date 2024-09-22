@@ -18,7 +18,8 @@ import { MatCardModule } from '@angular/material/card';
 import { DatePipe, NgClass } from '@angular/common';
 import { ContentHeaderComponent } from '../../theme/components/content-header/content-header.component';
 import { MatDividerModule } from '@angular/material/divider';
-import { UserService } from '@services/user.service';
+import { UserService } from '@services/users/user.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-users',
@@ -41,7 +42,8 @@ import { UserService } from '@services/user.service';
     DatePipe,  
     UserDialogComponent,
     ContentHeaderComponent,
-    NgClass
+    NgClass,
+    RouterModule
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',

@@ -4,8 +4,8 @@ import { HttpClient, HttpEventType  } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { GlobalService } from '@services/global.service';
-import { BMOClientDataService } from '@services/bmo-client-data.service';
+import { GlobalService } from '@services/shared/global.service';
+import { BMOClientDataService } from '@services/data-management/bmo-client-data.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 

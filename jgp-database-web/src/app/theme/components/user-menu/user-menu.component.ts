@@ -6,7 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
-import { AuthService } from '@services/auth.service';
+import { AuthService } from '@services/users/auth.service';
 
 @Component({
   selector: 'app-user-menu',

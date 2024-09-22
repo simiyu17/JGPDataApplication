@@ -5,7 +5,7 @@ import { Settings, SettingsService } from '@services/settings.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MatDividerModule } from '@angular/material/divider';
 import { VerticalMenuComponent } from '../menu/vertical-menu/vertical-menu.component';
-import { AuthService } from '@services/auth.service';
+import { AuthService } from '@services/users/auth.service';
 
 @Component({
   selector: 'app-sidenav',

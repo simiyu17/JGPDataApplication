@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
-import { DashboardService } from '@services/dashboard.service';
 import { HighLevelSummaryDto } from '../dto/highLevelSummaryDto';
+import { DashboardService } from '@services/dashboard/dashboard.service';
 
 @Component({
   selector: 'app-tiles',

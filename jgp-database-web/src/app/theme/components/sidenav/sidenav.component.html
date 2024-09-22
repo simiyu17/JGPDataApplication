@@ -1,7 +1,7 @@
 <div fxLayout="column" fxLayoutAlign="center center" class="user-block" [class.py-3]="settings.menuType != 'mini'" [class.py-2]="settings.menuType == 'mini'">
     <img src="img/users/default-user.jpg" alt="user-image">
     @if (settings.menuType != 'mini') {
-        <h2 class="mt-2">{{currentUser.name}}</h2>
+        <h2 class="mt-2">{{currentUser.userFullName}}</h2>
     }
     @if (settings.menuType == 'default') {
         <p class="secondary-text-color">{{currentUser.email}}</p>

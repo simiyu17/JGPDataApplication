@@ -3,10 +3,10 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { GlobalService } from '@services/global.service';
+import { GlobalService } from '@services/shared/global.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { LoanService } from '@services/loan.service';
+import { LoanService } from '@services/data-management/loan.service';
 
 @Component({
   selector: 'app-data-upload',

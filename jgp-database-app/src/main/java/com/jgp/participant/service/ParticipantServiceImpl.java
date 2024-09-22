@@ -29,6 +29,11 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
+    public ParticipantDto findParticipantById(Long participantId) {
+        return null;
+    }
+
+    @Override
     public List<Participant> availableClients(Pageable pageable) {
         return this.clientRepository.findAll(pageable).stream().toList();
     }
