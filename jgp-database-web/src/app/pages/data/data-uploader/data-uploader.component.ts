@@ -84,8 +84,11 @@ export class DataUploaderComponent {
         legalFormType = 'LOAN';
       } else if (this.template.name.toLowerCase().includes('bmo')) {
         legalFormType = 'BMO';
+      }else {
+        this.gs.openSnackBar('Invalid Template', "Dismiss");
       }
 
+      if('' !== legalFormType){
     this.dataUploadService
       .uploadDataTemplate(this.template, legalFormType,)
       .subscribe({
@@ -94,5 +97,6 @@ export class DataUploaderComponent {
           //this.refreshDocuments();
         }
       });
+    }
   }
 }

@@ -2,7 +2,9 @@ package com.jgp.finance.api;
 
 import com.jgp.bmo.dto.BMOClientDto;
 import com.jgp.bmo.service.BMOClientDataService;
+import com.jgp.finance.domain.Loan;
 import com.jgp.finance.dto.LoanDto;
+import com.jgp.finance.dto.LoanSearchCriteria;
 import com.jgp.finance.service.LoanService;
 import com.jgp.shared.dto.ApiResponseDto;
 import com.jgp.util.CommonUtil;
@@ -31,11 +33,15 @@ public class LoanController {
     private final LoanService loanService;
 
     @GetMapping
-    public ResponseEntity<List<LoanDto>> getAvailableLoanRecords(@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
+    public ResponseEntity<List<LoanDto>> getAvailableLoanRecords(@RequestParam(name = "partnerId", required = false) Long partnerId,
+                                                                 @RequestParam(name = "participantId", required = false) Long participantId,
+                                                                 @RequestParam(name = "status", required = false) Loan.LoanStatus status,
+                                                                 @RequestParam(name = "quality", required = false) Loan.LoanQuality quality,
+                                                                 @RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
                                                                  @RequestParam(name = "pageSize", defaultValue = "200") Integer pageSize){
         final var sortedByDateCreated =
                 PageRequest.of(pageNumber - 1, pageSize, Sort.by("dateCreated").descending());
-        return new ResponseEntity<>(this.loanService.getLoans(sortedByDateCreated), HttpStatus.OK);
+        return new ResponseEntity<>(this.loanService.getLoans(new LoanSearchCriteria(partnerId, participantId, status, quality), sortedByDateCreated), HttpStatus.OK);
     }
 
     @PostMapping("upload-template")

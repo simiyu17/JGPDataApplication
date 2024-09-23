@@ -1,8 +1,8 @@
-@if (selectedPartner | async; as selectedPartner){
+@if (selectedParticipant | async; as selectedParticipant){
     <app-content-header 
         [icon]="'supervisor_account'" 
-        [title]="selectedPartner.partnerName" 
-        [desc]="'View information about the Selected Partner and be able to edit or delete the Partner.'"
+        [title]="selectedParticipant.businessName" 
+        [desc]="'View information about the Selected Participant.'"
         [hideBreadcrumb]="false"
         [hasBgImage]="true" 
         [class]="'pb-5'"></app-content-header>
@@ -11,7 +11,7 @@
     <div fxLayout="column" class="p-2">
         <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="end center" class="px-2 user-toolbar">
             <div class="action-button" fxLayoutGap="25px">
-                <button mat-raised-button color="primary" [routerLink]="['/partners',selectedPartner.id, 'edit']">
+                <button mat-raised-button color="primary" [routerLink]="['/partners',selectedParticipant.id, 'edit']">
                   <mat-icon>edit</mat-icon>&nbsp;&nbsp;Edit
                 </button>
                 <button mat-raised-button color="warn" >
@@ -20,30 +20,88 @@
               </div>
         </mat-toolbar>
        
-        <div class="p-2 container">
-            <mat-card>
-                <mat-card-content>
-                  <div fxLayout="row wrap" fxLayout.lt-md="column">
-                    <h2 class="mat-h2" fxFlexFill>{{ selectedPartner.partnerName }}</h2>
-            
-                    <mat-divider [inset]="true"></mat-divider>
-            
-                    <h3 class="mat-h3" fxFlexFill>Details</h3>
-            
-                    <mat-divider [inset]="true"></mat-divider>
+        <div fxLayout="column" class="p-2">
+          <h2 class="mat-h2" fxFlexFill fxLayoutAlign="center">{{ selectedParticipant.businessName }} Details</h2>
+          <div fxLayout="row wrap" fxLayoutGap="2%" class="m-b-20">
+            <div fxFlex="49" class="p-2">
+              <mat-card class="custom-card">
+                  <mat-card-header class="bg-accent" fxLayoutAlign="space-between center">
+                      <mat-card-title class="m-0"><h3>d</h3></mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content class="py-3">
+                      <div fxLayout="column">
+                        <div fxFlexFill>
+                          <span fxFlex="40%">ID:</span>
+                          <span fxFlex="60%">{{ selectedParticipant.jgpId }}</span>
+                        </div>
+                
+                        <div fxFlexFill>
+                          <span fxFlex="40%">Phone Number:</span>
+                          <span fxFlex="60%">{{ selectedParticipant.phoneNumber }}</span>
+                        </div>
+                      </div>
+                  </mat-card-content>
+                  <mat-divider></mat-divider>
+                  <mat-card-actions fxLayoutAlign="end center" class="secondary-text-color">
+                  </mat-card-actions>
+              </mat-card>
+          </div>
+          <div fxFlex="49" class="p-2">
+            <mat-card class="custom-card">
+                <mat-card-header class="bg-accent" fxLayoutAlign="space-between center">
+                    <mat-card-title class="m-0"><h3>Accent Card</h3></mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="py-3">
+                  <div fxLayout="column">
+                    <div fxFlexFill>
+                      <span fxFlex="40%">ID:</span>
+                      <span fxFlex="60%">{{ selectedParticipant.jgpId }}</span>
+                    </div>
             
                     <div fxFlexFill>
-                      <span fxFlex="40%">Partner Name:</span>
-                      <span fxFlex="60%">{{ selectedPartner.partnerName }}</span>
+                      <span fxFlex="40%">Phone Number:</span>
+                      <span fxFlex="60%">{{ selectedParticipant.phoneNumber }}</span>
                     </div>
-            
-                    <div fxFlexFill>
-                      <span fxFlex="40%">Partner Type:</span>
-                      <span fxFlex="60%">{{ selectedPartner.type }}</span>
-                    </div>
-                    </div>
-                    </mat-card-content>
-                    </mat-card>
+                  </div>
+                </mat-card-content>
+                <mat-divider></mat-divider>
+                <mat-card-actions fxLayoutAlign="end center" class="secondary-text-color">
+                </mat-card-actions>
+            </mat-card>
+        </div>
+          </div>
+          <div fxLayout="column" fxLayoutGap="2%" class="m-b-20">
+            <div fxFlex="100" class="p-2">
+              <mat-card class="custom-card">
+                  <mat-card-header class="bg-accent" fxLayoutAlign="space-between center">
+                      <mat-card-title class="m-0"><h3>BMO Trainings</h3></mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content class="py-3">
+                      <p>
+                          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia nihil quis mollitia odio magni eaque id porro unde inventore recusandae. Debitis necessitatibus voluptates magnam eveniet odit distinctio odio provident sit.
+                      </p>
+                  </mat-card-content>
+                  <mat-divider></mat-divider>
+                  <mat-card-actions fxLayoutAlign="end center" class="secondary-text-color">
+                  </mat-card-actions>
+              </mat-card>
+          </div>
+          <div fxFlex="100" class="p-2">
+            <mat-card class="custom-card">
+                <mat-card-header class="bg-accent" fxLayoutAlign="space-between center">
+                    <mat-card-title class="m-0"><h3>Loan Accounts</h3></mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="py-3">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia nihil quis mollitia odio magni eaque id porro unde inventore recusandae. Debitis necessitatibus voluptates magnam eveniet odit distinctio odio provident sit.
+                    </p>
+                </mat-card-content>
+                <mat-divider></mat-divider>
+                <mat-card-actions fxLayoutAlign="end center" class="secondary-text-color">
+                </mat-card-actions>
+            </mat-card>
+        </div>
+          </div>
         </div>
     </div>
     }

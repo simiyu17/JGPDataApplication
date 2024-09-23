@@ -1,6 +1,7 @@
 package com.jgp.participant.api;
 
 import com.jgp.participant.domain.Participant;
+import com.jgp.participant.dto.ParticipantDto;
 import com.jgp.participant.service.ParticipantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,5 +31,10 @@ public class ParticipantController {
         final var sortedByDateCreated =
                 PageRequest.of(pageNumber - 1, pageSize, Sort.by("dateCreated").descending());
         return new ResponseEntity<>(this.participantService.availableClients(sortedByDateCreated), HttpStatus.OK);
+    }
+
+    @GetMapping("{participantId}")
+    public ResponseEntity<ParticipantDto> getParticipantDto(@PathVariable("participantId") Long participantId, @RequestParam(name = "includeAccounts", defaultValue = "false") boolean includeAccounts){
+        return new ResponseEntity<>(this.participantService.findParticipantById(participantId, includeAccounts), HttpStatus.OK);
     }
 }

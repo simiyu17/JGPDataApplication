@@ -27,7 +27,7 @@ public class BMOParticipantData extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participant_id")
-    private Participant client;
+    private Participant participant;
 
     @Column(name = "form_submitted_on")
     private LocalDate dateFormSubmitted;
@@ -61,9 +61,9 @@ public class BMOParticipantData extends BaseEntity {
     public BMOParticipantData() {
     }
 
-    public BMOParticipantData(Partner partner, Participant client, LocalDate dateFormSubmitted, Boolean isApplicantEligible, Integer tasAttended, Integer taSessionsAttended, Boolean isRecommendedForFinance, LocalDate decisionDate, String fiBusinessReferred, LocalDate dateRecordedByPartner, LocalDate dateRecordedToJGPDB, Integer rowIndex) {
+    public BMOParticipantData(Partner partner, Participant participant, LocalDate dateFormSubmitted, Boolean isApplicantEligible, Integer tasAttended, Integer taSessionsAttended, Boolean isRecommendedForFinance, LocalDate decisionDate, String fiBusinessReferred, LocalDate dateRecordedByPartner, LocalDate dateRecordedToJGPDB, Integer rowIndex) {
         this.partner = partner;
-        this.client = client;
+        this.participant = participant;
         this.dateFormSubmitted = dateFormSubmitted;
         this.isApplicantEligible = isApplicantEligible;
         this.tasAttended = tasAttended;
@@ -89,13 +89,13 @@ public class BMOParticipantData extends BaseEntity {
         return new EqualsBuilder()
                 .appendSuper(super.equals(o)).append(getId(), bmoData.getId())
                 .append(getPartner(), bmoData.getPartner())
-                .append(getClient(), bmoData.getClient())
+                .append(getParticipant(), bmoData.getParticipant())
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .appendSuper(super.hashCode()).append(getId()).append(getPartner()).append(getClient()).toHashCode();
+                .appendSuper(super.hashCode()).append(getId()).append(getPartner()).append(getParticipant()).toHashCode();
     }
 }

@@ -1,5 +1,7 @@
 package com.jgp.finance.service;
 
+import com.jgp.finance.domain.predicate.LoanPredicateBuilder;
+import com.jgp.finance.dto.LoanSearchCriteria;
 import com.jgp.finance.mapper.LoanMapper;
 import com.jgp.finance.domain.Loan;
 import com.jgp.finance.domain.LoanRepository;
@@ -23,6 +25,7 @@ public class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
     private final ApplicationEventPublisher publisher;
     private final LoanMapper loanMapper;
+    private final LoanPredicateBuilder loanPredicateBuilder;
 
     @Override
     public void createLoans(List<Loan> loans) {
@@ -39,8 +42,8 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    public List<LoanDto> getLoans(Pageable pageable) {
-        return this.loanMapper.toDto(this.loanRepository.findAll(pageable).stream().toList());
+    public List<LoanDto> getLoans(LoanSearchCriteria searchCriteria, Pageable pageable) {
+        return this.loanMapper.toDto(this.loanRepository.findAll(loanPredicateBuilder.buildPredicateForSearchLoans(searchCriteria), pageable).stream().toList());
     }
 
     @Override

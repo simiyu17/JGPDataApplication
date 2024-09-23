@@ -1,6 +1,7 @@
 package com.jgp.bmo.api;
 
 import com.jgp.bmo.dto.BMOClientDto;
+import com.jgp.bmo.dto.BMOParticipantSearchCriteria;
 import com.jgp.bmo.service.BMOClientDataService;
 import com.jgp.shared.dto.ApiResponseDto;
 import com.jgp.util.CommonUtil;
@@ -29,11 +30,13 @@ public class BMOClientController {
     private final BMOClientDataService bmoDataService;
 
     @GetMapping
-    public ResponseEntity<List<BMOClientDto>> getAvailableBMODataRecords(@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
+    public ResponseEntity<List<BMOClientDto>> getAvailableBMODataRecords(@RequestParam(name = "partnerId", required = false) Long partnerId,
+                                                                         @RequestParam(name = "participantId", required = false) Long participantId,
+                                                                        @RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
                                                                           @RequestParam(name = "pageSize", defaultValue = "200") Integer pageSize){
         final var sortedByDateCreated =
                 PageRequest.of(pageNumber - 1, pageSize, Sort.by("dateCreated").descending());
-        return new ResponseEntity<>(this.bmoDataService.getBMODataRecords(sortedByDateCreated), HttpStatus.OK);
+        return new ResponseEntity<>(this.bmoDataService.getBMODataRecords(new BMOParticipantSearchCriteria(partnerId, participantId), sortedByDateCreated), HttpStatus.OK);
     }
 
     @PostMapping("upload-template")

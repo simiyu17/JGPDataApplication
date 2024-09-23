@@ -30,11 +30,11 @@ import { MatDividerModule } from '@angular/material/divider';
 })
 export class ClientDetailsComponent {
 
-  selectedPartner: Observable<PartnerDto>;
+  selectedParticipant: Observable<any>;
   constructor(private activatedRoute: ActivatedRoute){}
 
   ngOnInit(): void {
-    this.selectedPartner = this.activatedRoute.data.pipe(map(data => data['selectedPartner']));
+    this.selectedParticipant = this.activatedRoute.data.pipe(map(data => data['selectedParticipant']));
   }
 
 }

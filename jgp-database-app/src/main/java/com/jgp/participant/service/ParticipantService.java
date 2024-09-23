@@ -15,7 +15,7 @@ public interface ParticipantService {
 
     Optional<Participant> findOneByJGPID(@NonNull String jgpId);
 
-    ParticipantDto findParticipantById(Long participantId);
+    ParticipantDto findParticipantById(Long participantId, boolean includeAccounts);
 
     List<Participant> availableClients(Pageable pageable);
 }
