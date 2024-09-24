@@ -10,6 +10,8 @@ import { PartnerDto } from '../../../dto/Partner';
 import { AsyncPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-client-details',
@@ -23,13 +25,17 @@ import { MatDividerModule } from '@angular/material/divider';
     MatFormFieldModule,
     AsyncPipe,
     MatDividerModule,
-    RouterModule
+    RouterModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   templateUrl: './client-details.component.html',
   styleUrl: './client-details.component.scss'
 })
 export class ClientDetailsComponent {
 
+  public bmoDisplayedColumns = ['partnerName', 'dateFormSubmitted', 'isApplicantEligible', 'taSessionsAttended', 'isRecommendedForFinance', 'decisionDate', 'fiBusinessReferred'];
+  public loansDisplayedColumns = ['partnerName', 'loanNumber', 'pipeLineSource', 'loanAmountAccessed', 'loanOutStandingAmount', 'loanDuration', 'dateApplied', 'dateDisbursed', 'loanStatus', 'loanQuality'];
   selectedParticipant: Observable<any>;
   constructor(private activatedRoute: ActivatedRoute){}
 

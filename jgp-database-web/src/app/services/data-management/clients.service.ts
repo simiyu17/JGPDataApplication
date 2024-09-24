@@ -17,6 +17,6 @@ export class ClientService {
     }
 
     getParticipantById(participantId: number | string | null): Observable<any> {
-      return this.httpClient.get(`${this.globalService.BASE_API_URL}/participants/${participantId}`);
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/participants/${participantId}?includeAccounts=true`);
     }
 }

@@ -1,8 +1,13 @@
 package com.jgp.participant.service;
 
+import com.jgp.bmo.dto.BMOParticipantSearchCriteria;
+import com.jgp.bmo.service.BMOClientDataService;
+import com.jgp.finance.dto.LoanSearchCriteria;
+import com.jgp.finance.service.LoanService;
 import com.jgp.participant.domain.Participant;
 import com.jgp.participant.domain.ParticipantRepository;
 import com.jgp.participant.dto.ParticipantDto;
+import com.jgp.participant.dto.ParticipantResponseDto;
 import com.jgp.participant.exception.ParticipantNotFoundException;
 import com.jgp.participant.mapper.ParticipantMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +25,8 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     private final ParticipantRepository participantRepository;
     private final ParticipantMapper participantMapper;
+    private final LoanService loanService;
+    private final BMOClientDataService bmoClientDataService;
 
     @Override
     public Participant createClient(ParticipantDto clientDto) {
@@ -32,13 +39,14 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public ParticipantDto findParticipantById(Long participantId, boolean includeAccounts) {
+    public ParticipantResponseDto findParticipantById(Long participantId, boolean includeAccounts) {
         var participant =  this.participantRepository.findById(participantId)
                 .map(this.participantMapper::toDto)
                 .orElseThrow(() -> new ParticipantNotFoundException(participantId));
 
         if (includeAccounts){
-        participant.jgpId().
+        participant.setLoanDtos(this.loanService.getLoans(LoanSearchCriteria.builder().participantId(participantId).build(), Pageable.unpaged()));
+        participant.setBmoClientDtos(this.bmoClientDataService.getBMODataRecords(BMOParticipantSearchCriteria.builder().participantId(participantId).build(), Pageable.unpaged()));
         }
 
         return participant;

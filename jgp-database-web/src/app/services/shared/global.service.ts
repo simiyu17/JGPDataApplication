@@ -4,8 +4,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalService {
-  //API_HOST = '68.183.21.53';
-  API_HOST = 'localhost';
+  API_HOST = '68.183.21.53';
+  //API_HOST = 'localhost';
   API_PORT = '8082';
   BASE_API_URL: string = `http://${this.API_HOST}:${this.API_PORT}/jgp-app/api/v1`;  
  

@@ -12,8 +12,9 @@ import org.mapstruct.NullValueMappingStrategy;
 public interface BMOClientMapper {
 
     @Mapping(target = "partnerId", expression = "java(null != bmoClientData.getPartner() ? bmoClientData.getPartner().getId() : null)")
-    @Mapping(target = "clientId", expression = "java(null != bmoClientData.getClient() ? bmoClientData.getClient().getId() : null)")
-    @Mapping(target = "clientName", expression = "java(null != bmoClientData.getClient() ? bmoClientData.getClient().getBusinessName() : null)")
+    @Mapping(target = "partnerName", expression = "java(null != bmoClientData.getPartner() ? bmoClientData.getPartner().getPartnerName() : null)")
+    @Mapping(target = "participantId", expression = "java(null != bmoClientData.getParticipant() ? bmoClientData.getParticipant().getId() : null)")
+    @Mapping(target = "participantName", expression = "java(null != bmoClientData.getParticipant() ? bmoClientData.getParticipant().getBusinessName() : null)")
     @Mapping(target = "tasAttended", expression = "java(null != bmoClientData.getTasAttended() ? bmoClientData.getTasAttended() : null)")
     @Mapping(target = "taSessionsAttended", expression = "java(null != bmoClientData.getTaSessionsAttended() ? bmoClientData.getTaSessionsAttended() : null)")
     @Mapping(target = "isRecommendedForFinance", expression = "java(null != bmoClientData.getIsRecommendedForFinance() ? bmoClientData.getIsRecommendedForFinance() : null)")

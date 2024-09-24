@@ -1,7 +1,7 @@
 package com.jgp.participant.mapper;
 
 import com.jgp.participant.domain.Participant;
-import com.jgp.participant.dto.ParticipantDto;
+import com.jgp.participant.dto.ParticipantResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
@@ -13,10 +13,9 @@ import java.util.List;
 public interface ParticipantMapper {
 
 
-    @Mapping(target = "businessName", expression = "java(participant.getBusinessName())")
+    /*@Mapping(target = "businessName", expression = "java(participant.getBusinessName())")
     @Mapping(target = "jgpId", expression = "java(participant.getJgpId())")
     @Mapping(target = "phoneNumber", expression = "java(participant.getPhoneNumber())")
-    @Mapping(target = "ownerGender", expression = "java(null != participant.getOwnerGender() ? participant.getOwnerGender().getName() : null)")
     @Mapping(target = "ownerAge", expression = "java(participant.getOwnerAge())")
     @Mapping(target = "businessLocation", expression = "java(participant.getBusinessLocation())")
     @Mapping(target = "industrySector", expression = "java(participant.getIndustrySector())")
@@ -32,10 +31,11 @@ public interface ParticipantMapper {
     @Mapping(target = "totalCasualEmployees", expression = "java(participant.getTotalCasualEmployees())")
     @Mapping(target = "youthCasualEmployees", expression = "java(participant.getYouthCasualEmployees())")
     @Mapping(target = "sampleRecords", expression = "java(participant.getSampleRecords())")
-    @Mapping(target = "taNeeds", expression = "java(participant.getTaNeeds())")
+    @Mapping(target = "taNeeds", expression = "java(participant.getTaNeeds())")*/
+    @Mapping(target = "ownerGender", expression = "java(null != participant.getOwnerGender() ? participant.getOwnerGender().getName() : null)")
     @Mapping(target = "bmoClientDtos", ignore = true)
     @Mapping(target = "loanDtos", ignore = true)
-    ParticipantDto toDto(Participant participant);
+    ParticipantResponseDto toDto(Participant participant);
 
-    List<ParticipantDto> toDto(List<Participant> participants);
+    List<ParticipantResponseDto> toDto(List<Participant> participants);
 }

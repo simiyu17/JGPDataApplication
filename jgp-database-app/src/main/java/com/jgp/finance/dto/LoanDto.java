@@ -6,6 +6,10 @@ import java.time.LocalDate;
 public record LoanDto(
          String participantName,
 
+         Long partnerId,
+
+         String partnerName,
+
          String loanNumber,
 
          String pipeLineSource,

@@ -2,6 +2,7 @@ package com.jgp.participant.api;
 
 import com.jgp.participant.domain.Participant;
 import com.jgp.participant.dto.ParticipantDto;
+import com.jgp.participant.dto.ParticipantResponseDto;
 import com.jgp.participant.service.ParticipantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -34,7 +35,7 @@ public class ParticipantController {
     }
 
     @GetMapping("{participantId}")
-    public ResponseEntity<ParticipantDto> getParticipantDto(@PathVariable("participantId") Long participantId, @RequestParam(name = "includeAccounts", defaultValue = "false") boolean includeAccounts){
+    public ResponseEntity<ParticipantResponseDto> getParticipantDto(@PathVariable("participantId") Long participantId, @RequestParam(name = "includeAccounts", defaultValue = "false") boolean includeAccounts){
         return new ResponseEntity<>(this.participantService.findParticipantById(participantId, includeAccounts), HttpStatus.OK);
     }
 }

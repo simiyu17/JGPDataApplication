@@ -15,9 +15,9 @@
                 <div fxLayout="column" class="p-2">
                     <div class="p-2">
                         <mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
-                            <ng-container matColumnDef="clientName">
+                            <ng-container matColumnDef="participantName">
                                 <mat-header-cell *matHeaderCellDef> Business Name </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.clientName}} </mat-cell>
+                                <mat-cell *matCellDef="let element"> {{element.participantName}} </mat-cell>
                             </ng-container>
                             <ng-container matColumnDef="tasAttended">
                                 <mat-header-cell *matHeaderCellDef> TAs Attended </mat-header-cell>

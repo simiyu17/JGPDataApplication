@@ -2,54 +2,61 @@ package com.jgp.participant.dto;
 
 import com.jgp.bmo.dto.BMOClientDto;
 import com.jgp.finance.dto.LoanDto;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class ParticipantResponseDto {
-    String businessName;
+@Getter
+@Setter
+public class ParticipantResponseDto implements Serializable {
+    private String businessName;
 
-    String jgpId;
+    private String jgpId;
 
-    String phoneNumber;
+    private String phoneNumber;
 
-    String ownerGender;
+    private String ownerGender;
 
-    Integer ownerAge;
+    private Integer ownerAge;
 
-    String businessLocation;
+    private String businessLocation;
 
-    String industrySector;
+    private String industrySector;
 
-    String businessSegment;
+    private String businessSegment;
 
-    Boolean isBusinessRegistered;
+    private Boolean isBusinessRegistered;
 
-    String registrationNumber;
+    private String registrationNumber;
 
-    Boolean hasBMOMembership;
+    private Boolean hasBMOMembership;
 
-    String bmoMembership;
+    private String bmoMembership;
 
-    BigDecimal bestMonthlyRevenue;
+    private BigDecimal bestMonthlyRevenue;
 
-    BigDecimal worstMonthlyRevenue;
+    private BigDecimal worstMonthlyRevenue;
 
-    Integer totalRegularEmployees,
+    private Integer totalRegularEmployees;
 
-    Integer youthRegularEmployees,
+    private Integer youthRegularEmployees;
 
-    Integer totalCasualEmployees,
+    private Integer totalCasualEmployees;
 
-    Integer youthCasualEmployees,
+    private Integer youthCasualEmployees;
 
-    String sampleRecords,
+    private String sampleRecords;
 
-    String taNeeds,
+    private String taNeeds;
 
-    String personWithDisability,
+    private String personWithDisability;
 
-    String refugeeStatus,
-    List<BMOClientDto> bmoClientDtos,
-    List<LoanDto> loanDtos
+    private String refugeeStatus;
+
+    private List<BMOClientDto> bmoClientDtos;
+
+    private List<LoanDto> loanDtos;
 }

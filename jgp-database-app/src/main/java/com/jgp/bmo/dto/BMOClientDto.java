@@ -5,9 +5,11 @@ import java.time.LocalDate;
 public record BMOClientDto(
          Long partnerId,
 
-         Long clientId,
+         String partnerName,
 
-         String clientName,
+         Long participantId,
+
+         String participantName,
 
          LocalDate dateFormSubmitted,
 
