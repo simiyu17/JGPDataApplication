@@ -10,6 +10,7 @@ import { PartnerDto } from '../../../dto/Partner';
 import { AsyncPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
+import { HasPermissionDirective } from '../../../directives/has-permission.directive';
 
 @Component({
   selector: 'app-partner-details',
@@ -23,7 +24,8 @@ import { MatDividerModule } from '@angular/material/divider';
     MatFormFieldModule,
     AsyncPipe,
     MatDividerModule,
-    RouterModule
+    RouterModule,
+    HasPermissionDirective
   ],
   templateUrl: './partner-details.component.html',
   styleUrl: './partner-details.component.scss'

@@ -11,8 +11,11 @@ import { EditPartnerComponent } from './edit-partner/edit-partner.component';
 import { PartnerService } from '@services/data-management/partners.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { NoPermissionComponent } from '../errors/no-permission/no-permission.component';
+import { AuthService } from '@services/users/auth.service';
+import { HasPermissionDirective } from '../../directives/has-permission.directive';
 
 @Component({
   selector: 'app-partners',
@@ -26,7 +29,9 @@ import { CommonModule } from '@angular/common';
     MatIconModule,
     MatFormFieldModule,
     RouterModule,
-    CommonModule
+    CommonModule,
+    NoPermissionComponent,
+    HasPermissionDirective
   ],
   templateUrl: './partners.component.html',
   styleUrl: './partners.component.scss'
@@ -43,7 +48,7 @@ export class PartnersComponent implements OnInit{
   public dataSource: any;
 
   partners: any
-  constructor(public dialog: MatDialog, private partnerService: PartnerService, private router: Router) { }
+  constructor(public dialog: MatDialog, private partnerService: PartnerService, public authService: AuthService) { }
 
   getAvailablePartners() {
     this.partnerService.getAvailablePartners()

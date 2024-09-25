@@ -16,6 +16,7 @@ public interface PermissionMapper {
     @Mapping(target = "code", expression = "java(permission.getCode())")
     @Mapping(target = "entityName", expression = "java(permission.getEntityName())")
     @Mapping(target = "actionName", expression = "java(permission.getActionName())")
+    @Mapping(target = "selected", ignore = true)
     PermissionDto toDto(Permission permission);
 
     List<PermissionDto> toDtoList(List<Permission> permissions);

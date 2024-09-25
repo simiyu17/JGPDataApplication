@@ -1,3 +1,4 @@
+@if(authService.hasPermission('BMO_PARTICIPANTS_DATA_VIEW')){
 <app-content-header 
     [icon]="'keyboard'" 
     [title]="'Data'" 
@@ -50,3 +51,7 @@
     </div> 
               
 </div>
+}
+@else {
+    <app-no-permission />
+}

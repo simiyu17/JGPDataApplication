@@ -10,6 +10,7 @@ import { AsyncPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { User } from '../../../common/models/user.model';
+import { HasPermissionDirective } from '../../../directives/has-permission.directive';
 
 @Component({
   selector: 'app-user-details',
@@ -23,7 +24,8 @@ import { User } from '../../../common/models/user.model';
     MatFormFieldModule,
     AsyncPipe,
     MatDividerModule,
-    RouterModule
+    RouterModule,
+    HasPermissionDirective
   ],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss'

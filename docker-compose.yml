@@ -13,7 +13,11 @@ services:
       - /data/jgpData:/var/lib/postgresql/data
   jgp_app:
     container_name: jgp_app
-    image: juliangeniuz/jgp-app-api:v2
+    build:
+      context: https://github.com/simiyu17/JGPDataApplication.git#:jgp-database-app
+      dockerfile: Dockerfile
+      args:
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
     restart: on-failure
     networks:
       - jgp-app-network
@@ -29,7 +33,11 @@ services:
       - "8082:8082"
   jgp_app_ui:
     container_name: jgp_app_ui
-    image: juliangeniuz/jgp-app-web:v2
+    build:
+      context: https://github.com/simiyu17/JGPDataApplication.git#:jgp-database-web
+      dockerfile: Dockerfile
+      args:
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
     restart: on-failure
     networks:
       - jgp-app-network

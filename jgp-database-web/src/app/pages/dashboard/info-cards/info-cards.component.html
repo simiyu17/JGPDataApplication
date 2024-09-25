@@ -1,30 +1,42 @@
 <div fxLayout="row wrap" #resizedDiv>
+
     <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-purple" #loansDisbursedByGenderChart>
-            <app-pie-chart 
-            [data]="loansDisbursedByGender" 
-            [showLegend]="loansDisbursedByGenderShowLegend" 
-            [colorScheme]="chartSColorScheme" 
-            [showLabels]="loansDisbursedByGenderShowLabels" 
-            [explodeSlices]="loansDisbursedByGenderExplodeSlices" 
-            [doughnut]="loansDisbursedByGenderDoughnut" 
-            [chartTitle]="loansDisbursedByGenderChartTitle" 
-            />
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center center">                
+                <mat-card-title>{{loansDisbursedByGenderChartTitle}}</mat-card-title>
+            </mat-card-header>
+            <div class="w-100 h-300p">
+                <app-pie-chart 
+                [data]="loansDisbursedByGender" 
+                [showLegend]="loansDisbursedByGenderShowLegend" 
+                [colorScheme]="chartSColorScheme" 
+                [showLabels]="loansDisbursedByGenderShowLabels" 
+                [explodeSlices]="loansDisbursedByGenderExplodeSlices" 
+                [doughnut]="loansDisbursedByGenderDoughnut" 
+                [chartTitle]="loansDisbursedByGenderChartTitle" 
+                />       
+            </div>
         </mat-card>
-    </div>
+    </div> 
+    
+    
     <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-teal">
-            <app-pie-chart 
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center center">                
+                <mat-card-title>{{loansDisbursedByPipelineChartTitle}}</mat-card-title>
+            </mat-card-header>
+            <div class="w-100 h-300p">
+                <app-pie-chart 
             [data]="loansDisbursedByPipeline" 
             [showLegend]="loansDisbursedByPipelineShowLegend" 
             [colorScheme]="chartSColorScheme" 
             [showLabels]="loansDisbursedByPipelineShowLabels" 
             [explodeSlices]="loansDisbursedByPipelineExplodeSlices" 
             [doughnut]="loansDisbursedByPipelineDoughnut" 
-            [chartTitle]="loansDisbursedByPipelineChartTitle" 
-            />
+            />        
+            </div>
         </mat-card>
-    </div>
+    </div> 
     <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                

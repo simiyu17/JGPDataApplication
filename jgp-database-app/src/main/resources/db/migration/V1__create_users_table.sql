@@ -24,7 +24,3 @@ CREATE TABLE users (
 	CONSTRAINT fk4yi7iyejvdeanf2jmu8i6dkc8 FOREIGN KEY (last_modified_by_id) REFERENCES users(id),
 	CONSTRAINT fk8nakkftyppd62ke6tv7oo5a92 FOREIGN KEY (created_by_id) REFERENCES users(id)
 );
-
-INSERT INTO users
-(cell_phone, designation, first_name, force_change_pass, is_active, is_admin, last_name, "password", email_address)
-VALUES('5464336455', 'Administrator', 'Admin', false, true, true, 'User', '$2a$10$O4gp07pGBTqthaxYkDEglOaBEY65reC1409H/DQMvmjA1CxZcNAYW', 'admin@admin.com');

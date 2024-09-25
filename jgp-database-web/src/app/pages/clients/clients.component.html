@@ -1,3 +1,4 @@
+@if(authService.hasPermission('PARTICIPANTS_READ')){
 <app-content-header 
     [icon]="'supervisor_account'" 
     [title]="'Project Participants'" 
@@ -39,3 +40,7 @@
         <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
     </div>
 </div>
+}
+@else {
+    <app-no-permission />
+}

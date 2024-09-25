@@ -2,40 +2,98 @@ package com.jgp.participant.mapper;
 
 import com.jgp.participant.domain.Participant;
 import com.jgp.participant.dto.ParticipantResponseDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.NullValueMappingStrategy;
-
+import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT, nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-public interface ParticipantMapper {
+@Component
+public class ParticipantMapper {
+
+    public ParticipantResponseDto toDto(Participant participant) {
+
+        ParticipantResponseDto participantResponseDto = new ParticipantResponseDto();
+
+        if ( participant != null ) {
+            if ( participant.getBusinessName() != null ) {
+                participantResponseDto.setBusinessName( participant.getBusinessName() );
+            }
+            if ( participant.getJgpId() != null ) {
+                participantResponseDto.setJgpId( participant.getJgpId() );
+            }
+            if ( participant.getPhoneNumber() != null ) {
+                participantResponseDto.setPhoneNumber( participant.getPhoneNumber() );
+            }
+            if ( participant.getOwnerAge() != null ) {
+                participantResponseDto.setOwnerAge( participant.getOwnerAge() );
+            }
+            if ( participant.getBusinessLocation() != null ) {
+                participantResponseDto.setBusinessLocation( participant.getBusinessLocation() );
+            }
+            if ( participant.getIndustrySector() != null ) {
+                participantResponseDto.setIndustrySector( participant.getIndustrySector() );
+            }
+            if ( participant.getBusinessSegment() != null ) {
+                participantResponseDto.setBusinessSegment( participant.getBusinessSegment() );
+            }
+            if ( participant.getIsBusinessRegistered() != null ) {
+                participantResponseDto.setIsBusinessRegistered( participant.getIsBusinessRegistered() );
+            }
+            if ( participant.getRegistrationNumber() != null ) {
+                participantResponseDto.setRegistrationNumber( participant.getRegistrationNumber() );
+            }
+            if ( participant.getHasBMOMembership() != null ) {
+                participantResponseDto.setHasBMOMembership( participant.getHasBMOMembership() );
+            }
+            if ( participant.getBmoMembership() != null ) {
+                participantResponseDto.setBmoMembership( participant.getBmoMembership() );
+            }
+            if ( participant.getBestMonthlyRevenue() != null ) {
+                participantResponseDto.setBestMonthlyRevenue( participant.getBestMonthlyRevenue() );
+            }
+            if ( participant.getWorstMonthlyRevenue() != null ) {
+                participantResponseDto.setWorstMonthlyRevenue( participant.getWorstMonthlyRevenue() );
+            }
+            if ( participant.getTotalRegularEmployees() != null ) {
+                participantResponseDto.setTotalRegularEmployees( participant.getTotalRegularEmployees() );
+            }
+            if ( participant.getYouthRegularEmployees() != null ) {
+                participantResponseDto.setYouthRegularEmployees( participant.getYouthRegularEmployees() );
+            }
+            if ( participant.getTotalCasualEmployees() != null ) {
+                participantResponseDto.setTotalCasualEmployees( participant.getTotalCasualEmployees() );
+            }
+            if ( participant.getYouthCasualEmployees() != null ) {
+                participantResponseDto.setYouthCasualEmployees( participant.getYouthCasualEmployees() );
+            }
+            if ( participant.getSampleRecords() != null ) {
+                participantResponseDto.setSampleRecords( participant.getSampleRecords() );
+            }
+            if ( participant.getTaNeeds() != null ) {
+                participantResponseDto.setTaNeeds( participant.getTaNeeds() );
+            }
+            if ( participant.getPersonWithDisability() != null ) {
+                participantResponseDto.setPersonWithDisability( participant.getPersonWithDisability() );
+            }
+            if ( participant.getRefugeeStatus() != null ) {
+                participantResponseDto.setRefugeeStatus( participant.getRefugeeStatus() );
+            }
+            participantResponseDto.setOwnerGender( null != participant.getOwnerGender() ? participant.getOwnerGender().getName() : null );
+        }
 
 
-    /*@Mapping(target = "businessName", expression = "java(participant.getBusinessName())")
-    @Mapping(target = "jgpId", expression = "java(participant.getJgpId())")
-    @Mapping(target = "phoneNumber", expression = "java(participant.getPhoneNumber())")
-    @Mapping(target = "ownerAge", expression = "java(participant.getOwnerAge())")
-    @Mapping(target = "businessLocation", expression = "java(participant.getBusinessLocation())")
-    @Mapping(target = "industrySector", expression = "java(participant.getIndustrySector())")
-    @Mapping(target = "businessSegment", expression = "java(participant.getBusinessSegment())")
-    @Mapping(target = "isBusinessRegistered", ignore = true)
-    @Mapping(target = "registrationNumber", expression = "java(participant.getRegistrationNumber())")
-    @Mapping(target = "hasBMOMembership", ignore = true)
-    @Mapping(target = "bmoMembership", expression = "java(participant.getBmoMembership())")
-    @Mapping(target = "bestMonthlyRevenue", expression = "java(participant.getBestMonthlyRevenue())")
-    @Mapping(target = "worstMonthlyRevenue", expression = "java(participant.getWorstMonthlyRevenue())")
-    @Mapping(target = "totalRegularEmployees", expression = "java(participant.getTotalRegularEmployees())")
-    @Mapping(target = "youthRegularEmployees", expression = "java(participant.getYouthRegularEmployees())")
-    @Mapping(target = "totalCasualEmployees", expression = "java(participant.getTotalCasualEmployees())")
-    @Mapping(target = "youthCasualEmployees", expression = "java(participant.getYouthCasualEmployees())")
-    @Mapping(target = "sampleRecords", expression = "java(participant.getSampleRecords())")
-    @Mapping(target = "taNeeds", expression = "java(participant.getTaNeeds())")*/
-    @Mapping(target = "ownerGender", expression = "java(null != participant.getOwnerGender() ? participant.getOwnerGender().getName() : null)")
-    @Mapping(target = "bmoClientDtos", ignore = true)
-    @Mapping(target = "loanDtos", ignore = true)
-    ParticipantResponseDto toDto(Participant participant);
+        return participantResponseDto;
+    }
 
-    List<ParticipantResponseDto> toDto(List<Participant> participants);
+    public List<ParticipantResponseDto> toDto(List<Participant> participants) {
+        if ( participants == null ) {
+            return new ArrayList<>();
+        }
+
+        List<ParticipantResponseDto> list = new ArrayList<ParticipantResponseDto>( participants.size() );
+        for ( Participant participant : participants ) {
+            list.add( toDto( participant ) );
+        }
+
+        return list;
+    }
 }

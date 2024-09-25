@@ -10,6 +10,8 @@ import { MatSort } from '@angular/material/sort';
 import { ContentHeaderComponent } from '../../theme/components/content-header/content-header.component';
 import { DataUploadComponent } from './data-upload/data-upload.component';
 import { LoanService } from '@services/data-management/loan.service';
+import { NoPermissionComponent } from '../errors/no-permission/no-permission.component';
+import { AuthService } from '@services/users/auth.service';
 
 @Component({
   selector: 'app-lending-data',
@@ -23,7 +25,8 @@ import { LoanService } from '@services/data-management/loan.service';
     MatIconModule,
     DataUploadComponent,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    NoPermissionComponent
   ],
   templateUrl: './lending-data.component.html',
   styleUrl: './lending-data.component.scss'
@@ -41,7 +44,7 @@ export class LendingDataComponent {
 
   newLoansData: any
 
-  constructor(private loanService: LoanService) { }
+  constructor(private loanService: LoanService, public authService: AuthService) { }
 
   getAvailableNewLendingData() {
     this.loanService.getAvailableNewLendingData()

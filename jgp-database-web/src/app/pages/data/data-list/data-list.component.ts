@@ -11,6 +11,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { ClientService } from '@services/data-management/clients.service';
 import { BMOClientDataService } from '@services/data-management/bmo-client-data.service';
+import { NoPermissionComponent } from '../../errors/no-permission/no-permission.component';
+import { AuthService } from '@services/users/auth.service';
 
 @Component({
   selector: 'app-data-list',
@@ -24,7 +26,8 @@ import { BMOClientDataService } from '@services/data-management/bmo-client-data.
     MatIconModule,
     DataUploadComponent,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    NoPermissionComponent
 ],
   templateUrl: './data-list.component.html'
 })
@@ -37,7 +40,7 @@ export class DataListComponent {
 
   bmoClientsData: any
 
-  constructor(private bmoClientDataService: BMOClientDataService) { }
+  constructor(private bmoClientDataService: BMOClientDataService, public authService: AuthService) { }
 
   getAvailableBMOClientData() {
     this.bmoClientDataService.getAvailableBMOClientData()

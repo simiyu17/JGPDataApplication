@@ -92,4 +92,22 @@ export class AuthService {
     return JSON.parse(this.getLocalStorageValue(this.CURRENT_USER_CREDENTIALS))
   }
 
+  hasPermission(permission: string): boolean {
+    const userPermissions = this.currentUser()?.permissions
+    permission = permission.trim();
+    if (userPermissions.includes('ALL_FUNCTIONS')) {
+      return true;
+    } else if (permission !== '') {
+        if (permission.substring(0, 5) === 'READ_' && userPermissions.includes('ALL_FUNCTIONS_READ')) {
+          return true;
+        } else if (userPermissions.includes(permission)) {
+          return true;
+        } else {
+          return false;
+        }
+    } else {
+      return false;
+    }
+  }
+
 }

@@ -12,6 +12,9 @@ import { EditRoleComponent } from './edit-role/edit-role.component';
 import { UserRoleService } from '@services/users/userroles.service';
 import { UserRoleDto } from '../../dto/UserRoleDto';
 import { RouterModule } from '@angular/router';
+import { NoPermissionComponent } from '../errors/no-permission/no-permission.component';
+import { AuthService } from '@services/users/auth.service';
+import { HasPermissionDirective } from '../../directives/has-permission.directive';
 
 @Component({
   selector: 'app-user-role',
@@ -24,7 +27,9 @@ import { RouterModule } from '@angular/router';
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
-    RouterModule
+    RouterModule,
+    NoPermissionComponent,
+    HasPermissionDirective
   ],
   templateUrl: './user-role.component.html',
   styleUrl: './user-role.component.scss'
@@ -41,7 +46,7 @@ export class UserRoleComponent implements OnInit{
   public dataSource: any;
 
   userRoles: any
-  constructor(public dialog: MatDialog, private userRoleServive: UserRoleService) { }
+  constructor(public dialog: MatDialog, private userRoleServive: UserRoleService, public authService: AuthService) { }
 
   getAvailableUserRoles() {
     this.userRoleServive.getAvailableUserRoles()

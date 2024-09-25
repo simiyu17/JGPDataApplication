@@ -1,3 +1,4 @@
+@if(authService.hasPermission('LOAN_READ')){
 <app-content-header 
     [icon]="'keyboard'" 
     [title]="'Lending Data'" 
@@ -58,3 +59,7 @@
     </div> 
               
 </div>
+}
+@else {
+    <app-no-permission />
+}

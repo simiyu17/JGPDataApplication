@@ -7,6 +7,8 @@ import { TilesComponent } from './tiles/tiles.component';
 import { InfoCardsComponent } from './info-cards/info-cards.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { DashboardService } from '@services/dashboard/dashboard.service';
+import { NoPermissionComponent } from '../errors/no-permission/no-permission.component';
+import { AuthService } from '@services/users/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,14 +20,15 @@ import { DashboardService } from '@services/dashboard/dashboard.service';
     MatProgressBarModule,
     TilesComponent,
     InfoCardsComponent,
-    AnalyticsComponent
+    AnalyticsComponent,
+    NoPermissionComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
 
-  constructor(private dashBoardService: DashboardService){
+  constructor(private dashBoardService: DashboardService, public authService: AuthService){
     
   }
 }

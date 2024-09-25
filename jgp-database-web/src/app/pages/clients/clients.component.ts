@@ -5,6 +5,8 @@ import { ContentHeaderComponent } from '../../theme/components/content-header/co
 import { ClientService } from '@services/data-management/clients.service';
 import { MatSort } from '@angular/material/sort';
 import { RouterModule } from '@angular/router';
+import { NoPermissionComponent } from '../errors/no-permission/no-permission.component';
+import { AuthService } from '@services/users/auth.service';
 
 @Component({
   selector: 'app-clients',
@@ -13,7 +15,8 @@ import { RouterModule } from '@angular/router';
     MatTableModule,
     MatPaginatorModule,
     ContentHeaderComponent,
-    RouterModule
+    RouterModule,
+    NoPermissionComponent
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss'
@@ -27,7 +30,7 @@ export class ClientsComponent {
   public dataSource: any;
 
   clients: any
-  constructor(private clientService: ClientService) { }
+  constructor(private clientService: ClientService, public authService: AuthService) { }
 
   getAvailableClients() {
     this.clientService.getAvailableClients()

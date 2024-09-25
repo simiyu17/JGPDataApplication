@@ -20,6 +20,10 @@ public interface BMOClientMapper {
     @Mapping(target = "isRecommendedForFinance", expression = "java(null != bmoClientData.getIsRecommendedForFinance() ? bmoClientData.getIsRecommendedForFinance() : null)")
     @Mapping(target = "decisionDate", expression = "java(null != bmoClientData.getDecisionDate() ? bmoClientData.getDecisionDate() : null)")
     @Mapping(target = "dateFormSubmitted", expression = "java(null != bmoClientData.getDateFormSubmitted() ? bmoClientData.getDateFormSubmitted() : null)")
+    @Mapping(target = "isApplicantEligible", expression = "java(null != bmoClientData.getIsApplicantEligible() ? bmoClientData.getIsApplicantEligible() : null)")
+    @Mapping(target = "fiBusinessReferred", expression = "java(null != bmoClientData.getFiBusinessReferred() ? bmoClientData.getFiBusinessReferred() : null)")
+    @Mapping(target = "dateRecordedByPartner", ignore = true)
+    @Mapping(target = "dateRecordedToJGPDB", expression = "java(null != bmoClientData.getDateCreated() ? bmoClientData.getDateCreated() : null)")
     BMOClientDto toDto(BMOParticipantData bmoClientData);
 
     List<BMOClientDto> toDto(List<BMOParticipantData> bmoClientDataList);

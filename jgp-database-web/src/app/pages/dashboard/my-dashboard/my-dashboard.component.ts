@@ -3,6 +3,7 @@ import { FiDashboardComponent } from '../fi-dashboard/fi-dashboard.component';
 import { BmoDashboardComponent } from '../bmo-dashboard/bmo-dashboard.component';
 import { AuthService } from '@services/users/auth.service';
 import { DashboardComponent } from "../dashboard.component";
+import { NoPermissionComponent } from '../../errors/no-permission/no-permission.component';
 
 @Component({
   selector: 'app-my-dashboard',
@@ -10,7 +11,8 @@ import { DashboardComponent } from "../dashboard.component";
   imports: [
     FiDashboardComponent,
     BmoDashboardComponent,
-    DashboardComponent
+    DashboardComponent,
+    NoPermissionComponent
 ],
   templateUrl: './my-dashboard.component.html',
   styleUrl: './my-dashboard.component.scss'
@@ -18,7 +20,7 @@ import { DashboardComponent } from "../dashboard.component";
 export class MyDashboardComponent {
 
   partnerType: string | undefined = 'NONE';
-  constructor(private authService: AuthService){
+  constructor(public authService: AuthService){
 
   }
   ngOnInit(): void {

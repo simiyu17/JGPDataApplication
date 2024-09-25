@@ -20,6 +20,9 @@ import { ContentHeaderComponent } from '../../theme/components/content-header/co
 import { MatDividerModule } from '@angular/material/divider';
 import { UserService } from '@services/users/user.service';
 import { RouterModule } from '@angular/router';
+import { NoPermissionComponent } from '../errors/no-permission/no-permission.component';
+import { AuthService } from '@services/users/auth.service';
+import { HasPermissionDirective } from '../../directives/has-permission.directive';
 
 @Component({
   selector: 'app-users',
@@ -43,7 +46,9 @@ import { RouterModule } from '@angular/router';
     UserDialogComponent,
     ContentHeaderComponent,
     NgClass,
-    RouterModule
+    RouterModule,
+    NoPermissionComponent,
+    HasPermissionDirective
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
@@ -58,7 +63,7 @@ export class UsersComponent implements OnInit {
   public isDeleted: boolean = false;
   public userImage = "img/users/default-user.jpg";
 
-  constructor(public dialog: MatDialog, public userService: UserService) { }
+  constructor(public dialog: MatDialog, public userService: UserService, public authService: AuthService) { }
 
   ngOnInit() {
     this.getUsers();
