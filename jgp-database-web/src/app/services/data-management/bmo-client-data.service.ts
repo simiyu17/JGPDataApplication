@@ -18,7 +18,18 @@ export class BMOClientDataService {
         return this.httpClient.post(`${this.gs.BASE_API_URL}/bmos/upload-template`, formData);
       }
 
-      getAvailableBMOClientData(): Observable<any> {
-        return this.httpClient.get(`${this.gs.BASE_API_URL}/bmos`);
+      getAvailableBMOClientData(approvedByPartner: Boolean, partnerId: number | undefined): Observable<any> {
+        if(partnerId){
+          return this.httpClient.get(`${this.gs.BASE_API_URL}/bmos?partnerId=${partnerId}&approvedByPartner=${approvedByPartner}`);
+        }
+        return this.httpClient.get(`${this.gs.BASE_API_URL}/bmos?approvedByPartner=${approvedByPartner}`);
+      }
+
+      approveBMOClientData(bmoIds: number[]): Observable<any> {
+        return this.httpClient.post(`${this.gs.BASE_API_URL}/bmos/approve-or-reject?approved=true`, JSON.stringify(bmoIds));
+      }
+
+      disapproveBMOClientData(bmoIds: number[]): Observable<any> {
+        return this.httpClient.post(`${this.gs.BASE_API_URL}/bmos/approve-or-reject?approved=false`, JSON.stringify(bmoIds));
       }
 }

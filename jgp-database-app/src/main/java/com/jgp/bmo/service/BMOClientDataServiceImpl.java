@@ -9,6 +9,7 @@ import com.jgp.bmo.mapper.BMOClientMapper;
 import com.jgp.infrastructure.bulkimport.constants.TemplatePopulateImportConstants;
 import com.jgp.infrastructure.bulkimport.event.BulkImportEvent;
 import com.jgp.util.CommonUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,6 +31,14 @@ public class BMOClientDataServiceImpl implements BMOClientDataService {
     @Override
     public void createBMOData(List<BMOParticipantData> bmoDataListRequest) {
         this.bmoDataRepository.saveAll(bmoDataListRequest);
+    }
+
+    @Transactional
+    @Override
+    public void approvedBMOParticipantsData(List<Long> dataIds, Boolean approval) {
+        final var bmoData = this.bmoDataRepository.findAllById(dataIds);
+        bmoData.forEach(bmo -> bmo.approveData(approval));
+        this.bmoDataRepository.saveAll(bmoData);
     }
 
     @Override

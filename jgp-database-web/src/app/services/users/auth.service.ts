@@ -94,6 +94,9 @@ export class AuthService {
 
   hasPermission(permission: string): boolean {
     const userPermissions = this.currentUser()?.permissions
+    if(!userPermissions){
+      return false;
+    }
     permission = permission.trim();
     if (userPermissions.includes('ALL_FUNCTIONS')) {
       return true;

@@ -35,6 +35,10 @@ public class BMOPredicateBuilder {
             predicateList.add(qbmoParticipantData.partner.id.eq(searchCriteria.partnerId()));
         }
 
+        if (null != searchCriteria.approvedByPartner()) {
+            predicateList.add(qbmoParticipantData.isDataApprovedByPartner.eq(searchCriteria.approvedByPartner()));
+        }
+
         if (!predicateList.isEmpty()) {
             builder.orAllOf(predicateList.toArray(new Predicate[0]));
         }

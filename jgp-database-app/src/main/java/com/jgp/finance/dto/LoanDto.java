@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record LoanDto(
+         Long id,
+
          String participantName,
 
          Long partnerId,

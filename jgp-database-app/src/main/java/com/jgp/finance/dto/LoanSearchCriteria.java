@@ -8,6 +8,7 @@ public record LoanSearchCriteria(
         Long partnerId,
         Long participantId,
         Loan.LoanStatus status,
-        Loan.LoanQuality quality
+        Loan.LoanQuality quality,
+        Boolean approvedByPartner
 ) {
 }

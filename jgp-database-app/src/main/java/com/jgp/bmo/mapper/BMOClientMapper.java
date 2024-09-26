@@ -11,6 +11,7 @@ import org.mapstruct.NullValueMappingStrategy;
 @Mapper(componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT, nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface BMOClientMapper {
 
+    @Mapping(target = "id", expression = "java(bmoClientData.getId())")
     @Mapping(target = "partnerId", expression = "java(null != bmoClientData.getPartner() ? bmoClientData.getPartner().getId() : null)")
     @Mapping(target = "partnerName", expression = "java(null != bmoClientData.getPartner() ? bmoClientData.getPartner().getPartnerName() : null)")
     @Mapping(target = "participantId", expression = "java(null != bmoClientData.getParticipant() ? bmoClientData.getParticipant().getId() : null)")

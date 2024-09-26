@@ -56,6 +56,9 @@ public class BMOParticipantData extends BaseEntity {
     @Column(name = "date_recorded_to_jgp")
     private LocalDate dateRecordedToJGPDB;
 
+    @Column(name = "data_is_approved")
+    private Boolean isDataApprovedByPartner;
+
     private transient Integer rowIndex;
 
     public BMOParticipantData() {
@@ -74,9 +77,12 @@ public class BMOParticipantData extends BaseEntity {
         this.dateRecordedByPartner = dateRecordedByPartner;
         this.dateRecordedToJGPDB = dateRecordedToJGPDB;
         this.rowIndex = rowIndex;
+        this.isDataApprovedByPartner = false;
     }
 
-
+    public void approveData(Boolean approval){
+        this.isDataApprovedByPartner = approval;
+    }
 
     @Override
     public boolean equals(Object o) {

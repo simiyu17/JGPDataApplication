@@ -12,6 +12,8 @@ public interface BMOClientDataService {
 
     void createBMOData(List<BMOParticipantData> bmoDataListRequest);
 
+    void approvedBMOParticipantsData(List<Long> dataIds, Boolean approval);
+
     void uploadBMOData(MultipartFile file);
 
     List<BMOClientDto> getBMODataRecords(BMOParticipantSearchCriteria searchCriteria,Pageable pageable);

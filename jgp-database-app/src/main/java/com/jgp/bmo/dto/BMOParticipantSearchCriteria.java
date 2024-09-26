@@ -5,6 +5,7 @@ import lombok.Builder;
 @Builder
 public record BMOParticipantSearchCriteria(
         Long partnerId,
-        Long participantId
+        Long participantId,
+        Boolean approvedByPartner
 ) {
 }

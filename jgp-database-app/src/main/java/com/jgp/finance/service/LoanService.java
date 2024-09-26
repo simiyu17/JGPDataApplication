@@ -14,6 +14,8 @@ public interface LoanService {
 
     void uploadBulkLoanData(MultipartFile file);
 
+    void approvedParticipantsLoansData(List<Long> dataIds, Boolean approval);
+
     List<LoanDto> getLoans(LoanSearchCriteria searchCriteria, Pageable pageable);
 
     LoanDto findLoanById(Long loanId);

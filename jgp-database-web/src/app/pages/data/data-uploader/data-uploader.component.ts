@@ -86,6 +86,8 @@ export class DataUploaderComponent {
   uploadTemplate() {
     let legalFormType = '';
     /** Only for Client Bulk Imports */
+    if(this.authService.currentUser()?.partnerId){
+      console.log(this.authService.currentUser()?.partnerId )
       if (this.template.name.toLowerCase().includes('loan')) {
         legalFormType = 'LOAN';
       } else if (this.template.name.toLowerCase().includes('bmo')) {
@@ -93,8 +95,11 @@ export class DataUploaderComponent {
       }else {
         this.gs.openSnackBar('Invalid Template', "Dismiss");
       }
+    }else{
+      this.gs.openSnackBar('User must be assigned to a patner!!', "Dismiss");
+    }
 
-      if('' !== legalFormType){
+    if('' !== legalFormType){
     this.dataUploadService
       .uploadDataTemplate(this.template, legalFormType,)
       .subscribe({

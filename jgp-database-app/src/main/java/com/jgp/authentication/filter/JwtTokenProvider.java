@@ -1,6 +1,7 @@
 package com.jgp.authentication.filter;
 
 import com.jgp.authentication.domain.AppUser;
+import com.jgp.authentication.domain.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -62,10 +63,10 @@ public class JwtTokenProvider {
                 .claim("user_email", user.getUsername())
                 .claim("user_partner_name", Objects.isNull(user.getPartner()) ? "-" : user.getPartner().getPartnerName())
                 .claim("user_partner_type", Objects.isNull(user.getPartner()) ? "-" : user.getPartner().getType())
-                .claim("user_partner_id", Objects.isNull(user.getPartner()) ? "-" : user.getPartner().getId())
+                .claim("user_partner_id", Objects.isNull(user.getPartner()) ? null : user.getPartner().getId())
                 .claim("user_position", user.getDesignation())
                 .claim("user_registration", user.getDateCreated().format(DateTimeFormatter.ofPattern("MMM, yyyy")))
-                .claim("roles", new HashSet<>(Collections.singletonList("USER")))
+                .claim("user_roles", user.getRoles().stream().map(Role::getRoleName).collect(Collectors.toSet()))
                 .claim("user_permissions", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()))
                 .claim("force_change_password", user.isForceChangePass())
                 .issuedAt(new Date(System.currentTimeMillis()))

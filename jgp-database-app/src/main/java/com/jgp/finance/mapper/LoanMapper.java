@@ -12,6 +12,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT, nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface LoanMapper {
 
+    @Mapping(target = "id", expression = "java(loan.getId())")
     @Mapping(target = "partnerId", expression = "java(null != loan.getPartner() ? loan.getPartner().getId() : null)")
     @Mapping(target = "partnerName", expression = "java(null != loan.getPartner() ? loan.getPartner().getPartnerName() : null)")
     @Mapping(target = "participantName", expression = "java(null != loan.getParticipant() ? loan.getParticipant().getBusinessName() : null)")

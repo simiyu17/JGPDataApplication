@@ -3,6 +3,8 @@ package com.jgp.bmo.dto;
 import java.time.LocalDate;
 
 public record BMOClientDto(
+         Long id,
+
          Long partnerId,
 
          String partnerName,
