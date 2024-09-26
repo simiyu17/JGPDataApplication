@@ -1,8 +1,8 @@
 package com.jgp.finance.api;
 
-import com.jgp.bmo.dto.BMOClientDto;
-import com.jgp.bmo.service.BMOClientDataService;
+import com.jgp.finance.domain.Loan;
 import com.jgp.finance.dto.LoanDto;
+import com.jgp.finance.dto.LoanSearchCriteria;
 import com.jgp.finance.service.LoanService;
 import com.jgp.shared.dto.ApiResponseDto;
 import com.jgp.util.CommonUtil;
@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,11 +32,16 @@ public class LoanController {
     private final LoanService loanService;
 
     @GetMapping
-    public ResponseEntity<List<LoanDto>> getAvailableLoanRecords(@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
+    public ResponseEntity<List<LoanDto>> getAvailableLoanRecords(@RequestParam(name = "partnerId", required = false) Long partnerId,
+                                                                 @RequestParam(name = "participantId", required = false) Long participantId,
+                                                                 @RequestParam(name = "status", required = false) Loan.LoanStatus status,
+                                                                 @RequestParam(name = "quality", required = false) Loan.LoanQuality quality,
+                                                                 @RequestParam(name = "approvedByPartner", required = false) Boolean approvedByPartner,
+                                                                 @RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
                                                                  @RequestParam(name = "pageSize", defaultValue = "200") Integer pageSize){
         final var sortedByDateCreated =
                 PageRequest.of(pageNumber - 1, pageSize, Sort.by("dateCreated").descending());
-        return new ResponseEntity<>(this.loanService.getLoans(sortedByDateCreated), HttpStatus.OK);
+        return new ResponseEntity<>(this.loanService.getLoans(new LoanSearchCriteria(partnerId, participantId, status, quality, approvedByPartner), sortedByDateCreated), HttpStatus.OK);
     }
 
     @PostMapping("upload-template")
@@ -50,5 +56,11 @@ public class LoanController {
     @GetMapping("{loanId}")
     public ResponseEntity<LoanDto> getLoan(@PathVariable("loanId") Long loanId){
         return new ResponseEntity<>(this.loanService.findLoanById(loanId), HttpStatus.OK);
+    }
+
+    @PostMapping("approve-or-reject")
+    public ResponseEntity<ApiResponseDto> approveLoansData(@RequestBody List<Long> loanIds, @RequestParam(name = "approved") Boolean approved) {
+        this.loanService.approvedParticipantsLoansData(loanIds, approved);
+        return new ResponseEntity<>(new ApiResponseDto(true, CommonUtil.RESOURCE_UPDATED), HttpStatus.OK);
     }
 }

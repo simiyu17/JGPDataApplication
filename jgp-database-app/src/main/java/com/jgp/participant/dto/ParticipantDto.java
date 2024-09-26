@@ -3,6 +3,7 @@ package com.jgp.participant.dto;
 import com.jgp.bmo.dto.BMOClientDto;
 import com.jgp.finance.dto.LoanDto;
 import lombok.Builder;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;

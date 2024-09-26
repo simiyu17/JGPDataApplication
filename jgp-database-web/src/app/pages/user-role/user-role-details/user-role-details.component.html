@@ -11,7 +11,7 @@
     <div fxLayout="column" class="p-2">
         <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="end center" class="px-2 user-toolbar">
             <div class="action-button" fxLayoutGap="25px">
-                <button mat-raised-button color="primary" [routerLink]="['/user-roles', selectedUserRole.id, 'edit']">
+                <button mat-raised-button color="primary" *jgpHasPermission="'USER_ROLE_UPDATE'" [routerLink]="['/user-roles', selectedUserRole.id, 'edit']">
                   <mat-icon>edit</mat-icon>&nbsp;&nbsp;Edit
                 </button>
                 <button mat-raised-button color="warn" >

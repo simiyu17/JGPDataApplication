@@ -12,6 +12,7 @@ import { UserRoleDto } from '../../../dto/UserRoleDto';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
+import { HasPermissionDirective } from '../../../directives/has-permission.directive';
 
 @Component({
   selector: 'app-user-role-details',
@@ -25,7 +26,8 @@ import { MatDividerModule } from '@angular/material/divider';
     MatFormFieldModule,
     AsyncPipe,
     MatDividerModule,
-    RouterModule
+    RouterModule,
+    HasPermissionDirective
   ],
   templateUrl: './user-role-details.component.html',
   styleUrl: './user-role-details.component.scss'

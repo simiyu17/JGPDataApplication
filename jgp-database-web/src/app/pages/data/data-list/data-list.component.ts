@@ -9,8 +9,13 @@ import { DataUploadComponent } from "../data-upload/data-upload.component";
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { ClientService } from '@services/data-management/clients.service';
 import { BMOClientDataService } from '@services/data-management/bmo-client-data.service';
+import { NoPermissionComponent } from '../../errors/no-permission/no-permission.component';
+import { AuthService } from '@services/users/auth.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SelectionModel } from '@angular/cdk/collections';
+import { HasPermissionDirective } from '../../../directives/has-permission.directive';
+import { GlobalService } from '@services/shared/global.service';
 
 @Component({
   selector: 'app-data-list',
@@ -24,7 +29,10 @@ import { BMOClientDataService } from '@services/data-management/bmo-client-data.
     MatIconModule,
     DataUploadComponent,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    NoPermissionComponent,
+    MatCheckboxModule,
+    HasPermissionDirective
 ],
   templateUrl: './data-list.component.html'
 })
@@ -32,15 +40,16 @@ export class DataListComponent {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  public displayedColumns = ['clientName', 'tasAttended', 'taSessionsAttended', 'isRecommendedForFinance', 'dateFormSubmitted', 'decisionDate'];
+  public displayedColumns = ['select', 'participantName', 'tasAttended', 'taSessionsAttended', 'isRecommendedForFinance', 'dateFormSubmitted', 'decisionDate'];
   public dataSource: any;
 
   bmoClientsData: any
+  public selection = new SelectionModel<any>(true, []);
 
-  constructor(private bmoClientDataService: BMOClientDataService) { }
+  constructor(private bmoClientDataService: BMOClientDataService, public authService: AuthService, private gs: GlobalService) { }
 
   getAvailableBMOClientData() {
-    this.bmoClientDataService.getAvailableBMOClientData()
+    this.bmoClientDataService.getAvailableBMOClientData(false, this.authService.currentUser()?.partnerId)
       .subscribe({
         next: (response) => {
           this.bmoClientsData = response;
@@ -60,5 +69,28 @@ export class DataListComponent {
 
   ngOnInit(): void {
     this.getAvailableBMOClientData();
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach((row: any) => this.selection.select(row));
+  }
+
+  approveSelectedRows(){
+    this.bmoClientDataService.approveBMOClientData(this.selection.selected.map(row => row.id))
+      .subscribe({
+        next: (response) => {
+          this.gs.openSnackBar(response.message, "Dismiss");
+          this.getAvailableBMOClientData();
+        },
+        error: (error) => { }
+      });
   }
 }

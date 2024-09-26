@@ -10,6 +10,12 @@ import { MatSort } from '@angular/material/sort';
 import { ContentHeaderComponent } from '../../theme/components/content-header/content-header.component';
 import { DataUploadComponent } from './data-upload/data-upload.component';
 import { LoanService } from '@services/data-management/loan.service';
+import { NoPermissionComponent } from '../errors/no-permission/no-permission.component';
+import { AuthService } from '@services/users/auth.service';
+import { GlobalService } from '@services/shared/global.service';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { HasPermissionDirective } from '../../directives/has-permission.directive';
 
 @Component({
   selector: 'app-lending-data',
@@ -23,7 +29,10 @@ import { LoanService } from '@services/data-management/loan.service';
     MatIconModule,
     DataUploadComponent,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    NoPermissionComponent,
+    MatCheckboxModule,
+    HasPermissionDirective
   ],
   templateUrl: './lending-data.component.html',
   styleUrl: './lending-data.component.scss'
@@ -33,18 +42,19 @@ export class LendingDataComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public displayedColumns = [
-    'participantName', 'loanNumber', 'pipeLineSource', 
+    'select', 'participantName', 'loanNumber', 'pipeLineSource', 
     'loanAmountAccessed', 'loanOutStandingAmount', 
     'loanDuration', 'dateApplied', 'loanQuality'
   ];
   public dataSource: any;
 
   newLoansData: any
+  public selection = new SelectionModel<any>(true, []);
 
-  constructor(private loanService: LoanService) { }
+  constructor(private loanService: LoanService, public authService: AuthService, private gs: GlobalService) { }
 
   getAvailableNewLendingData() {
-    this.loanService.getAvailableNewLendingData()
+    this.loanService.getAvailableLendingData(false, this.authService.currentUser()?.partnerId)
       .subscribe({
         next: (response) => {
           this.newLoansData = response;
@@ -64,5 +74,28 @@ export class LendingDataComponent {
 
   ngOnInit(): void {
     this.getAvailableNewLendingData();
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach((row: any) => this.selection.select(row));
+  }
+
+  approveSelectedRows(){
+    this.loanService.approveLoansData(this.selection.selected.map(row => row.id))
+      .subscribe({
+        next: (response) => {
+          this.gs.openSnackBar(response.message, "Dismiss");
+          this.getAvailableNewLendingData();
+        },
+        error: (error) => { }
+      });
   }
 }

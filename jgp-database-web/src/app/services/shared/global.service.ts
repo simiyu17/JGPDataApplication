@@ -15,7 +15,7 @@ export class GlobalService {
   constructor(public _snackBar: MatSnackBar) { }
 
   openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
+    this._snackBar.open(message, 'X', {
       duration: 3000,
       verticalPosition: 'top'
     });

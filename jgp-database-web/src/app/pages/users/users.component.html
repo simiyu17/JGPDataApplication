@@ -1,3 +1,4 @@
+@if(authService.hasPermission('USERS_READ')){
 <app-content-header 
     [icon]="'supervisor_account'" 
     [title]="'Users'" 
@@ -8,7 +9,7 @@
 
 <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between center" class="px-2 user-toolbar">
     <div fxLayout="row">
-        <button mat-icon-button [routerLink]="['new']" class="default-contrast">
+        <button mat-icon-button *jgpHasPermission="'USERS_CREATE'" [routerLink]="['new']" class="default-contrast">
             <mat-icon>person_add</mat-icon>
         </button>
         <button mat-icon-button (click)="showSearch = !showSearch" class="default-contrast mx-2">
@@ -213,3 +214,7 @@
         </div>  
     } 
 </div>
+}
+@else {
+    <app-no-permission />
+}

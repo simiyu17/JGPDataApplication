@@ -1,3 +1,4 @@
+@if(authService.hasPermission('PARTNERS_VIEW')){
 <app-content-header 
     [icon]="'supervisor_account'" 
     [title]="'Partners'" 
@@ -10,7 +11,7 @@
 <div fxLayout="column" class="p-2">
     <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="end center" class="px-2 user-toolbar">
         <div class="action-button" fxLayoutGap="25px">
-            <button mat-raised-button color="primary" routerLink="new">
+            <button mat-raised-button color="primary" *jgpHasPermission="'PARTNERS_CREATE'" routerLink="new">
               <mat-icon>person_add</mat-icon>&nbsp;&nbsp;Create Partner
             </button>
           </div>
@@ -33,3 +34,7 @@
         <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
     </div>
 </div>
+}
+@else {
+    <app-no-permission />
+}

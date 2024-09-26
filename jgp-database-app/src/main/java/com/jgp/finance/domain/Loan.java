@@ -78,6 +78,9 @@ public class Loan extends BaseEntity {
     @Column(name = "unique_values")
     private String uniqueValues;
 
+    @Column(name = "data_is_approved")
+    private boolean isDataApprovedByPartner;
+
     private transient Integer rowIndex;
 
     public Loan() {
@@ -105,6 +108,11 @@ public class Loan extends BaseEntity {
         this.uniqueValues = uniqueValues;
         this.dateAddedToDB = dateAddedToDB;
         this.rowIndex = rowIndex;
+        this.isDataApprovedByPartner = false;
+    }
+
+    public void approveData(Boolean approval){
+        this.isDataApprovedByPartner = approval;
     }
 
     @Getter

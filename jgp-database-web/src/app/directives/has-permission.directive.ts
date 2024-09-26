@@ -27,7 +27,7 @@ export class HasPermissionDirective {
      * Evaluates the condition to show template.
      */
     @Input()
-    set mifosxHasPermission(permission: any) {
+    set jgpHasPermission(permission: any) {
       if (typeof permission !== 'string') {
         throw new Error('hasPermission value must be a string');
       }

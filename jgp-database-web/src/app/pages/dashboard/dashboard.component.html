@@ -1,3 +1,4 @@
+@if(authService.hasPermission('DASHBOARD_VIEW')){
 <app-content-header
     icon="dashboard" 
     desc="Welcome to Dashboard !"
@@ -49,3 +50,8 @@
     <!-- <app-team></app-team> -->
 
 </div>
+
+}
+@else {
+    <app-no-permission />
+}

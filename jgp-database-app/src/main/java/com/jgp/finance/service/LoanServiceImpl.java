@@ -1,5 +1,7 @@
 package com.jgp.finance.service;
 
+import com.jgp.finance.domain.predicate.LoanPredicateBuilder;
+import com.jgp.finance.dto.LoanSearchCriteria;
 import com.jgp.finance.mapper.LoanMapper;
 import com.jgp.finance.domain.Loan;
 import com.jgp.finance.domain.LoanRepository;
@@ -7,6 +9,7 @@ import com.jgp.finance.dto.LoanDto;
 import com.jgp.infrastructure.bulkimport.constants.TemplatePopulateImportConstants;
 import com.jgp.infrastructure.bulkimport.event.BulkImportEvent;
 import com.jgp.util.CommonUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.context.ApplicationEventPublisher;
@@ -23,6 +26,7 @@ public class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
     private final ApplicationEventPublisher publisher;
     private final LoanMapper loanMapper;
+    private final LoanPredicateBuilder loanPredicateBuilder;
 
     @Override
     public void createLoans(List<Loan> loans) {
@@ -38,9 +42,17 @@ public class LoanServiceImpl implements LoanService {
         }
     }
 
+    @Transactional
     @Override
-    public List<LoanDto> getLoans(Pageable pageable) {
-        return this.loanMapper.toDto(this.loanRepository.findAll(pageable).stream().toList());
+    public void approvedParticipantsLoansData(List<Long> dataIds, Boolean approval) {
+        var loans = this.loanRepository.findAllById(dataIds);
+        loans.forEach(loan -> loan.approveData(approval));
+        this.loanRepository.saveAll(loans);
+    }
+
+    @Override
+    public List<LoanDto> getLoans(LoanSearchCriteria searchCriteria, Pageable pageable) {
+        return this.loanMapper.toDto(this.loanRepository.findAll(loanPredicateBuilder.buildPredicateForSearchLoans(searchCriteria), pageable).stream().toList());
     }
 
     @Override

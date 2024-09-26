@@ -2,6 +2,7 @@ package com.jgp.finance.service;
 
 import com.jgp.finance.domain.Loan;
 import com.jgp.finance.dto.LoanDto;
+import com.jgp.finance.dto.LoanSearchCriteria;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +14,9 @@ public interface LoanService {
 
     void uploadBulkLoanData(MultipartFile file);
 
-    List<LoanDto> getLoans(Pageable pageable);
+    void approvedParticipantsLoansData(List<Long> dataIds, Boolean approval);
+
+    List<LoanDto> getLoans(LoanSearchCriteria searchCriteria, Pageable pageable);
 
     LoanDto findLoanById(Long loanId);
 }

@@ -1,3 +1,4 @@
+@if(authService.hasPermission('LOAN_READ')){
 <app-content-header 
     [icon]="'keyboard'" 
     [title]="'Lending Data'" 
@@ -13,8 +14,29 @@
             </mat-card-header>
             <mat-card-content class="pt-3">
                 <div fxLayout="column" class="p-2">
+                    <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="end center" class="px-2 user-toolbar">
+                        <div class="action-button" fxLayoutGap="25px">
+                            <button mat-raised-button color="primary" *jgpHasPermission="'USER_ROLE_CREATE'" routerLink="new" [disabled]="selection.selected.length == 0" (click)="approveSelectedRows()">
+                              <mat-icon>verified</mat-icon>&nbsp;&nbsp;Approve Selected
+                            </button>
+                          </div>
+                    </mat-toolbar>
                     <div class="p-2">
                         <mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+                            <ng-container matColumnDef="select">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                  [checked]="selection.hasValue() && isAllSelected()"
+                                                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                    </mat-checkbox>
+                                </th>
+                                <td mat-cell *matCellDef="let row">
+                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                                  (change)="$event ? selection.toggle(row) : null"
+                                                  [checked]="selection.isSelected(row)">
+                                    </mat-checkbox>
+                                </td>
+                            </ng-container>
                             <ng-container matColumnDef="participantName">
                                 <mat-header-cell *matHeaderCellDef> Business Name </mat-header-cell>
                                 <mat-cell *matCellDef="let element"> {{element.participantName}} </mat-cell>
@@ -48,7 +70,7 @@
                                 <mat-cell *matCellDef="let element"> {{element.loanQuality}} </mat-cell>
                             </ng-container>
                             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></mat-row>
                         </mat-table>
                         <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
                     </div>
@@ -58,3 +80,7 @@
     </div> 
               
 </div>
+}
+@else {
+    <app-no-permission />
+}

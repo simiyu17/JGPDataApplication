@@ -12,6 +12,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { GlobalService } from '@services/shared/global.service';
+import { NoPermissionComponent } from '../../errors/no-permission/no-permission.component';
+import { AuthService } from '@services/users/auth.service';
 
 @Component({
   selector: 'app-data-uploader',
@@ -28,7 +30,8 @@ import { GlobalService } from '@services/shared/global.service';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    MatOptionModule
+    MatOptionModule,
+    NoPermissionComponent
 ],
   templateUrl: './data-uploader.component.html',
   styleUrl: './data-uploader.component.scss'
@@ -38,11 +41,13 @@ export class DataUploaderComponent {
   bulkImport: any = {};
   template: File;
   bulkImportForm: UntypedFormGroup;
+  partnerType: string | undefined = 'NONE';
 
   constructor(
     private dataUploadService: DataUploadService, 
     private gs: GlobalService,
-    private formBuilder: UntypedFormBuilder){
+    private formBuilder: UntypedFormBuilder,
+    public authService: AuthService){
 
   }
 
@@ -57,6 +62,7 @@ export class DataUploaderComponent {
   }
 
   ngOnInit() {
+    this.partnerType = this.authService.currentUser()?.partnerType === '-' ? 'NONE' : this.authService.currentUser()?.partnerType;
     this.createBulkImportForm();
   }
 
@@ -80,12 +86,20 @@ export class DataUploaderComponent {
   uploadTemplate() {
     let legalFormType = '';
     /** Only for Client Bulk Imports */
+    if(this.authService.currentUser()?.partnerId){
+      console.log(this.authService.currentUser()?.partnerId )
       if (this.template.name.toLowerCase().includes('loan')) {
         legalFormType = 'LOAN';
       } else if (this.template.name.toLowerCase().includes('bmo')) {
         legalFormType = 'BMO';
+      }else {
+        this.gs.openSnackBar('Invalid Template', "Dismiss");
       }
+    }else{
+      this.gs.openSnackBar('User must be assigned to a patner!!', "Dismiss");
+    }
 
+    if('' !== legalFormType){
     this.dataUploadService
       .uploadDataTemplate(this.template, legalFormType,)
       .subscribe({
@@ -94,5 +108,6 @@ export class DataUploaderComponent {
           //this.refreshDocuments();
         }
       });
+    }
   }
 }

@@ -27,7 +27,7 @@ public class BMOParticipantData extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participant_id")
-    private Participant client;
+    private Participant participant;
 
     @Column(name = "form_submitted_on")
     private LocalDate dateFormSubmitted;
@@ -56,14 +56,17 @@ public class BMOParticipantData extends BaseEntity {
     @Column(name = "date_recorded_to_jgp")
     private LocalDate dateRecordedToJGPDB;
 
+    @Column(name = "data_is_approved")
+    private Boolean isDataApprovedByPartner;
+
     private transient Integer rowIndex;
 
     public BMOParticipantData() {
     }
 
-    public BMOParticipantData(Partner partner, Participant client, LocalDate dateFormSubmitted, Boolean isApplicantEligible, Integer tasAttended, Integer taSessionsAttended, Boolean isRecommendedForFinance, LocalDate decisionDate, String fiBusinessReferred, LocalDate dateRecordedByPartner, LocalDate dateRecordedToJGPDB, Integer rowIndex) {
+    public BMOParticipantData(Partner partner, Participant participant, LocalDate dateFormSubmitted, Boolean isApplicantEligible, Integer tasAttended, Integer taSessionsAttended, Boolean isRecommendedForFinance, LocalDate decisionDate, String fiBusinessReferred, LocalDate dateRecordedByPartner, LocalDate dateRecordedToJGPDB, Integer rowIndex) {
         this.partner = partner;
-        this.client = client;
+        this.participant = participant;
         this.dateFormSubmitted = dateFormSubmitted;
         this.isApplicantEligible = isApplicantEligible;
         this.tasAttended = tasAttended;
@@ -74,9 +77,12 @@ public class BMOParticipantData extends BaseEntity {
         this.dateRecordedByPartner = dateRecordedByPartner;
         this.dateRecordedToJGPDB = dateRecordedToJGPDB;
         this.rowIndex = rowIndex;
+        this.isDataApprovedByPartner = false;
     }
 
-
+    public void approveData(Boolean approval){
+        this.isDataApprovedByPartner = approval;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -89,13 +95,13 @@ public class BMOParticipantData extends BaseEntity {
         return new EqualsBuilder()
                 .appendSuper(super.equals(o)).append(getId(), bmoData.getId())
                 .append(getPartner(), bmoData.getPartner())
-                .append(getClient(), bmoData.getClient())
+                .append(getParticipant(), bmoData.getParticipant())
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .appendSuper(super.hashCode()).append(getId()).append(getPartner()).append(getClient()).toHashCode();
+                .appendSuper(super.hashCode()).append(getId()).append(getPartner()).append(getParticipant()).toHashCode();
     }
 }

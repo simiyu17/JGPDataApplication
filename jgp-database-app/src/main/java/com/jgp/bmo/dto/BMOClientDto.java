@@ -3,11 +3,15 @@ package com.jgp.bmo.dto;
 import java.time.LocalDate;
 
 public record BMOClientDto(
+         Long id,
+
          Long partnerId,
 
-         Long clientId,
+         String partnerName,
 
-         String clientName,
+         Long participantId,
+
+         String participantName,
 
          LocalDate dateFormSubmitted,
 

@@ -1,3 +1,4 @@
+@if(authService.hasPermission('LOAN_UPLOAD') || authService.hasPermission('BMO_PARTICIPANTS_DATA_UPLOAD')){
 <app-content-header 
     [icon]="'supervisor_account'" 
     [title]="'Data Upload'" 
@@ -20,8 +21,11 @@
                     <mat-form-field fxFlex>
                       <mat-label>Legal Form</mat-label>
                       <mat-select required formControlName="legalForm">
-                        <mat-option value="Entity">BMO Data Template</mat-option>
-                        <mat-option value="Person">Loan Template</mat-option>
+                        @if (partnerType === 'BMO') {
+                          <mat-option value="BMO_DATA">BMO Data Template</mat-option>
+                      }@else if (partnerType === 'FI') {
+                        <mat-option value="LOAN_DATA">Loan Template</mat-option>
+                      }
                       </mat-select>
                     </mat-form-field>
                   </div>
@@ -59,3 +63,7 @@
           </div>
     </div>
 </div>
+}
+@else {
+    <app-no-permission />
+}
