@@ -89,7 +89,7 @@ public class ParticipantMapper {
             return new ArrayList<>();
         }
 
-        List<ParticipantResponseDto> list = new ArrayList<ParticipantResponseDto>( participants.size() );
+        var list = new ArrayList<ParticipantResponseDto>( participants.size() );
         for ( Participant participant : participants ) {
             list.add( toDto( participant ) );
         }

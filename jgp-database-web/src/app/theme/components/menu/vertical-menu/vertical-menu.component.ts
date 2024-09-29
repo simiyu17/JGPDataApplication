@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation, OnChanges, SimpleChanges } from '@angular/core';
 import { MenuService } from '@services/menu.service';
 import { Settings, SettingsService } from '@services/settings.service';
 import { Menu } from '../../../../common/models/menu.model';
@@ -7,6 +7,7 @@ import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { AuthService } from '@services/users/auth.service';
 
 @Component({
   selector: 'app-vertical-menu',
@@ -27,12 +28,22 @@ export class VerticalMenuComponent implements OnInit {
   @Input('menuParentId') menuParentId: any;
   parentMenu: Array<any>;
   public settings: Settings;
-  constructor(public settingsService: SettingsService, public menuService: MenuService) {
+  currentUser: any = {}
+  myDashboardMenu?: Menu; 
+  constructor(public settingsService: SettingsService, public menuService: MenuService, private authService: AuthService) {
     this.settings = this.settingsService.settings;
   }
 
+
   ngOnInit() {
     this.parentMenu = this.menuItems.filter(item => item.parentId == this.menuParentId);
+    this.currentUser = this.authService.currentUser();  
+    this.myDashboardMenu = this.menuItems.find(item => item.id === 2);
+    if(this.myDashboardMenu && this.currentUser.partnerName){
+      this.myDashboardMenu.title = `${this.currentUser.partnerName} Dashboard`;
+    }else {
+      this.parentMenu = this.parentMenu.filter(item => item.id !== 2);
+    }
   }
 
   onClick(menuId: any) {
