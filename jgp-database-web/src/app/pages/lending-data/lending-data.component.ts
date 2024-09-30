@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -16,6 +16,7 @@ import { GlobalService } from '@services/shared/global.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HasPermissionDirective } from '../../directives/has-permission.directive';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-lending-data',
@@ -37,7 +38,7 @@ import { HasPermissionDirective } from '../../directives/has-permission.directiv
   templateUrl: './lending-data.component.html',
   styleUrl: './lending-data.component.scss'
 })
-export class LendingDataComponent {
+export class LendingDataComponent implements OnDestroy, OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -51,10 +52,12 @@ export class LendingDataComponent {
   newLoansData: any
   public selection = new SelectionModel<any>(true, []);
 
+  private unsubscribe$ = new Subject<void>();
   constructor(private loanService: LoanService, public authService: AuthService, private gs: GlobalService) { }
 
   getAvailableNewLendingData() {
     this.loanService.getAvailableLendingData(false, this.authService.currentUser()?.partnerId)
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.newLoansData = response;
@@ -90,6 +93,7 @@ export class LendingDataComponent {
 
   approveSelectedRows(){
     this.loanService.approveLoansData(this.selection.selected.map(row => row.id))
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.gs.openSnackBar(response.message, "Dismiss");
@@ -97,5 +101,11 @@ export class LendingDataComponent {
         },
         error: (error) => { }
       });
+  }
+
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

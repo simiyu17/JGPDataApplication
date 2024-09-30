@@ -8,6 +8,7 @@ import com.jgp.bmo.dto.BMOParticipantSearchCriteria;
 import com.jgp.bmo.mapper.BMOClientMapper;
 import com.jgp.infrastructure.bulkimport.constants.TemplatePopulateImportConstants;
 import com.jgp.infrastructure.bulkimport.event.BulkImportEvent;
+import com.jgp.participant.domain.ParticipantRepository;
 import com.jgp.util.CommonUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class BMOClientDataServiceImpl implements BMOClientDataService {
     private final ApplicationEventPublisher publisher;
     private final BMOClientMapper bmoClientMapper;
     private final BMOPredicateBuilder bmoPredicateBuilder;
+    private final ParticipantRepository participantRepository;
 
     @Override
     public void createBMOData(List<BMOParticipantData> bmoDataListRequest) {
@@ -37,7 +39,14 @@ public class BMOClientDataServiceImpl implements BMOClientDataService {
     @Override
     public void approvedBMOParticipantsData(List<Long> dataIds, Boolean approval) {
         final var bmoData = this.bmoDataRepository.findAllById(dataIds);
-        bmoData.forEach(bmo -> bmo.approveData(approval));
+        bmoData.forEach(bmo -> {
+            bmo.approveData(approval);
+            var participant = bmo.getParticipant();
+            if (Boolean.TRUE.equals(approval) && Boolean.FALSE.equals(participant.getIsActive())){
+                participant.activateParticipant();
+                this.participantRepository.save(participant);
+            }
+        });
         this.bmoDataRepository.saveAll(bmoData);
     }
 

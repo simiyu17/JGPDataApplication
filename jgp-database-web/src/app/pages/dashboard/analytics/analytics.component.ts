@@ -3,7 +3,7 @@ import { MatCardModule } from '@angular/material/card';
 import { analytics } from '@data/dashboard-data';
 import { DashboardService } from '@services/dashboard/dashboard.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { takeWhile } from 'rxjs';
+import { Subject, takeUntil, takeWhile } from 'rxjs';
 
 @Component({
   selector: 'app-analytics',
@@ -46,13 +46,14 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
   
   @ViewChild('resizedDiv') resizedDiv: ElementRef;
   public previousWidthOfResizedDiv: number = 0;
-  alive: boolean = true
+  private unsubscribe$ = new Subject<void>();
 
   constructor(private dashBoardService: DashboardService){
     
   }
   ngOnDestroy(): void {
-    this.alive = false;
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   ngOnInit() {
@@ -62,7 +63,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
 
   getLastThreeYearsAccessedLoanPerPartnerSummary() {
     this.dashBoardService.getLastThreeYearsAccessedLoanPerPartnerSummary()
-    .pipe(takeWhile(() => this.alive))
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.lastThreeYearLoansAccessedPerPartner = response;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ContentHeaderComponent } from '../../../theme/components/content-header/content-header.component';
 import { FileUploadComponent } from "../../file-upload/file-upload.component";
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { GlobalService } from '@services/shared/global.service';
 import { NoPermissionComponent } from '../../errors/no-permission/no-permission.component';
 import { AuthService } from '@services/users/auth.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-data-uploader',
@@ -36,13 +37,14 @@ import { AuthService } from '@services/users/auth.service';
   templateUrl: './data-uploader.component.html',
   styleUrl: './data-uploader.component.scss'
 })
-export class DataUploaderComponent {
+export class DataUploaderComponent implements OnDestroy {
 
   bulkImport: any = {};
   template: File;
   bulkImportForm: UntypedFormGroup;
   partnerType: string | undefined = 'NONE';
 
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private dataUploadService: DataUploadService, 
     private gs: GlobalService,
@@ -101,7 +103,8 @@ export class DataUploaderComponent {
 
     if('' !== legalFormType){
     this.dataUploadService
-      .uploadDataTemplate(this.template, legalFormType,)
+      .uploadDataTemplate(this.template, legalFormType)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.gs.openSnackBar(response.message, "Dismiss");
@@ -109,5 +112,10 @@ export class DataUploaderComponent {
         }
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

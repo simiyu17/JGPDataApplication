@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { User } from '../../common/models/user.model';
 import { MatDialog } from '@angular/material/dialog';
 import { UserDialogComponent } from './user-dialog/user-dialog.component'; 
@@ -23,6 +23,7 @@ import { RouterModule } from '@angular/router';
 import { NoPermissionComponent } from '../errors/no-permission/no-permission.component';
 import { AuthService } from '@services/users/auth.service';
 import { HasPermissionDirective } from '../../directives/has-permission.directive';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -54,7 +55,7 @@ import { HasPermissionDirective } from '../../directives/has-permission.directiv
   styleUrl: './users.component.scss',
   encapsulation: ViewEncapsulation.None
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, OnDestroy {
   public users: User[] | null;
   public searchText: string;
   public page: any;
@@ -63,6 +64,7 @@ export class UsersComponent implements OnInit {
   public isDeleted: boolean = false;
   public userImage = "img/users/default-user.jpg";
 
+  private unsubscribe$ = new Subject<void>();
   constructor(public dialog: MatDialog, public userService: UserService, public authService: AuthService) { }
 
   ngOnInit() {
@@ -71,7 +73,9 @@ export class UsersComponent implements OnInit {
 
   public getUsers(): void {
     this.users = null; //for show spinner each time
-    this.userService.getAvailableUsers().subscribe(users => this.users = users);
+    this.userService.getAvailableUsers()
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(users => this.users = users);
   }
   public addUser(user: User) {
     //this.userService.createUser(user).subscribe(user => this.getUsers());
@@ -107,4 +111,9 @@ export class UsersComponent implements OnInit {
     this.showSearch = false;
   }
 
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 }

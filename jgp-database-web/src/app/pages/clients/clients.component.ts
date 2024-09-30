@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ContentHeaderComponent } from '../../theme/components/content-header/content-header.component';
@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { RouterModule } from '@angular/router';
 import { NoPermissionComponent } from '../errors/no-permission/no-permission.component';
 import { AuthService } from '@services/users/auth.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-clients',
@@ -22,7 +23,7 @@ import { AuthService } from '@services/users/auth.service';
   styleUrl: './clients.component.scss'
  
 })
-export class ClientsComponent {
+export class ClientsComponent implements OnInit, OnDestroy{
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -30,10 +31,12 @@ export class ClientsComponent {
   public dataSource: any;
 
   clients: any
+  private unsubscribe$ = new Subject<void>();
   constructor(private clientService: ClientService, public authService: AuthService) { }
 
   getAvailableClients() {
     this.clientService.getAvailableClients()
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.clients = response;
@@ -54,5 +57,10 @@ export class ClientsComponent {
 
   ngOnInit(): void {
     this.getAvailableClients();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

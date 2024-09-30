@@ -6,7 +6,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ContentHeaderComponent } from '../../../theme/components/content-header/content-header.component';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import { PartnerDto } from '../../../dto/Partner';
 import { AsyncPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';

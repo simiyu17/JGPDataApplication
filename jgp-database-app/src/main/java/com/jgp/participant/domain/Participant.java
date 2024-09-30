@@ -95,7 +95,7 @@ public class Participant extends BaseEntity {
     public Participant() {
     }
 
-    private Participant(String businessName, String jgpId, String phoneNumber, Gender ownerGender, Integer ownerAge, String businessLocation, String industrySector, String businessSegment, Boolean isBusinessRegistered, String registrationNumber, Boolean hasBMOMembership, String bmoMembership, BigDecimal bestMonthlyRevenue, BigDecimal worstMonthlyRevenue, Integer totalRegularEmployees, Integer youthRegularEmployees, Integer totalCasualEmployees, Integer youthCasualEmployees, String sampleRecords, String taNeeds, String personWithDisability, String refugeeStatus, Boolean isActive) {
+    private Participant(String businessName, String jgpId, String phoneNumber, Gender ownerGender, Integer ownerAge, String businessLocation, String industrySector, String businessSegment, Boolean isBusinessRegistered, String registrationNumber, Boolean hasBMOMembership, String bmoMembership, BigDecimal bestMonthlyRevenue, BigDecimal worstMonthlyRevenue, Integer totalRegularEmployees, Integer youthRegularEmployees, Integer totalCasualEmployees, Integer youthCasualEmployees, String sampleRecords, String taNeeds, String personWithDisability, String refugeeStatus) {
         this.businessName = businessName;
         this.jgpId = jgpId;
         this.phoneNumber = phoneNumber;
@@ -118,7 +118,7 @@ public class Participant extends BaseEntity {
         this.taNeeds = taNeeds;
         this.personWithDisability = personWithDisability;
         this.refugeeStatus = refugeeStatus;
-        this.isActive = isActive;
+        this.isActive = Boolean.FALSE;
     }
 
     public static Participant createClient(ParticipantDto dto){
@@ -141,9 +141,12 @@ public class Participant extends BaseEntity {
                 dto.bmoMembership(), dto.bestMonthlyRevenue(), dto.worstMonthlyRevenue(),
                 dto.totalRegularEmployees(), dto.youthRegularEmployees(), dto.totalCasualEmployees(),
                 dto.youthCasualEmployees(), dto.sampleRecords(), dto.taNeeds(),
-                dto.personWithDisability(), dto.refugeeStatus(), Boolean.TRUE);
+                dto.personWithDisability(), dto.refugeeStatus());
     }
 
+    public void activateParticipant(){
+        this.isActive = Boolean.TRUE;
+    }
 
     @Getter
     public enum Gender {

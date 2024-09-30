@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
@@ -11,6 +11,7 @@ import { DashboardService } from '@services/dashboard/dashboard.service';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PieChartComponent } from '../pie-chart/pie-chart.component';
+import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-fi-dashboard',
   standalone: true,
@@ -31,7 +32,7 @@ import { PieChartComponent } from '../pie-chart/pie-chart.component';
   templateUrl: './fi-dashboard.component.html',
   styleUrl: './fi-dashboard.component.scss'
 })
-export class FiDashboardComponent implements OnInit {
+export class FiDashboardComponent implements OnInit, OnDestroy {
 
   partnerName: string = '';
   partnerId: any;
@@ -67,6 +68,8 @@ export class FiDashboardComponent implements OnInit {
   public loansDisbursedByQualityXAxisLabel: string = 'Quality';
   public loansDisbursedByQualityYAxisLabel: string = 'Amount Disbursed';
   public loansDisbursedByQualityChartTitle: string = 'Loan Disbursed by Pipeline Source';
+
+  private unsubscribe$ = new Subject<void>();
   constructor(private authService: AuthService, private dashBoardService: DashboardService){
 
   }
@@ -81,6 +84,7 @@ export class FiDashboardComponent implements OnInit {
 
   getLoansDisbursedByGenderSummary() {
     this.dashBoardService.getLoansDisbursedByGenderSummary(this.partnerId)
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.loansDisbursedByGender = response;
@@ -91,6 +95,7 @@ export class FiDashboardComponent implements OnInit {
 
   getLoansDisbursedByPipelineSummary() {
     this.dashBoardService.getLoansDisbursedByPipelineSummary(this.partnerId)
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.loansDisbursedByPipeline = response;
@@ -101,6 +106,7 @@ export class FiDashboardComponent implements OnInit {
 
   getLoansDisbursedByQualitySummary() {
     this.dashBoardService.getLoansDisbursedByQualitySummary(this.partnerId)
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.loansDisbursedByQuality = response;
@@ -109,11 +115,14 @@ export class FiDashboardComponent implements OnInit {
       });
   }
 
-  
-
 
   public onSelect(event: any) {
     console.log(event);
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
 }

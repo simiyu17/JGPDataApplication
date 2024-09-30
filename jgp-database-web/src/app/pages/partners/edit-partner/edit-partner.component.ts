@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,7 +17,7 @@ import { GlobalService } from '@services/shared/global.service';
 import { ContentHeaderComponent } from '../../../theme/components/content-header/content-header.component';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map } from 'rxjs';
+import { map, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-edit-partner',
@@ -42,11 +42,12 @@ import { map } from 'rxjs';
   templateUrl: './edit-partner.component.html',
   styleUrl: './edit-partner.component.scss'
 })
-export class EditPartnerComponent {
+export class EditPartnerComponent implements OnDestroy{
 
   public editPartnerForm: FormGroup;
 
   selectedPartner: PartnerDto;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     public fb: FormBuilder, 
     private partnerService: PartnerService,
@@ -62,6 +63,7 @@ export class EditPartnerComponent {
 
     ngOnInit(): void {
       this.activatedRoute.data.pipe(map(data => data['selectedPartner']))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.selectedPartner = response;
@@ -76,6 +78,7 @@ export class EditPartnerComponent {
     onSubmitEditPartner(): void {
       if (this.editPartnerForm.valid && this.selectedPartner.id) {
           this.partnerService.updatePartner(this.selectedPartner.id, this.editPartnerForm.value)
+          .pipe(takeUntil(this.unsubscribe$))
           .subscribe({
             next: (response) => {
               this.gs.openSnackBar("Done sucessfully!!", "Dismiss");
@@ -86,5 +89,11 @@ export class EditPartnerComponent {
             }
           });
       }
+    }
+
+
+    ngOnDestroy(): void {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
     }
 }

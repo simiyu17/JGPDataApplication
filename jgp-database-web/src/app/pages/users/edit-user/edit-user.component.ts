@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,7 +17,7 @@ import { GlobalService } from '@services/shared/global.service';
 import { ContentHeaderComponent } from '../../../theme/components/content-header/content-header.component';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map } from 'rxjs';
+import { map, Subject, takeUntil } from 'rxjs';
 import { UserRoleService } from '@services/users/userroles.service';
 import { UserService } from '@services/users/user.service';
 import { User } from '../../../common/models/user.model';
@@ -45,12 +45,13 @@ import { User } from '../../../common/models/user.model';
   templateUrl: './edit-user.component.html',
   styleUrl: './edit-user.component.scss'
 })
-export class EditUserComponent {
+export class EditUserComponent implements OnDestroy{
 
   public editUserForm: FormGroup;
   partners: PartnerDto[] = [];
   allUserRoles: any;
   selectedUser: User;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     public fb: FormBuilder, 
     private userService: UserService, 
@@ -75,6 +76,7 @@ export class EditUserComponent {
 
     getAvailableUserRoles() {
       this.userRolesService.getAvailableUserRoles()
+      .pipe(takeUntil(this.unsubscribe$))
         .subscribe({
           next: (response) => {
             this.allUserRoles = response;
@@ -85,6 +87,7 @@ export class EditUserComponent {
     
     getAvailablePartners() {
       this.partnerService.getAvailablePartners()
+      .pipe(takeUntil(this.unsubscribe$))
           .subscribe({
             next: (response) => {
               this.partners = response
@@ -100,6 +103,7 @@ export class EditUserComponent {
       this.getAvailablePartners();
       this.getAvailableUserRoles();
       this.activatedRoute.data.pipe(map(data => data['selectedUser']))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.selectedUser = response;
@@ -120,8 +124,9 @@ export class EditUserComponent {
     onSubmitEditUserer(): void {
       if (this.editUserForm.valid && this.selectedUser.id) {
           this.userService.updateUser(this.selectedUser.id, this.editUserForm.value)
+          .pipe(takeUntil(this.unsubscribe$))
           .subscribe({
-            next: (response) => {
+            next: () => {
               this.gs.openSnackBar("Done sucessfully!!", "Dismiss");
               this.router.navigateByUrl(`/users/${this.selectedUser.id}/details`);
             },
@@ -130,5 +135,11 @@ export class EditUserComponent {
             }
           });
       }
+    }
+
+
+    ngOnDestroy(): void {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
     }
 }

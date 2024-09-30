@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ContentHeaderComponent } from '../../theme/components/content-header/content-header.component';
@@ -15,6 +15,7 @@ import { RouterModule } from '@angular/router';
 import { NoPermissionComponent } from '../errors/no-permission/no-permission.component';
 import { AuthService } from '@services/users/auth.service';
 import { HasPermissionDirective } from '../../directives/has-permission.directive';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-user-role',
@@ -34,7 +35,7 @@ import { HasPermissionDirective } from '../../directives/has-permission.directiv
   templateUrl: './user-role.component.html',
   styleUrl: './user-role.component.scss'
 })
-export class UserRoleComponent implements OnInit{
+export class UserRoleComponent implements OnInit, OnDestroy{
   public searchText: string;
   public page: any;
   public showSearch: boolean = false;
@@ -46,10 +47,12 @@ export class UserRoleComponent implements OnInit{
   public dataSource: any;
 
   userRoles: any
+  private unsubscribe$ = new Subject<void>();
   constructor(public dialog: MatDialog, private userRoleServive: UserRoleService, public authService: AuthService) { }
 
   getAvailableUserRoles() {
     this.userRoleServive.getAvailableUserRoles()
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.userRoles = response;
@@ -89,4 +92,8 @@ export class UserRoleComponent implements OnInit{
   }
 
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 }

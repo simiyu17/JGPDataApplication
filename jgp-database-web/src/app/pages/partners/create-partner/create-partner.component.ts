@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,6 +16,7 @@ import { GlobalService } from '@services/shared/global.service';
 import { Router } from '@angular/router';
 import { ContentHeaderComponent } from '../../../theme/components/content-header/content-header.component';
 import { MatCardModule } from '@angular/material/card';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-create-partner',
@@ -40,9 +41,10 @@ import { MatCardModule } from '@angular/material/card';
   templateUrl: './create-partner.component.html',
   styleUrl: './create-partner.component.scss'
 })
-export class CreatePartnerComponent {
+export class CreatePartnerComponent implements OnDestroy{
 
   public newPartnerForm: FormGroup;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     public fb: FormBuilder, 
     private partnerService: PartnerService,
@@ -59,6 +61,7 @@ export class CreatePartnerComponent {
   onSubmitEditPartner(): void {
     if (this.newPartnerForm.valid) {
         this.partnerService.createPartner(this.newPartnerForm.value)
+        .pipe(takeUntil(this.unsubscribe$))
         .subscribe({
           next: (response) => {
             this.gs.openSnackBar("Done sucessfully!!", "Dismiss");
@@ -70,5 +73,11 @@ export class CreatePartnerComponent {
         });
       
     }
+  }
+
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }
