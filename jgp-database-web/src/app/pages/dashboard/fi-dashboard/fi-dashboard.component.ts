@@ -59,15 +59,15 @@ export class FiDashboardComponent implements OnInit, OnDestroy {
   public loansDisbursedByPipelineDoughnut: boolean = false;
   public loansDisbursedByPipelineChartTitle: string = 'Loan Disbursed by Pipeline Source';
 
-  public loansDisbursedByQuality: any[];
-  public loansDisbursedByQualityShowXAxis: boolean = true;
-  public loansDisbursedByQualityShowYAxis: boolean = true;
-  public loansDisbursedByQualityShowLegend: boolean = false;
-  public loansDisbursedByQualityShowXAxisLabel: boolean = true;
-  public loansDisbursedByQualityShowYAxisLabel: boolean = true;
-  public loansDisbursedByQualityXAxisLabel: string = 'Quality';
-  public loansDisbursedByQualityYAxisLabel: string = 'Amount Disbursed';
-  public loansDisbursedByQualityChartTitle: string = 'Loan Disbursed by Pipeline Source';
+  public loansDisbursedByStatus: any[];
+  public loansDisbursedByStatusShowXAxis: boolean = true;
+  public loansDisbursedByStatusShowYAxis: boolean = true;
+  public loansDisbursedByStatusShowLegend: boolean = false;
+  public loansDisbursedByStatusShowXAxisLabel: boolean = true;
+  public loansDisbursedByStatusShowYAxisLabel: boolean = true;
+  public loansDisbursedByStatusXAxisLabel: string = 'Status';
+  public loansDisbursedByStatusYAxisLabel: string = 'Amount Disbursed';
+  public loansDisbursedByStatusChartTitle: string = 'Loan Disbursed by Pipeline Source';
 
   private unsubscribe$ = new Subject<void>();
   constructor(private authService: AuthService, private dashBoardService: DashboardService){
@@ -79,7 +79,7 @@ export class FiDashboardComponent implements OnInit, OnDestroy {
     this.partnerId = this.authService.currentUser()?.partnerId;
     this.getLoansDisbursedByGenderSummary();
     this.getLoansDisbursedByPipelineSummary();
-    this.getLoansDisbursedByQualitySummary();
+    this.getLoansDisbursedByStatusSummary();
   }
 
   getLoansDisbursedByGenderSummary() {
@@ -104,12 +104,12 @@ export class FiDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  getLoansDisbursedByQualitySummary() {
-    this.dashBoardService.getLoansDisbursedByQualitySummary(this.partnerId)
+  getLoansDisbursedByStatusSummary() {
+    this.dashBoardService.getLoansDisbursedByStatusSummary(this.partnerId)
     .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
-          this.loansDisbursedByQuality = response;
+          this.loansDisbursedByStatus = response;
         },
         error: (error) => { }
       });

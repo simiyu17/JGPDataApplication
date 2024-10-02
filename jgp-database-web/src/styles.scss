@@ -27,3 +27,33 @@
   .mat-mdc-row:hover .mat-mdc-cell {
     background-color: rgb(183, 187, 187);
   }
+
+
+ /* Ensure the dialog takes full width and height of the viewport */
+.custom-dialog-container .mat-dialog-container {
+  height: 100vh;  /* Full viewport height */
+  width: 100vw;   /* Full viewport width */
+  max-height: 100vh;
+  max-width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Ensure the content inside the dialog stretches to fit */
+.full-dialog-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.content-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: lightblue;
+}

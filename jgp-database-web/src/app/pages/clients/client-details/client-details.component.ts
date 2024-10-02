@@ -34,7 +34,7 @@ import { MatTableModule } from '@angular/material/table';
 export class ClientDetailsComponent {
 
   public bmoDisplayedColumns = ['partnerName', 'dateFormSubmitted', 'isApplicantEligible', 'taSessionsAttended', 'isRecommendedForFinance', 'decisionDate', 'fiBusinessReferred'];
-  public loansDisplayedColumns = ['partnerName', 'loanNumber', 'pipeLineSource', 'loanAmountAccessed', 'loanOutStandingAmount', 'loanDuration', 'dateApplied', 'dateDisbursed', 'loanStatus', 'loanQuality'];
+  public loansDisplayedColumns = ['partnerName', 'loanNumber', 'pipeLineSource', 'loanAmountAccessed', 'loanOutStandingAmount', 'loanDuration', 'dateApplied', 'dateDisbursed', 'loanStatus', 'loanStatus'];
   selectedParticipant: Observable<any>;
   constructor(private activatedRoute: ActivatedRoute){}
 

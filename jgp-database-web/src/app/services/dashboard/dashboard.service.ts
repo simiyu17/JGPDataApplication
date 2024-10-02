@@ -32,7 +32,7 @@ export class DashboardService {
       return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-disbursed-by-pipeline${queryParam}`);
     }
 
-    getLoansDisbursedByQualitySummary(partnerId: number | undefined = undefined): Observable<any> {
+    getLoansDisbursedByStatusSummary(partnerId: number | undefined = undefined): Observable<any> {
       const queryParam = (partnerId ? `?partner-id=${partnerId}` : '');
       return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-disbursed-by-quality${queryParam}`);
     }
