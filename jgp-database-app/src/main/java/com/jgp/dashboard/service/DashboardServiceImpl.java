@@ -38,6 +38,8 @@ public class DashboardServiceImpl implements DashboardService {
     private static final String PARTNER_ID_PARAM = "partnerId";
     private static final String FROM_DATE_PARAM = "fromDate";
     private static final String TO_DATE_PARAM = "toDate";
+    private static final String LOAN_WHERE_CLAUSE_BY_DISBURSED_DATE_PARAM = "WHERE l.date_disbursed between :fromDate and :toDate  ";
+    private static final String BMO_WHERE_CLAUSE_BY_PARTNER_RECORDED_DATE_PARAM = "WHERE bpd.date_partner_recorded between :fromDate and :toDate ";
 
     @Override
     public HighLevelSummaryDto getHighLevelSummary(LocalDate fromDate, LocalDate toDate, Long partnerId) {
@@ -46,8 +48,8 @@ public class DashboardServiceImpl implements DashboardService {
             fromDate = getDefaultQueryDates().getLeft();
             toDate = getDefaultQueryDates().getRight();
         }
-        var bpdWhereClause = "WHERE bpd.date_partner_recorded between :fromDate and :toDate ";
-        var loanWhereClause = "WHERE l.date_disbursed between :fromDate and :toDate  ";
+        var bpdWhereClause = BMO_WHERE_CLAUSE_BY_PARTNER_RECORDED_DATE_PARAM;
+        var loanWhereClause = LOAN_WHERE_CLAUSE_BY_DISBURSED_DATE_PARAM;
         MapSqlParameterSource parameters = new MapSqlParameterSource(FROM_DATE_PARAM, fromDate);
         parameters.addValue(TO_DATE_PARAM, toDate);
 
@@ -67,7 +69,7 @@ public class DashboardServiceImpl implements DashboardService {
             fromDate = getDefaultQueryDates().getLeft();
             toDate = getDefaultQueryDates().getRight();
         }
-        var loanWhereClause = "WHERE l.date_disbursed between :fromDate and :toDate  ";
+        var loanWhereClause = LOAN_WHERE_CLAUSE_BY_DISBURSED_DATE_PARAM;
         MapSqlParameterSource parameters = new MapSqlParameterSource(FROM_DATE_PARAM, fromDate);
         parameters.addValue(TO_DATE_PARAM, toDate);
         if (Objects.nonNull(partnerId)){
@@ -84,44 +86,55 @@ public class DashboardServiceImpl implements DashboardService {
         if (Objects.isNull(fromDate) || Objects.isNull(toDate)){
             fromDate = getDefaultQueryDates().getLeft();
             toDate = getDefaultQueryDates().getRight();
-        }lllllllllllllllllllllllllllllllllllllllllllllllll
-        MapSqlParameterSource parameters = new MapSqlParameterSource(PARTNER_ID_PARAM, partnerId);
-        parameters.addValue(PARTNER_ID_PARAM, partnerId);
-        var sqlBuilder = new StringBuilder(DataPointMapper.BUSINESSES_TRAINED_BY_GENDER_SCHEMA);
-        if (Objects.nonNull(partnerId)){
-            sqlBuilder.append("where bpd.partner_id = :partnerId ");
         }
-        sqlBuilder.append("group by 1;");
+        var whereClause = BMO_WHERE_CLAUSE_BY_PARTNER_RECORDED_DATE_PARAM;
+        MapSqlParameterSource parameters = new MapSqlParameterSource(FROM_DATE_PARAM, fromDate);
+        parameters.addValue(TO_DATE_PARAM, toDate);
+        if (Objects.nonNull(partnerId)){
+            parameters.addValue(PARTNER_ID_PARAM, partnerId);
+            whereClause = String.format("%s and bpd.partner_id = :partnerId", whereClause);
+        }
+        var sqlQuery = String.format(DataPointMapper.BUSINESSES_TRAINED_BY_GENDER_SCHEMA+" group by 1;", whereClause);
 
-        return this.namedParameterJdbcTemplate.query(sqlBuilder.toString(), parameters, rm);
+        return this.namedParameterJdbcTemplate.query(sqlQuery, parameters, rm);
     }
 
     @Override
-    public List<DataPointDto> getLoanDisbursedByPipelineSourceSummary(Long partnerId) {
+    public List<DataPointDto> getLoanDisbursedByPipelineSourceSummary(LocalDate fromDate, LocalDate toDate, Long partnerId) {
         final DataPointMapper rm = new DataPointMapper(DECIMAL_DATA_POINT_TYPE);
-        MapSqlParameterSource parameters = new MapSqlParameterSource(PARTNER_ID_PARAM, partnerId);
-        parameters.addValue(PARTNER_ID_PARAM, partnerId);
-        var sqlBuilder = new StringBuilder(DataPointMapper.LOANS_DISBURSED_BY_PIPELINE_SCHEMA);
-        if (Objects.nonNull(partnerId)){
-            sqlBuilder.append("where l.partner_id = :partnerId ");
+        if (Objects.isNull(fromDate) || Objects.isNull(toDate)){
+            fromDate = getDefaultQueryDates().getLeft();
+            toDate = getDefaultQueryDates().getRight();
         }
-        sqlBuilder.append("group by 1;");
+        var loanWhereClause = LOAN_WHERE_CLAUSE_BY_DISBURSED_DATE_PARAM;
+        MapSqlParameterSource parameters = new MapSqlParameterSource(FROM_DATE_PARAM, fromDate);
+        parameters.addValue(TO_DATE_PARAM, toDate);
+        if (Objects.nonNull(partnerId)){
+            parameters.addValue(PARTNER_ID_PARAM, partnerId);
+            loanWhereClause = String.format("%s and l.partner_id = :partnerId", loanWhereClause);
+        }
+        var sqlQuery = String.format(DataPointMapper.LOANS_DISBURSED_BY_PIPELINE_SCHEMA+" group by 1;", loanWhereClause);
 
-        return this.namedParameterJdbcTemplate.query(sqlBuilder.toString(), parameters, rm);
+        return this.namedParameterJdbcTemplate.query(sqlQuery, parameters, rm);
     }
 
     @Override
-    public List<DataPointDto> getLoansDisbursedByQualitySummary(Long partnerId) {
+    public List<DataPointDto> getLoansDisbursedByQualitySummary(LocalDate fromDate, LocalDate toDate, Long partnerId) {
         final DataPointMapper rm = new DataPointMapper(DECIMAL_DATA_POINT_TYPE);
-        MapSqlParameterSource parameters = new MapSqlParameterSource(PARTNER_ID_PARAM, partnerId);
-        parameters.addValue(PARTNER_ID_PARAM, partnerId);
-        var sqlBuilder = new StringBuilder(DataPointMapper.LOANS_DISBURSED_BY_QUALITY_SCHEMA);
-        if (Objects.nonNull(partnerId)){
-            sqlBuilder.append("where l.partner_id = :partnerId ");
+        if (Objects.isNull(fromDate) || Objects.isNull(toDate)){
+            fromDate = getDefaultQueryDates().getLeft();
+            toDate = getDefaultQueryDates().getRight();
         }
-        sqlBuilder.append("group by 1;");
+        var loanWhereClause = LOAN_WHERE_CLAUSE_BY_DISBURSED_DATE_PARAM;
+        MapSqlParameterSource parameters = new MapSqlParameterSource(FROM_DATE_PARAM, fromDate);
+        parameters.addValue(TO_DATE_PARAM, toDate);
+        if (Objects.nonNull(partnerId)){
+            parameters.addValue(PARTNER_ID_PARAM, partnerId);
+            loanWhereClause = String.format("%s and l.partner_id = :partnerId", loanWhereClause);
+        }
+        var sqlQuery = String.format(DataPointMapper.LOANS_DISBURSED_BY_QUALITY_SCHEMA+" group by 1;", loanWhereClause);
 
-        return this.namedParameterJdbcTemplate.query(sqlBuilder.toString(), parameters, rm);
+        return this.namedParameterJdbcTemplate.query(sqlQuery, parameters, rm);
     }
 
     @Override
@@ -214,13 +227,13 @@ public class DashboardServiceImpl implements DashboardService {
         public static final String LOANS_DISBURSED_BY_PIPELINE_SCHEMA = """
                 select l.pipeline_source as dataKey, sum(l.loan_amount_accessed) as dataValue,\s
                 SUM(l.loan_amount_accessed) * 100.0 / SUM(SUM(l.loan_amount_accessed)) OVER () AS percentage\s
-                from loans l\s
+                from loans l %s\s
                 """;
 
         public static final String LOANS_DISBURSED_BY_QUALITY_SCHEMA = """
                 select l.loan_quality as dataKey, sum(l.loan_amount_accessed) as dataValue,\s
                 SUM(l.loan_amount_accessed) * 100.0 / SUM(SUM(l.loan_amount_accessed)) OVER () AS percentage\s
-                from loans l\s
+                from loans l %s\s
                 """;
 
         public static final String BUSINESSES_TRAINED_BY_SECTOR_SCHEMA = """

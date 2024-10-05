@@ -42,7 +42,7 @@ public class DashboardController {
     public ResponseEntity<List<DataPointDto>> getBusinessesByGenderSummary(@RequestParam(value = "partner-id", required = false) Long partnerId,
                                                                            @RequestParam(value = "from-date", required = false) LocalDate fromDate,
                                                                            @RequestParam(value = "to-date", required = false) LocalDate toDate){
-        return new ResponseEntity<>(this.dashboardService.getBusinessOwnersTrainedByGenderSummary(partnerId), HttpStatus.OK);
+        return new ResponseEntity<>(this.dashboardService.getBusinessOwnersTrainedByGenderSummary(fromDate, toDate, partnerId), HttpStatus.OK);
     }
 
     @GetMapping("loans-disbursed-by-pipeline")
