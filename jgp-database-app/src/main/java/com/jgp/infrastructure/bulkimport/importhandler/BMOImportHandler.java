@@ -72,13 +72,14 @@ public class BMOImportHandler implements ImportHandler {
         String referredFIBusiness = ImportHandlerUtils.readAsString(BMOConstants.REFERRED_FI_BUSINESS_COL, row);
         LocalDate dateRecordedByPartner = ImportHandlerUtils.readAsDate(BMOConstants.DATE_RECORD_ENTERED_BY_PARTNER_COL, row);
         LocalDate recordedToJGPDBOnDate = ImportHandlerUtils.readAsDate(BMOConstants.DATE_RECORDED_TO_JGP_DB_COL, row);
+        final var taNeeds = ImportHandlerUtils.readAsString(BMOConstants.TA_NEEDS_COL, row);
 
         statuses.add(status);
         return new BMOParticipantData(Objects.nonNull(userService.currentUser()) ? userService.currentUser().getPartner() : null,
                 getParticipant(row),
                 appFormSubmittedDate, isApplicantEligible, numberOfTAsAttended,
                 taSessionsAttended, isRecommendedForFinance, pipelineDecisionDate,
-                referredFIBusiness, dateRecordedByPartner, recordedToJGPDBOnDate, row.getRowNum());
+                referredFIBusiness, dateRecordedByPartner, recordedToJGPDBOnDate, taNeeds, row.getRowNum());
     }
 
     private Participant getParticipant(Row row){
@@ -108,7 +109,6 @@ public class BMOImportHandler implements ImportHandler {
         final var totalCasualEmployees = ImportHandlerUtils.readAsInt(BMOConstants.TOTAL_CASUAL_EMPLOYEES_COL, row);
         final var youthCasualEmployees = ImportHandlerUtils.readAsInt(BMOConstants.YOUTH_CASUAL_EMPLOYEES_COL, row);
         final var sampleRecordsKept = ImportHandlerUtils.readAsString(BMOConstants.SAMPLE_RECORDS_KEPT_COL, row);
-        final var taNeeds = ImportHandlerUtils.readAsString(BMOConstants.TA_NEEDS_COL, row);
         final var personWithDisability = ImportHandlerUtils.readAsString(BMOConstants.PERSON_WITH_DISABILITY_COL, row);
         final var refugeeStatus = ImportHandlerUtils.readAsString(BMOConstants.REFUGEE_STATUS_COL, row);
 
@@ -119,7 +119,7 @@ public class BMOImportHandler implements ImportHandler {
                 .registrationNumber(registrationNumber).isBusinessRegistered(null != registrationNumber)
                 .worstMonthlyRevenue(worstMonthlyRevenue).totalRegularEmployees(totalRegularEmployees)
                 .youthRegularEmployees(youthRegularEmployees).totalCasualEmployees(totalCasualEmployees)
-                .youthCasualEmployees(youthCasualEmployees).sampleRecords(sampleRecordsKept).taNeeds(taNeeds)
+                .youthCasualEmployees(youthCasualEmployees).sampleRecords(sampleRecordsKept)
                 .personWithDisability(personWithDisability).refugeeStatus(refugeeStatus).jgpId(jgpId)
                 .build();
         return this.clientService.createClient(clientDto);

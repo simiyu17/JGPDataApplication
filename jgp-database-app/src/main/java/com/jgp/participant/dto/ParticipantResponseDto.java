@@ -50,8 +50,6 @@ public class ParticipantResponseDto implements Serializable {
 
     private String sampleRecords;
 
-    private String taNeeds;
-
     private String personWithDisability;
 
     private String refugeeStatus;

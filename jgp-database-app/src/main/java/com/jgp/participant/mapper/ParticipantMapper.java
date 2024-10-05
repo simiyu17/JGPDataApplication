@@ -68,9 +68,6 @@ public class ParticipantMapper {
             if ( participant.getSampleRecords() != null ) {
                 participantResponseDto.setSampleRecords( participant.getSampleRecords() );
             }
-            if ( participant.getTaNeeds() != null ) {
-                participantResponseDto.setTaNeeds( participant.getTaNeeds() );
-            }
             if ( participant.getPersonWithDisability() != null ) {
                 participantResponseDto.setPersonWithDisability( participant.getPersonWithDisability() );
             }

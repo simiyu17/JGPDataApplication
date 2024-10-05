@@ -19,13 +19,13 @@ public interface DashboardService {
 
     List<DataPointDto> getLoansDisbursedByQualitySummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
-    List<SeriesDataPointDto> getTaNeedsByGenderSummary(Long partnerId);
+    List<SeriesDataPointDto> getTaNeedsByGenderSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
-    List<DataPointDto> getTaTrainingBySectorSummary(Long partnerId);
+    List<DataPointDto> getTaTrainingBySectorSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
-    List<SeriesDataPointDto> getTrainingByPartnerByGenderSummary();
+    List<SeriesDataPointDto> getTrainingByPartnerByGenderSummary(LocalDate fromDate, LocalDate toDate);
 
-    List<SeriesDataPointDto> getLastThreeYearsAccessedLoanPerPartnerSummary();
+    List<SeriesDataPointDto> getLastThreeYearsAccessedLoanPerPartnerSummary(Long partnerId);
 
-    List<SeriesDataPointDto> getLoansAccessedVsOutStandingByPartnerSummary();
+    List<SeriesDataPointDto> getLoansAccessedVsOutStandingByPartnerSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 }

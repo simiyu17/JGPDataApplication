@@ -8,6 +8,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -31,6 +32,9 @@ public class Participant extends BaseEntity {
     @Column(name = "owner_gender")
     @Enumerated(EnumType.STRING)
     private Gender ownerGender;
+
+    @Column(name = "gender_category")
+    private String genderCategory;
 
     @Column(name = "owner_age")
     private Integer ownerAge;
@@ -77,9 +81,6 @@ public class Participant extends BaseEntity {
     @Column(name = "sample_records")
     private String sampleRecords;
 
-    @Column(name = "ta_needs")
-    private String taNeeds;
-
     @Column(name = "person_with_disability")
     private String personWithDisability;
 
@@ -95,7 +96,7 @@ public class Participant extends BaseEntity {
     public Participant() {
     }
 
-    private Participant(String businessName, String jgpId, String phoneNumber, Gender ownerGender, Integer ownerAge, String businessLocation, String industrySector, String businessSegment, Boolean isBusinessRegistered, String registrationNumber, Boolean hasBMOMembership, String bmoMembership, BigDecimal bestMonthlyRevenue, BigDecimal worstMonthlyRevenue, Integer totalRegularEmployees, Integer youthRegularEmployees, Integer totalCasualEmployees, Integer youthCasualEmployees, String sampleRecords, String taNeeds, String personWithDisability, String refugeeStatus) {
+    private Participant(String businessName, String jgpId, String phoneNumber, Gender ownerGender, Integer ownerAge, String businessLocation, String industrySector, String businessSegment, Boolean isBusinessRegistered, String registrationNumber, Boolean hasBMOMembership, String bmoMembership, BigDecimal bestMonthlyRevenue, BigDecimal worstMonthlyRevenue, Integer totalRegularEmployees, Integer youthRegularEmployees, Integer totalCasualEmployees, Integer youthCasualEmployees, String sampleRecords, String personWithDisability, String refugeeStatus) {
         this.businessName = businessName;
         this.jgpId = jgpId;
         this.phoneNumber = phoneNumber;
@@ -115,10 +116,10 @@ public class Participant extends BaseEntity {
         this.totalCasualEmployees = totalCasualEmployees;
         this.youthCasualEmployees = youthCasualEmployees;
         this.sampleRecords = sampleRecords;
-        this.taNeeds = taNeeds;
         this.personWithDisability = personWithDisability;
         this.refugeeStatus = refugeeStatus;
         this.isActive = Boolean.FALSE;
+        this.genderCategory = GenderCategory.getGenderCategory(this.ownerGender, ownerAge).getName();
     }
 
     public static Participant createClient(ParticipantDto dto){
@@ -140,7 +141,7 @@ public class Participant extends BaseEntity {
                 dto.isBusinessRegistered(), dto.registrationNumber(), dto.hasBMOMembership(),
                 dto.bmoMembership(), dto.bestMonthlyRevenue(), dto.worstMonthlyRevenue(),
                 dto.totalRegularEmployees(), dto.youthRegularEmployees(), dto.totalCasualEmployees(),
-                dto.youthCasualEmployees(), dto.sampleRecords(), dto.taNeeds(),
+                dto.youthCasualEmployees(), dto.sampleRecords(),
                 dto.personWithDisability(), dto.refugeeStatus());
     }
 
@@ -149,6 +150,7 @@ public class Participant extends BaseEntity {
     }
 
     @Getter
+    @RequiredArgsConstructor
     public enum Gender {
 
         MALE("Male"),
@@ -156,9 +158,38 @@ public class Participant extends BaseEntity {
         OTHER("Other");
 
         private final String name;
+    }
 
-        Gender(String name) {
-            this.name = name;
+    @Getter
+    @RequiredArgsConstructor
+    public enum GenderCategory {
+
+        YOUNG_MALE("Young Men", 18, 35),
+        YOUNG_FEMALE("Young Women", 18, 35),
+        ADULT_MALE("Men", 36, 200),
+        ADULT_FEMALE("Women", 36, 200),
+        OTHER("Other", 0, 200);
+
+        private final String name;
+        private final Integer ageFrom;
+        private final Integer ageTo;
+
+        public static GenderCategory getGenderCategory(Gender gender, Integer age){
+            if (Gender.MALE.equals(gender)){
+                if (age > 35){
+                    return ADULT_MALE;
+                } else {
+                    return YOUNG_MALE;
+                }
+            } else if (Gender.FEMALE.equals(gender)) {
+                if (age > 35){
+                    return ADULT_FEMALE;
+                } else {
+                    return YOUNG_FEMALE;
+                }
+            }else {
+                return OTHER;
+            }
         }
 
     }

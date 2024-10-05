@@ -26,11 +26,12 @@ export class KenyanMapComponent implements OnInit {
   }
 
   private createSvg(): void {
-    d3.select('figure').remove();
+    /*d3.select('figure').remove();
 
     const element = this.chartContainer.nativeElement;
     const contentWidth = element.offsetWidth - this.margin.left - this.margin.right;
     const contentHeight = element.offsetHeight - this.margin.top - this.margin.bottom;
+    */
 
     this.svg = d3.select("figure#map")
       .append("svg")

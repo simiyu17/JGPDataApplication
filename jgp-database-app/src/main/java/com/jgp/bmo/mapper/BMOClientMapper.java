@@ -25,6 +25,7 @@ public interface BMOClientMapper {
     @Mapping(target = "fiBusinessReferred", expression = "java(null != bmoClientData.getFiBusinessReferred() ? bmoClientData.getFiBusinessReferred() : null)")
     @Mapping(target = "dateRecordedByPartner", ignore = true)
     @Mapping(target = "dateRecordedToJGPDB", expression = "java(null != bmoClientData.getDateCreated() ? bmoClientData.getDateCreated() : null)")
+    @Mapping(target = "taNeeds", expression = "java(null != bmoClientData.getTaNeeds() ? bmoClientData.getTaNeeds() : null)")
     BMOClientDto toDto(BMOParticipantData bmoClientData);
 
     List<BMOClientDto> toDto(List<BMOParticipantData> bmoClientDataList);

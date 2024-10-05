@@ -48,8 +48,6 @@ public record ParticipantDto(
 
         String sampleRecords,
 
-        String taNeeds,
-
         String personWithDisability,
 
         String refugeeStatus,

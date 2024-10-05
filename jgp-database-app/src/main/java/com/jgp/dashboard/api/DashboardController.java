@@ -46,37 +46,48 @@ public class DashboardController {
     }
 
     @GetMapping("loans-disbursed-by-pipeline")
-    public ResponseEntity<List<DataPointDto>> getLoansDisbursedByPipelineSummary(@RequestParam(value = "partner-id", required = false) Long partnerId){
-        return new ResponseEntity<>(this.dashboardService.getLoanDisbursedByPipelineSourceSummary(partnerId), HttpStatus.OK);
+    public ResponseEntity<List<DataPointDto>> getLoansDisbursedByPipelineSummary(@RequestParam(value = "partner-id", required = false) Long partnerId,
+                                                                                 @RequestParam(value = "from-date", required = false) LocalDate fromDate,
+                                                                                 @RequestParam(value = "to-date", required = false) LocalDate toDate){
+        return new ResponseEntity<>(this.dashboardService.getLoanDisbursedByPipelineSourceSummary(fromDate, toDate, partnerId), HttpStatus.OK);
     }
 
     @GetMapping("loans-disbursed-by-quality")
-    public ResponseEntity<List<DataPointDto>> getLoansDisbursedByQualitySummary(@RequestParam(value = "partner-id", required = false) Long partnerId){
-        return new ResponseEntity<>(this.dashboardService.getLoansDisbursedByQualitySummary(partnerId), HttpStatus.OK);
+    public ResponseEntity<List<DataPointDto>> getLoansDisbursedByQualitySummary(@RequestParam(value = "partner-id", required = false) Long partnerId,
+                                                                                @RequestParam(value = "from-date", required = false) LocalDate fromDate,
+                                                                                @RequestParam(value = "to-date", required = false) LocalDate toDate){
+        return new ResponseEntity<>(this.dashboardService.getLoansDisbursedByQualitySummary(fromDate, toDate, partnerId), HttpStatus.OK);
     }
 
     @GetMapping("ta-needs-by-gender")
-    public ResponseEntity<List<SeriesDataPointDto>> getTaNeedsByGenderSummary(@RequestParam(value = "partner-id", required = false) Long partnerId){
-        return new ResponseEntity<>(this.dashboardService.getTaNeedsByGenderSummary(partnerId), HttpStatus.OK);
+    public ResponseEntity<List<SeriesDataPointDto>> getTaNeedsByGenderSummary(@RequestParam(value = "partner-id", required = false) Long partnerId,
+                                                                              @RequestParam(value = "from-date", required = false) LocalDate fromDate,
+                                                                              @RequestParam(value = "to-date", required = false) LocalDate toDate){
+        return new ResponseEntity<>(this.dashboardService.getTaNeedsByGenderSummary(fromDate, toDate, partnerId), HttpStatus.OK);
     }
 
     @GetMapping("ta-training-by-sector")
-    public ResponseEntity<List<DataPointDto>> getTaTrainingBySectorSummary(@RequestParam(value = "partner-id", required = false) Long partnerId){
-        return new ResponseEntity<>(this.dashboardService.getTaTrainingBySectorSummary(partnerId), HttpStatus.OK);
+    public ResponseEntity<List<DataPointDto>> getTaTrainingBySectorSummary(@RequestParam(value = "partner-id", required = false) Long partnerId,
+                                                                           @RequestParam(value = "from-date", required = false) LocalDate fromDate,
+                                                                           @RequestParam(value = "to-date", required = false) LocalDate toDate){
+        return new ResponseEntity<>(this.dashboardService.getTaTrainingBySectorSummary(fromDate, toDate, partnerId), HttpStatus.OK);
     }
 
     @GetMapping("training-by-partner-by-gender")
-    public ResponseEntity<List<SeriesDataPointDto>> getTrainingByPartnerByGenderSummary(){
-        return new ResponseEntity<>(this.dashboardService.getTrainingByPartnerByGenderSummary(), HttpStatus.OK);
+    public ResponseEntity<List<SeriesDataPointDto>> getTrainingByPartnerByGenderSummary(@RequestParam(value = "from-date", required = false) LocalDate fromDate,
+                                                                                        @RequestParam(value = "to-date", required = false) LocalDate toDate){
+        return new ResponseEntity<>(this.dashboardService.getTrainingByPartnerByGenderSummary(fromDate, toDate), HttpStatus.OK);
     }
 
     @GetMapping("loan-accessed-per-partner-for-last-three-years")
-    public ResponseEntity<List<SeriesDataPointDto>> getLastThreeYearsAccessedLoanPerPartnerSummary(){
-        return new ResponseEntity<>(this.dashboardService.getLastThreeYearsAccessedLoanPerPartnerSummary(), HttpStatus.OK);
+    public ResponseEntity<List<SeriesDataPointDto>> getLastThreeYearsAccessedLoanPerPartnerSummary(@RequestParam(value = "partner-id", required = false) Long partnerId){
+        return new ResponseEntity<>(this.dashboardService.getLastThreeYearsAccessedLoanPerPartnerSummary(partnerId), HttpStatus.OK);
     }
 
     @GetMapping("loans-accessed-vs-out-standing-per-partner")
-    public ResponseEntity<List<SeriesDataPointDto>> getLoansAccessedVsOutStandingByPartnerSummary(){
-        return new ResponseEntity<>(this.dashboardService.getLoansAccessedVsOutStandingByPartnerSummary(), HttpStatus.OK);
+    public ResponseEntity<List<SeriesDataPointDto>> getLoansAccessedVsOutStandingByPartnerSummary(@RequestParam(value = "partner-id", required = false) Long partnerId,
+                                                                                                  @RequestParam(value = "from-date", required = false) LocalDate fromDate,
+                                                                                                  @RequestParam(value = "to-date", required = false) LocalDate toDate){
+        return new ResponseEntity<>(this.dashboardService.getLoansAccessedVsOutStandingByPartnerSummary(fromDate, toDate, partnerId), HttpStatus.OK);
     }
 }

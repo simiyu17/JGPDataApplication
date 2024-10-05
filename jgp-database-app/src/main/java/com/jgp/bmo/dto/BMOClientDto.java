@@ -29,5 +29,7 @@ public record BMOClientDto(
 
          LocalDate dateRecordedByPartner,
 
-         LocalDate dateRecordedToJGPDB
+         LocalDate dateRecordedToJGPDB,
+
+         String taNeeds
 ) {}
