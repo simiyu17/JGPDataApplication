@@ -4,15 +4,16 @@ import com.jgp.dashboard.dto.DataPointDto;
 import com.jgp.dashboard.dto.HighLevelSummaryDto;
 import com.jgp.dashboard.dto.SeriesDataPointDto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface DashboardService {
 
-    HighLevelSummaryDto getHighLevelSummary();
+    HighLevelSummaryDto getHighLevelSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
-    List<DataPointDto> getLoanDisbursedByGenderSummary(Long partnerId);
+    List<DataPointDto> getLoanDisbursedByGenderSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
-    List<DataPointDto> getBusinessOwnersTrainedByGenderSummary(Long partnerId);
+    List<DataPointDto> getBusinessOwnersTrainedByGenderSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
     List<DataPointDto> getLoanDisbursedByPipelineSourceSummary(Long partnerId);
 

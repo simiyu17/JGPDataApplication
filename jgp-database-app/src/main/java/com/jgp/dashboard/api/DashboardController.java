@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -24,17 +25,23 @@ public class DashboardController {
     private final DashboardService dashboardService;
 
     @GetMapping("high-level-summary")
-    public ResponseEntity<HighLevelSummaryDto> getHighLevelSummary(){
-        return new ResponseEntity<>(this.dashboardService.getHighLevelSummary(), HttpStatus.OK);
+    public ResponseEntity<HighLevelSummaryDto> getHighLevelSummary(@RequestParam(value = "partner-id", required = false) Long partnerId,
+                                                                   @RequestParam(value = "from-date", required = false) LocalDate fromDate,
+                                                                   @RequestParam(value = "to-date", required = false) LocalDate toDate){
+        return new ResponseEntity<>(this.dashboardService.getHighLevelSummary(fromDate, toDate, partnerId), HttpStatus.OK);
     }
 
     @GetMapping("loans-disbursed-by-gender")
-    public ResponseEntity<List<DataPointDto>> getLoansDisbursedByGenderSummary(@RequestParam(value = "partner-id", required = false) Long partnerId){
-        return new ResponseEntity<>(this.dashboardService.getLoanDisbursedByGenderSummary(partnerId), HttpStatus.OK);
+    public ResponseEntity<List<DataPointDto>> getLoansDisbursedByGenderSummary(@RequestParam(value = "partner-id", required = false) Long partnerId,
+                                                                               @RequestParam(value = "from-date", required = false) LocalDate fromDate,
+                                                                               @RequestParam(value = "to-date", required = false) LocalDate toDate){
+        return new ResponseEntity<>(this.dashboardService.getLoanDisbursedByGenderSummary(fromDate, toDate, partnerId), HttpStatus.OK);
     }
 
     @GetMapping("businesses-trained-by-gender")
-    public ResponseEntity<List<DataPointDto>> getBusinessesByGenderSummary(@RequestParam(value = "partner-id", required = false) Long partnerId){
+    public ResponseEntity<List<DataPointDto>> getBusinessesByGenderSummary(@RequestParam(value = "partner-id", required = false) Long partnerId,
+                                                                           @RequestParam(value = "from-date", required = false) LocalDate fromDate,
+                                                                           @RequestParam(value = "to-date", required = false) LocalDate toDate){
         return new ResponseEntity<>(this.dashboardService.getBusinessOwnersTrainedByGenderSummary(partnerId), HttpStatus.OK);
     }
 

@@ -4,6 +4,8 @@ import com.jgp.dashboard.dto.DataPointDto;
 import com.jgp.dashboard.dto.HighLevelSummaryDto;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,6 +17,8 @@ import com.jgp.dashboard.dto.SeriesDataPointDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -28,36 +32,61 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class DashboardServiceImpl implements DashboardService {
 
-    private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private static final String INTEGER_DATA_POINT_TYPE = "INTEGER";
     private static final String DECIMAL_DATA_POINT_TYPE = "DECIMAL";
+    private static final String PARTNER_ID_PARAM = "partnerId";
+    private static final String FROM_DATE_PARAM = "fromDate";
+    private static final String TO_DATE_PARAM = "toDate";
 
     @Override
-    public HighLevelSummaryDto getHighLevelSummary() {
+    public HighLevelSummaryDto getHighLevelSummary(LocalDate fromDate, LocalDate toDate, Long partnerId) {
         final var highLevelSummaryMapper = new HighLevelSummaryMapper();
-        return this.jdbcTemplate.queryForObject(HighLevelSummaryMapper.SCHEMA, highLevelSummaryMapper);
-    }
-
-    @Override
-    public List<DataPointDto> getLoanDisbursedByGenderSummary(Long partnerId) {
-        final DataPointMapper rm = new DataPointMapper(DECIMAL_DATA_POINT_TYPE);
-        MapSqlParameterSource parameters = new MapSqlParameterSource("partnerId", partnerId);
-        parameters.addValue("partnerId", partnerId);
-        var sqlBuilder = new StringBuilder(DataPointMapper.LOANS_DISBURSED_BY_GENDER_SCHEMA);
-        if (Objects.nonNull(partnerId)){
-            sqlBuilder.append("where l.partner_id = :partnerId ");
+        if (Objects.isNull(fromDate) || Objects.isNull(toDate)){
+            fromDate = getDefaultQueryDates().getLeft();
+            toDate = getDefaultQueryDates().getRight();
         }
-        sqlBuilder.append("group by 1;");
+        var bpdWhereClause = "WHERE bpd.date_partner_recorded between :fromDate and :toDate ";
+        var loanWhereClause = "WHERE l.date_disbursed between :fromDate and :toDate  ";
+        MapSqlParameterSource parameters = new MapSqlParameterSource(FROM_DATE_PARAM, fromDate);
+        parameters.addValue(TO_DATE_PARAM, toDate);
 
-        return this.namedParameterJdbcTemplate.query(sqlBuilder.toString(), parameters, rm);
+        if (Objects.nonNull(partnerId)) {
+            parameters.addValue(PARTNER_ID_PARAM, partnerId);
+            bpdWhereClause = String.format("%s and bpd.partner_id = :partnerId", bpdWhereClause);
+            loanWhereClause = String.format("%s and l.partner_id = :partnerId", loanWhereClause);
+        }
+        var sqlQuery = String.format(HighLevelSummaryMapper.SCHEMA, bpdWhereClause, loanWhereClause);
+        return this.namedParameterJdbcTemplate.queryForObject(sqlQuery, parameters, highLevelSummaryMapper);
     }
 
     @Override
-    public List<DataPointDto> getBusinessOwnersTrainedByGenderSummary(Long partnerId) {
+    public List<DataPointDto> getLoanDisbursedByGenderSummary(LocalDate fromDate, LocalDate toDate, Long partnerId) {
+        final DataPointMapper rm = new DataPointMapper(DECIMAL_DATA_POINT_TYPE);
+        if (Objects.isNull(fromDate) || Objects.isNull(toDate)){
+            fromDate = getDefaultQueryDates().getLeft();
+            toDate = getDefaultQueryDates().getRight();
+        }
+        var loanWhereClause = "WHERE l.date_disbursed between :fromDate and :toDate  ";
+        MapSqlParameterSource parameters = new MapSqlParameterSource(FROM_DATE_PARAM, fromDate);
+        parameters.addValue(TO_DATE_PARAM, toDate);
+        if (Objects.nonNull(partnerId)){
+            parameters.addValue(PARTNER_ID_PARAM, partnerId);
+            loanWhereClause = String.format("%s and l.partner_id = :partnerId", loanWhereClause);
+        }
+        var sqlQuery = String.format(DataPointMapper.LOANS_DISBURSED_BY_GENDER_SCHEMA+" group by 1;", loanWhereClause);
+        return this.namedParameterJdbcTemplate.query(sqlQuery, parameters, rm);
+    }
+
+    @Override
+    public List<DataPointDto> getBusinessOwnersTrainedByGenderSummary(LocalDate fromDate, LocalDate toDate, Long partnerId) {
         final DataPointMapper rm = new DataPointMapper(INTEGER_DATA_POINT_TYPE);
-        MapSqlParameterSource parameters = new MapSqlParameterSource("partnerId", partnerId);
-        parameters.addValue("partnerId", partnerId);
+        if (Objects.isNull(fromDate) || Objects.isNull(toDate)){
+            fromDate = getDefaultQueryDates().getLeft();
+            toDate = getDefaultQueryDates().getRight();
+        }lllllllllllllllllllllllllllllllllllllllllllllllll
+        MapSqlParameterSource parameters = new MapSqlParameterSource(PARTNER_ID_PARAM, partnerId);
+        parameters.addValue(PARTNER_ID_PARAM, partnerId);
         var sqlBuilder = new StringBuilder(DataPointMapper.BUSINESSES_TRAINED_BY_GENDER_SCHEMA);
         if (Objects.nonNull(partnerId)){
             sqlBuilder.append("where bpd.partner_id = :partnerId ");
@@ -70,8 +99,8 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public List<DataPointDto> getLoanDisbursedByPipelineSourceSummary(Long partnerId) {
         final DataPointMapper rm = new DataPointMapper(DECIMAL_DATA_POINT_TYPE);
-        MapSqlParameterSource parameters = new MapSqlParameterSource("partnerId", partnerId);
-        parameters.addValue("partnerId", partnerId);
+        MapSqlParameterSource parameters = new MapSqlParameterSource(PARTNER_ID_PARAM, partnerId);
+        parameters.addValue(PARTNER_ID_PARAM, partnerId);
         var sqlBuilder = new StringBuilder(DataPointMapper.LOANS_DISBURSED_BY_PIPELINE_SCHEMA);
         if (Objects.nonNull(partnerId)){
             sqlBuilder.append("where l.partner_id = :partnerId ");
@@ -84,8 +113,8 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public List<DataPointDto> getLoansDisbursedByQualitySummary(Long partnerId) {
         final DataPointMapper rm = new DataPointMapper(DECIMAL_DATA_POINT_TYPE);
-        MapSqlParameterSource parameters = new MapSqlParameterSource("partnerId", partnerId);
-        parameters.addValue("partnerId", partnerId);
+        MapSqlParameterSource parameters = new MapSqlParameterSource(PARTNER_ID_PARAM, partnerId);
+        parameters.addValue(PARTNER_ID_PARAM, partnerId);
         var sqlBuilder = new StringBuilder(DataPointMapper.LOANS_DISBURSED_BY_QUALITY_SCHEMA);
         if (Objects.nonNull(partnerId)){
             sqlBuilder.append("where l.partner_id = :partnerId ");
@@ -98,8 +127,8 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public List<SeriesDataPointDto> getTaNeedsByGenderSummary(Long partnerId) {
         final SeriesDataPointMapper rm = new SeriesDataPointMapper();
-        MapSqlParameterSource parameters = new MapSqlParameterSource("partnerId", partnerId);
-        parameters.addValue("partnerId", partnerId);
+        MapSqlParameterSource parameters = new MapSqlParameterSource(PARTNER_ID_PARAM, partnerId);
+        parameters.addValue(PARTNER_ID_PARAM, partnerId);
         var sqlBuilder = new StringBuilder(SeriesDataPointMapper.TA_NEEDS_BY_GENDER_SCHEMA);
         if (Objects.nonNull(partnerId)){
             sqlBuilder.append("where bpd.partner_id = :partnerId ");
@@ -112,8 +141,8 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public List<DataPointDto> getTaTrainingBySectorSummary(Long partnerId) {
         final DataPointMapper rm = new DataPointMapper(DECIMAL_DATA_POINT_TYPE);
-        MapSqlParameterSource parameters = new MapSqlParameterSource("partnerId", partnerId);
-        parameters.addValue("partnerId", partnerId);
+        MapSqlParameterSource parameters = new MapSqlParameterSource(PARTNER_ID_PARAM, partnerId);
+        parameters.addValue(PARTNER_ID_PARAM, partnerId);
         var sqlBuilder = new StringBuilder(DataPointMapper.BUSINESSES_TRAINED_BY_SECTOR_SCHEMA);
         if (Objects.nonNull(partnerId)){
             sqlBuilder.append("where bpd.partner_id = :partnerId ");
@@ -147,10 +176,10 @@ public class DashboardServiceImpl implements DashboardService {
                     with highLevelSummary as (\s
                     select count(*) as businessesTrained,\s
                     0 as businessesLoaned, 0 as amountDisbursed,\s
-                    0 as outStandingAmount from participants p\s
+                    0 as outStandingAmount from bmo_participants_data bpd %s \s
                     union
                     select 0 as businessesTrained, count(*) as businessesLoaned,\s
-                    sum(loan_amount_accessed) as amountDisbursed, sum(loan_outstanding_amount) as outStandingAmount from loans l
+                    sum(loan_amount_accessed) as amountDisbursed, sum(loan_outstanding_amount) as outStandingAmount from loans l %s\s
                     )
                     select sum(businessesTrained) as businessesTrained, sum(businessesLoaned) as businessesLoaned,\s
                     sum(amountDisbursed) as amountDisbursed, sum(outStandingAmount) as outStandingAmount
@@ -172,14 +201,14 @@ public class DashboardServiceImpl implements DashboardService {
         public static final String LOANS_DISBURSED_BY_GENDER_SCHEMA = """
                 select p.owner_gender as dataKey, sum(l.loan_amount_accessed) as dataValue,\s
                 SUM(l.loan_amount_accessed) * 100.0 / SUM(SUM(l.loan_amount_accessed)) OVER () AS percentage\s
-                from loans l left join participants p on l.participant_id = p.id\s
+                from loans l left join participants p on l.participant_id = p.id %s\s
                 """;
 
         public static final String BUSINESSES_TRAINED_BY_GENDER_SCHEMA = """
                 select p.owner_gender as dataKey, count(p.id) as dataValue,\s
                 count(p.id) * 100.0 / count(count(p.id)) OVER () AS percentage\s
-                from participants p inner join bmo_participants_data bpd on bpd.participant_id = p.id\s
-                inner join partners p2 on p2.id = bpd.partner_id\s
+                from bmo_participants_data bpd inner join participants p on bpd.participant_id = p.id\s
+                inner join partners p2 on p2.id = bpd.partner_id %s\s
                 """;
 
         public static final String LOANS_DISBURSED_BY_PIPELINE_SCHEMA = """
@@ -295,5 +324,10 @@ private static final class SeriesDataPointMapper implements ResultSetExtractor<L
     }
 }
 
+
+private Pair<LocalDate, LocalDate> getDefaultQueryDates(){
+        final var dateToday = LocalDate.now();
+        return new ImmutablePair<>(LocalDate.of(dateToday.getYear(), Month.JANUARY, 1), dateToday);
+}
 
 }

@@ -57,7 +57,9 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/d3/dist/d3.js"
+            ],
             "allowedCommonJsDependencies": [ 
               "leaflet-map", 
               "dragula",
@@ -127,7 +129,9 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/d3/dist/d3.js"
+            ]
           }
         }
       }

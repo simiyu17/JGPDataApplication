@@ -11,6 +11,7 @@ import { DashboardService } from '@services/dashboard/dashboard.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ChartDialogComponent } from '../../chart-dialog/chart-dialog.component';
+import { KenyanMapComponent } from "../kenyan-map/kenyan-map.component";
 
 @Component({
   selector: 'app-info-cards',
@@ -22,7 +23,8 @@ import { ChartDialogComponent } from '../../chart-dialog/chart-dialog.component'
     NgxChartsModule,
     PieChartComponent,
     DiskSpaceComponent,
-    MatDialogModule
+    MatDialogModule,
+    KenyanMapComponent
 ],
   templateUrl: './info-cards.component.html',
   styleUrl: './info-cards.component.scss'
