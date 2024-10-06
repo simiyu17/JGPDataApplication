@@ -179,6 +179,25 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
+    public List<DataPointDto> getTaTrainingBySegmentSummary(LocalDate fromDate, LocalDate toDate, Long partnerId) {
+        final DataPointMapper rm = new DataPointMapper(DECIMAL_DATA_POINT_TYPE);
+        if (Objects.isNull(fromDate) || Objects.isNull(toDate)){
+            fromDate = getDefaultQueryDates().getLeft();
+            toDate = getDefaultQueryDates().getRight();
+        }
+        var whereClause = BMO_WHERE_CLAUSE_BY_PARTNER_RECORDED_DATE_PARAM;
+        MapSqlParameterSource parameters = new MapSqlParameterSource(FROM_DATE_PARAM, fromDate);
+        parameters.addValue(TO_DATE_PARAM, toDate);
+        if (Objects.nonNull(partnerId)){
+            parameters.addValue(PARTNER_ID_PARAM, partnerId);
+            whereClause = String.format(BMO_WHERE_CLAUSE_BY_PARTNER_ID_PARAM, whereClause);
+        }
+        var sqlQuery = String.format(DataPointMapper.BUSINESSES_TRAINED_BY_SEGMENT_SCHEMA, whereClause);
+
+        return this.namedParameterJdbcTemplate.query(sqlQuery, parameters, rm);
+    }
+
+    @Override
     public List<SeriesDataPointDto> getTrainingByPartnerByGenderSummary(LocalDate fromDate, LocalDate toDate) {
         final SeriesDataPointMapper rm = new SeriesDataPointMapper();
         if (Objects.isNull(fromDate) || Objects.isNull(toDate)){
@@ -279,6 +298,13 @@ public class DashboardServiceImpl implements DashboardService {
 
         public static final String BUSINESSES_TRAINED_BY_SECTOR_SCHEMA = """
                 select p.industry_sector as dataKey, count(p.id) as dataValue,\s
+                count(p.id) * 100.0 / count(count(p.id)) OVER () AS percentage\s
+                from participants p inner join bmo_participants_data bpd on bpd.participant_id = p.id\s
+                inner join partners p2 on p2.id = bpd.partner_id %s group by 1;\s
+                """;
+
+        public static final String BUSINESSES_TRAINED_BY_SEGMENT_SCHEMA = """
+                select p.business_segment as dataKey, count(p.id) as dataValue,\s
                 count(p.id) * 100.0 / count(count(p.id)) OVER () AS percentage\s
                 from participants p inner join bmo_participants_data bpd on bpd.participant_id = p.id\s
                 inner join partners p2 on p2.id = bpd.partner_id %s group by 1;\s

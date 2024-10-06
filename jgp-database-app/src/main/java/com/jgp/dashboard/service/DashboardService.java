@@ -23,6 +23,8 @@ public interface DashboardService {
 
     List<DataPointDto> getTaTrainingBySectorSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
+    List<DataPointDto> getTaTrainingBySegmentSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
+
     List<SeriesDataPointDto> getTrainingByPartnerByGenderSummary(LocalDate fromDate, LocalDate toDate);
 
     List<SeriesDataPointDto> getLastThreeYearsAccessedLoanPerPartnerSummary(Long partnerId);

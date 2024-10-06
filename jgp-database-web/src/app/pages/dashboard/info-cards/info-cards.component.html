@@ -149,22 +149,17 @@
     <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
-                <mat-card-title>{{taTrainedBySectorChartTitle}}</mat-card-title>
+                <mat-card-title>{{taTrainedBySegmentChartTitle}}</mat-card-title>
             </mat-card-header>
             <div class="w-100 h-300p">
-                <ngx-charts-bar-horizontal
-                    [scheme]="chartSColorScheme"
-                    [results]="taTrainedBySector"
-                    [gradient]="gradient"
-                    [xAxis]="taTrainedBySectorShowXAxis"
-                    [yAxis]="taTrainedBySectorShowYAxis"
-                    [legend]="taTrainedBySectorShowLegend"
-                    [showXAxisLabel]="taTrainedBySectorShowXAxisLabel"
-                    [showYAxisLabel]="taTrainedBySectorShowYAxisLabel"
-                    [xAxisLabel]="taTrainedBySectorYAxisLabel"
-                    [yAxisLabel]="taTrainedBySectorXAxisLabel"
-                    (select)="onSelect($event)"
-                />         
+                <app-pie-chart 
+            [data]="taTrainedBySegment" 
+            [showLegend]="taTrainedBySegmentShowLegend" 
+            [colorScheme]="chartSColorScheme" 
+            [showLabels]="taTrainedBySegmentShowLabels" 
+            [explodeSlices]="taTrainedBySegmentExplodeSlices" 
+            [doughnut]="taTrainedBySegmentDoughnut" 
+            />        
             </div>
         </mat-card>
     </div>  

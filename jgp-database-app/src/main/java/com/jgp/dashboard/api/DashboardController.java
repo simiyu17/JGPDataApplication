@@ -73,6 +73,13 @@ public class DashboardController {
         return new ResponseEntity<>(this.dashboardService.getTaTrainingBySectorSummary(fromDate, toDate, partnerId), HttpStatus.OK);
     }
 
+    @GetMapping("ta-training-by-segment")
+    public ResponseEntity<List<DataPointDto>> getTaTrainingBySegmentSummary(@RequestParam(value = "partner-id", required = false) Long partnerId,
+                                                                           @RequestParam(value = "from-date", required = false) LocalDate fromDate,
+                                                                           @RequestParam(value = "to-date", required = false) LocalDate toDate){
+        return new ResponseEntity<>(this.dashboardService.getTaTrainingBySegmentSummary(fromDate, toDate, partnerId), HttpStatus.OK);
+    }
+
     @GetMapping("training-by-partner-by-gender")
     public ResponseEntity<List<SeriesDataPointDto>> getTrainingByPartnerByGenderSummary(@RequestParam(value = "from-date", required = false) LocalDate fromDate,
                                                                                         @RequestParam(value = "to-date", required = false) LocalDate toDate){

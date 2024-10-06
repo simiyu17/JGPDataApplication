@@ -6,7 +6,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card';
 import { DataUploadService } from '@services/shared/data-upload.service';
-import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -59,7 +59,7 @@ export class DataUploaderComponent implements OnDestroy {
       countryId: [''],
       officeId: [''],
       staffId: [''],
-      legalForm: [''],
+      legalForm: ['', Validators.required],
     });
   }
 
@@ -76,13 +76,6 @@ export class DataUploaderComponent implements OnDestroy {
     if ($event.target.files.length > 0) {
       this.template = $event.target.files[0];
     }
-  }
-
-  /**
-   * Gets bulk import's downloadable template from API.
-   */
-  downloadTemplate() {
-   
   }
 
   uploadTemplate() {
@@ -109,6 +102,30 @@ export class DataUploaderComponent implements OnDestroy {
         next: (response) => {
           this.gs.openSnackBar(response.message, "Dismiss");
           //this.refreshDocuments();
+        }
+      });
+    }
+  }
+
+  downloadTemplate() {
+    this.dataUploadService.downloadDataTemplate('LOAN_IMPORT_TEMPLATE')
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response) => {
+          console.log(response)
+            this.dataUploadService.downloadFileFromAPIResponse(response);
+        }
+      });
+  }
+
+  downloadTemplate2() {
+    console.log(this.bulkImportForm.valid)
+    if(this.bulkImportForm.valid){
+    this.dataUploadService.downloadDataTemplate(this.bulkImportForm.value.legalForm)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response) => {
+            this.dataUploadService.downloadFileFromAPIResponse(response);
         }
       });
     }

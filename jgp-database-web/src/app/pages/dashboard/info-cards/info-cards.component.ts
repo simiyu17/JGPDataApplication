@@ -122,6 +122,13 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked, OnDestroy {
   public accessedVSOutStandingAmountYAxisLabel = 'Amount';
   public accessedVSOutStandingAmountChartTitle: string = 'Accessed Vs OutStanding By Partner';
 
+  public taTrainedBySegment: any[];
+  public taTrainedBySegmentShowLegend: boolean = false;
+  public taTrainedBySegmentShowLabels: boolean = true;
+  public taTrainedBySegmentExplodeSlices: boolean = false;
+  public taTrainedBySegmentDoughnut: boolean = false;
+  public taTrainedBySegmentChartTitle: string = 'TA By Business Segment';
+
 
   private unsubscribe$ = new Subject<void>();
 
@@ -144,6 +151,7 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.getLoansDisbursedByStatusSummary();
     this.getTaNeedsByGenderSummary();
     this.getTaTrainingBySectorSummary();
+    this.getTaTrainingBySegmentSummary();
     this.getTrainingByPartnerByGenderSummary();
     this.getLoansAccessedVsOutStandingByPartnerSummary();
   }
@@ -209,6 +217,17 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked, OnDestroy {
       .subscribe({
         next: (response) => {
           this.taTrainedBySector = response;
+        },
+        error: (error) => { }
+      });
+  }
+
+  getTaTrainingBySegmentSummary() {
+    this.dashBoardService.getTaTrainingBySegmentSummary()
+    .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response) => {
+          this.taTrainedBySegment = response;
         },
         error: (error) => { }
       });

@@ -47,6 +47,11 @@ export class DashboardService {
       return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/ta-training-by-sector${queryParam}`);
     }
 
+    getTaTrainingBySegmentSummary(partnerId: number | undefined = undefined): Observable<any> {
+      const queryParam = (partnerId ? `?partner-id=${partnerId}` : '');
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/ta-training-by-segment${queryParam}`);
+    }
+
     getTrainingByPartnerByGenderSummary(partnerId: number | undefined = undefined): Observable<any> {
       const queryParam = (partnerId ? `?partner-id=${partnerId}` : '');
       return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/training-by-partner-by-gender${queryParam}`);
