@@ -43,11 +43,12 @@ export class DataUploadService {
    *
    * @param res
    */
-  downloadFileFromAPIResponse(res: any) {
+  downloadFileFromAPIResponse(res: any, downloadFileName: string) {
     const headers = res.headers;
     const contentType = headers.get('Content-Type');
     const blob = new Blob([res.body], { type: contentType });
-    const fileName = this.getFileNameFromHttpHeaders(headers);
+    const dateToday = new Date()
+    const fileName = `${downloadFileName}_${dateToday.toISOString().split('T')[0]}.xlsx`;//this.getFileNameFromHttpHeaders(headers);
     let fileLink = document.createElement('a');
     document.body.appendChild(fileLink);
     fileLink.style.display = 'none';

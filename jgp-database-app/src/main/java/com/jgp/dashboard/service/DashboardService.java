@@ -1,5 +1,6 @@
 package com.jgp.dashboard.service;
 
+import com.jgp.dashboard.dto.CountySummaryDto;
 import com.jgp.dashboard.dto.DataPointDto;
 import com.jgp.dashboard.dto.HighLevelSummaryDto;
 import com.jgp.dashboard.dto.SeriesDataPointDto;
@@ -30,4 +31,6 @@ public interface DashboardService {
     List<SeriesDataPointDto> getLastThreeYearsAccessedLoanPerPartnerSummary(Long partnerId);
 
     List<SeriesDataPointDto> getLoansAccessedVsOutStandingByPartnerSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
+
+    List<CountySummaryDto> getCountySummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 }

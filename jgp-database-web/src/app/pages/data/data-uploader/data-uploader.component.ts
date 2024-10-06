@@ -107,25 +107,15 @@ export class DataUploaderComponent implements OnDestroy {
     }
   }
 
+  
   downloadTemplate() {
-    this.dataUploadService.downloadDataTemplate('LOAN_IMPORT_TEMPLATE')
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (response) => {
-          console.log(response)
-            this.dataUploadService.downloadFileFromAPIResponse(response);
-        }
-      });
-  }
-
-  downloadTemplate2() {
-    console.log(this.bulkImportForm.valid)
+    console.log(this.bulkImportForm.value.legalForm)
     if(this.bulkImportForm.valid){
     this.dataUploadService.downloadDataTemplate(this.bulkImportForm.value.legalForm)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
-            this.dataUploadService.downloadFileFromAPIResponse(response);
+            this.dataUploadService.downloadFileFromAPIResponse(response, this.bulkImportForm.value.legalForm);
         }
       });
     }

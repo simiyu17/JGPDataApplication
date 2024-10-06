@@ -1,5 +1,6 @@
 package com.jgp.dashboard.service;
 
+import com.jgp.dashboard.dto.CountySummaryDto;
 import com.jgp.dashboard.dto.DataPointDto;
 import com.jgp.dashboard.dto.HighLevelSummaryDto;
 import java.sql.ResultSet;
@@ -243,6 +244,27 @@ public class DashboardServiceImpl implements DashboardService {
         return this.namedParameterJdbcTemplate.query(sqlQuery, parameters, rm);
     }
 
+    @Override
+    public List<CountySummaryDto> getCountySummary(LocalDate fromDate, LocalDate toDate, Long partnerId) {
+        final var countySummaryMapper = new CountySummaryDataMapper();
+        if (Objects.isNull(fromDate) || Objects.isNull(toDate)){
+            fromDate = getDefaultQueryDates().getLeft();
+            toDate = getDefaultQueryDates().getRight();
+        }
+        var bpdWhereClause = BMO_WHERE_CLAUSE_BY_PARTNER_RECORDED_DATE_PARAM;
+        var loanWhereClause = LOAN_WHERE_CLAUSE_BY_DISBURSED_DATE_PARAM;
+        MapSqlParameterSource parameters = new MapSqlParameterSource(FROM_DATE_PARAM, fromDate);
+        parameters.addValue(TO_DATE_PARAM, toDate);
+
+        if (Objects.nonNull(partnerId)) {
+            parameters.addValue(PARTNER_ID_PARAM, partnerId);
+            bpdWhereClause = String.format(BMO_WHERE_CLAUSE_BY_PARTNER_ID_PARAM, bpdWhereClause);
+            loanWhereClause = String.format(LOAN_WHERE_CLAUSE_BY_PARTNER_ID_PARAM, loanWhereClause);
+        }
+        var sqlQuery = String.format(CountySummaryDataMapper.COUNTY_SUMMARY_SCHEMA, bpdWhereClause, loanWhereClause);
+        return this.namedParameterJdbcTemplate.query(sqlQuery, parameters, countySummaryMapper);
+    }
+
     private static final class HighLevelSummaryMapper implements RowMapper<HighLevelSummaryDto> {
 
         public static final String SCHEMA = """
@@ -403,6 +425,43 @@ private static final class SeriesDataPointMapper implements ResultSetExtractor<L
         return dataPoints;
     }
 }
+
+    private static final class CountySummaryDataMapper implements ResultSetExtractor<List<CountySummaryDto>> {
+
+        public static final String COUNTY_SUMMARY_SCHEMA = """
+                with highLevelSummary as (
+                                     select p.business_location as county, count(*) as businessesTrained,
+                                     0 as businessesLoaned, 0 as amountDisbursed,
+                                     0 as outStandingAmount from bmo_participants_data bpd\s
+                                     inner join participants p on p.id = bpd.participant_id %s
+                                     group by 1
+                                     union
+                                     select p.business_location as county, 0 as businessesTrained, count(*) as businessesLoaned,
+                                     sum(loan_amount_accessed) as amountDisbursed, sum(loan_outstanding_amount) as outStandingAmount from loans l\s
+                                     inner join participants p on p.id = l.participant_id %s\s
+                                     group by 1
+                                     )
+                                     select county, sum(businessesTrained) as businessesTrained, sum(businessesLoaned) as businessesLoaned,
+                                     sum(amountDisbursed) as amountDisbursed, sum(outStandingAmount) as outStandingAmount
+                                     from highLevelSummary group by 1;
+               \s""";
+
+
+        @Override
+        public List<CountySummaryDto> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            var dataPoints = new ArrayList<CountySummaryDto>();
+            while (rs.next()){
+                final var countyName = rs.getString("county");
+                final var businessesTrained = rs.getInt("businessesTrained");
+                final var businessesLoaned = rs.getInt("businessesLoaned");
+                final var amountDisbursed = rs.getBigDecimal("amountDisbursed");
+                final var outStandingAmount = rs.getBigDecimal("outStandingAmount");
+
+                dataPoints.add(new CountySummaryDto(countyName, businessesTrained, businessesLoaned, amountDisbursed, outStandingAmount));
+            }
+            return dataPoints;
+        }
+    }
 
 
 private Pair<LocalDate, LocalDate> getDefaultQueryDates(){

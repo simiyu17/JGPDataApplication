@@ -1,5 +1,6 @@
 package com.jgp.dashboard.api;
 
+import com.jgp.dashboard.dto.CountySummaryDto;
 import com.jgp.dashboard.dto.DataPointDto;
 import com.jgp.dashboard.dto.HighLevelSummaryDto;
 import com.jgp.dashboard.dto.SeriesDataPointDto;
@@ -96,5 +97,12 @@ public class DashboardController {
                                                                                                   @RequestParam(value = "from-date", required = false) LocalDate fromDate,
                                                                                                   @RequestParam(value = "to-date", required = false) LocalDate toDate){
         return new ResponseEntity<>(this.dashboardService.getLoansAccessedVsOutStandingByPartnerSummary(fromDate, toDate, partnerId), HttpStatus.OK);
+    }
+
+    @GetMapping("county-summary")
+    public ResponseEntity<List<CountySummaryDto>> getCountySummary(@RequestParam(value = "partner-id", required = false) Long partnerId,
+                                                                   @RequestParam(value = "from-date", required = false) LocalDate fromDate,
+                                                                   @RequestParam(value = "to-date", required = false) LocalDate toDate){
+        return new ResponseEntity<>(this.dashboardService.getCountySummary(fromDate, toDate, partnerId), HttpStatus.OK);
     }
 }
