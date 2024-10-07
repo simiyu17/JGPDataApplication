@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,6 +20,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { UserService } from '@services/users/user.service';
 import { UserRoleService } from '@services/users/userroles.service';
 import { PartnerDto } from '../../../dto/Partner';
+import { Subject, takeUntil } from 'rxjs';
 
 
 @Component({
@@ -46,12 +47,13 @@ import { PartnerDto } from '../../../dto/Partner';
   templateUrl: './create-user.component.html',
   styleUrl: './create-user.component.scss'
 })
-export class CreateUserComponent {
+export class CreateUserComponent implements OnDestroy {
 
   public createUserForm: FormGroup;
 
   partners: PartnerDto[] = [];
   allUserRoles: any;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     public fb: FormBuilder, private gs: GlobalService, 
     private userService: UserService, 
@@ -74,6 +76,7 @@ export class CreateUserComponent {
 
 getAvailableUserRoles() {
   this.userRolesService.getAvailableUserRoles()
+  .pipe(takeUntil(this.unsubscribe$))
     .subscribe({
       next: (response) => {
         this.allUserRoles = response;
@@ -84,6 +87,7 @@ getAvailableUserRoles() {
 
 getAvailablePartners() {
   this.partnerService.getAvailablePartners()
+  .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.partners = response
@@ -103,6 +107,7 @@ ngOnInit() {
 onSubmitCreateUser(): void {
   if (this.createUserForm.valid) {
       this.userService.createUser(this.createUserForm.value)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.gs.openSnackBar("Done sucessfully!!", "Dismiss");
@@ -116,4 +121,9 @@ onSubmitCreateUser(): void {
   }
 }
 
+
+ngOnDestroy(): void {
+  this.unsubscribe$.next();
+  this.unsubscribe$.complete();
+}
 }

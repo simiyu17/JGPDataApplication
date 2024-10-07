@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ContentHeaderComponent } from '../../theme/components/content-header/content-header.component';
@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { NoPermissionComponent } from '../errors/no-permission/no-permission.component';
 import { AuthService } from '@services/users/auth.service';
 import { HasPermissionDirective } from '../../directives/has-permission.directive';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-partners',
@@ -36,7 +37,7 @@ import { HasPermissionDirective } from '../../directives/has-permission.directiv
   templateUrl: './partners.component.html',
   styleUrl: './partners.component.scss'
 })
-export class PartnersComponent implements OnInit{
+export class PartnersComponent implements OnInit, OnDestroy{
   public searchText: string;
   public page: any;
   public showSearch: boolean = false;
@@ -48,10 +49,12 @@ export class PartnersComponent implements OnInit{
   public dataSource: any;
 
   partners: any
+  private unsubscribe$ = new Subject<void>();
   constructor(public dialog: MatDialog, private partnerService: PartnerService, public authService: AuthService) { }
 
   getAvailablePartners() {
     this.partnerService.getAvailablePartners()
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.partners = response;
@@ -90,4 +93,9 @@ export class PartnersComponent implements OnInit{
     this.getAvailablePartners();
   }
 
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 }

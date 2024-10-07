@@ -1,8 +1,9 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { analytics } from '@data/dashboard-data';
 import { DashboardService } from '@services/dashboard/dashboard.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { Subject, takeUntil, takeWhile } from 'rxjs';
 
 @Component({
   selector: 'app-analytics',
@@ -14,7 +15,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.scss'
 })
-export class AnalyticsComponent implements OnInit {
+export class AnalyticsComponent implements OnInit, OnDestroy {
   public chartSColorScheme: any = {
     domain: ['#2F3E9E', '#D22E2E', '#378D3B', '#7f7f7f', '#c4a678', '#6a7b6a', '#191919', '#3d144c', '#f0e1dc', '#a04324', '#00ffff', '#0e5600', '#0e9697']
   };
@@ -45,9 +46,14 @@ export class AnalyticsComponent implements OnInit {
   
   @ViewChild('resizedDiv') resizedDiv: ElementRef;
   public previousWidthOfResizedDiv: number = 0;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(private dashBoardService: DashboardService){
     
+  }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   ngOnInit() {
@@ -57,6 +63,7 @@ export class AnalyticsComponent implements OnInit {
 
   getLastThreeYearsAccessedLoanPerPartnerSummary() {
     this.dashBoardService.getLastThreeYearsAccessedLoanPerPartnerSummary()
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.lastThreeYearLoansAccessedPerPartner = response;

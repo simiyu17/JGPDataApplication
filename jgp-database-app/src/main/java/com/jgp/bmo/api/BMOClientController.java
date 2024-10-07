@@ -3,8 +3,11 @@ package com.jgp.bmo.api;
 import com.jgp.bmo.dto.BMOClientDto;
 import com.jgp.bmo.dto.BMOParticipantSearchCriteria;
 import com.jgp.bmo.service.BMOClientDataService;
+import com.jgp.infrastructure.bulkimport.data.GlobalEntityType;
+import com.jgp.infrastructure.bulkimport.service.BulkImportWorkbookPopulatorService;
 import com.jgp.shared.dto.ApiResponseDto;
 import com.jgp.util.CommonUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -29,6 +32,7 @@ import java.util.List;
 public class BMOClientController {
 
     private final BMOClientDataService bmoDataService;
+    private final BulkImportWorkbookPopulatorService bulkImportWorkbookPopulatorService;
 
     @GetMapping
     public ResponseEntity<List<BMOClientDto>> getAvailableBMODataRecords(@RequestParam(name = "partnerId", required = false) Long partnerId,
@@ -48,6 +52,11 @@ public class BMOClientController {
         }
         this.bmoDataService.uploadBMOData(excelFile);
         return new ResponseEntity<>(new ApiResponseDto(true, CommonUtil.RESOURCE_CREATED), HttpStatus.CREATED);
+    }
+
+    @GetMapping("template/download")
+    public ResponseEntity<?> downloadDataTemplate(HttpServletResponse response) {
+        return bulkImportWorkbookPopulatorService.getTemplate(GlobalEntityType.BMO_IMPORT_TEMPLATE.toString(), response);
     }
 
     @GetMapping("{bmoId}")

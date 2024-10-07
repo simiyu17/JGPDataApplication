@@ -4,8 +4,11 @@ import com.jgp.finance.domain.Loan;
 import com.jgp.finance.dto.LoanDto;
 import com.jgp.finance.dto.LoanSearchCriteria;
 import com.jgp.finance.service.LoanService;
+import com.jgp.infrastructure.bulkimport.data.GlobalEntityType;
+import com.jgp.infrastructure.bulkimport.service.BulkImportWorkbookPopulatorService;
 import com.jgp.shared.dto.ApiResponseDto;
 import com.jgp.util.CommonUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -30,6 +34,7 @@ import java.util.List;
 public class LoanController {
 
     private final LoanService loanService;
+    private final BulkImportWorkbookPopulatorService bulkImportWorkbookPopulatorService;
 
     @GetMapping
     public ResponseEntity<List<LoanDto>> getAvailableLoanRecords(@RequestParam(name = "partnerId", required = false) Long partnerId,
@@ -41,7 +46,7 @@ public class LoanController {
                                                                  @RequestParam(name = "pageSize", defaultValue = "200") Integer pageSize){
         final var sortedByDateCreated =
                 PageRequest.of(pageNumber - 1, pageSize, Sort.by("dateCreated").descending());
-        return new ResponseEntity<>(this.loanService.getLoans(new LoanSearchCriteria(partnerId, participantId, status, quality, approvedByPartner), sortedByDateCreated), HttpStatus.OK);
+        return new ResponseEntity<>(this.loanService.getLoans(new LoanSearchCriteria(partnerId, participantId, status, quality, approvedByPartner, null, null), sortedByDateCreated), HttpStatus.OK);
     }
 
     @PostMapping("upload-template")
@@ -51,6 +56,11 @@ public class LoanController {
         }
         this.loanService.uploadBulkLoanData(excelFile);
         return new ResponseEntity<>(new ApiResponseDto(true, CommonUtil.RESOURCE_CREATED), HttpStatus.CREATED);
+    }
+
+    @GetMapping("template/download")
+    public ResponseEntity<?> downloadDataTemplate(HttpServletResponse response) {
+        return bulkImportWorkbookPopulatorService.getTemplate(GlobalEntityType.LOAN_IMPORT_TEMPLATE.toString(), response);
     }
 
     @GetMapping("{loanId}")

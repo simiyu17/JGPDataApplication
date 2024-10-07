@@ -22,9 +22,9 @@
                       <mat-label>Legal Form</mat-label>
                       <mat-select required formControlName="legalForm">
                         @if (partnerType === 'BMO') {
-                          <mat-option value="BMO_DATA">BMO Data Template</mat-option>
+                          <mat-option value="BMO_IMPORT_TEMPLATE">BMO Data Template</mat-option>
                       }@else if (partnerType === 'FI') {
-                        <mat-option value="LOAN_DATA">Loan Template</mat-option>
+                        <mat-option value="LOAN_IMPORT_TEMPLATE">Loan Template</mat-option>
                       }
                       </mat-select>
                     </mat-form-field>
@@ -51,7 +51,7 @@
         
               <jgp-file-upload flex="75%" (change)="onFileSelect($event)"></jgp-file-upload>
         
-              <mat-hint>Please retain the names of the file prefix as they were downloaded.</mat-hint>
+              <mat-hint>Please <strong>DO NOT</strong> change the names of the data template as they were downloaded.</mat-hint>
         
               <div fxFlex="13%">
                 <button mat-raised-button color="primary" [disabled]="!template" (click)="uploadTemplate()">

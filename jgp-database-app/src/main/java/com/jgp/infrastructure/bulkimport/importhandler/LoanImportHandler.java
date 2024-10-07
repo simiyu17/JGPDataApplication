@@ -11,6 +11,7 @@ import com.jgp.infrastructure.bulkimport.event.BulkImportEvent;
 import com.jgp.participant.domain.Participant;
 import com.jgp.participant.dto.ParticipantDto;
 import com.jgp.participant.service.ParticipantService;
+import com.jgp.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
@@ -98,12 +99,13 @@ public class LoanImportHandler implements ImportHandler {
         final var gender = ImportHandlerUtils.readAsString(LoanConstants.GENDER_COL, row);
         final var age = ImportHandlerUtils.readAsInt(LoanConstants.AGE_COL, row);
         final var businessLocation = ImportHandlerUtils.readAsString(LoanConstants.BUSINESS_LOCATION_COL, row);
+        final var locationCountyCode = CommonUtil.KenyanCounty.getKenyanCountyFromName(businessLocation);
         final var industrySector = ImportHandlerUtils.readAsString(LoanConstants.INDUSTRY_SECTOR_COL, row);
         final var businessSegment = ImportHandlerUtils.readAsString(LoanConstants.BUSINESS_SEGMENT_COL, row);
         final var clientDto = ParticipantDto.builder().businessLocation(businessLocation).businessName(businessName)
                 .ownerGender(gender).ownerAge(age).isBusinessRegistered(true).jgpId(jgpId)
                 .phoneNumber(phoneNumber).industrySector(industrySector).businessSegment(businessSegment)
-                .build();
+                .locationCountyCode(locationCountyCode.isPresent() ? locationCountyCode.get().getCountyCode() : "999").build();
         return this.clientService.createClient(clientDto);
     }
 

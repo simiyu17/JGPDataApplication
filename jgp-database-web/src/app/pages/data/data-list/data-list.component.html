@@ -16,7 +16,7 @@
                 <div fxLayout="column" class="p-2">
                     <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="end center" class="px-2 user-toolbar">
                         <div class="action-button" fxLayoutGap="25px">
-                            <button mat-raised-button color="primary" *jgpHasPermission="'USER_ROLE_CREATE'" routerLink="new" [disabled]="selection.selected.length == 0" (click)="approveSelectedRows()">
+                            <button mat-raised-button color="primary" *jgpHasPermission="'BMO_PARTICIPANTS_DATA_APPROVE'" routerLink="new" [disabled]="selection.selected.length == 0" (click)="approveSelectedRows()">
                               <mat-icon>verified</mat-icon>&nbsp;&nbsp;Approve Selected
                             </button>
                           </div>

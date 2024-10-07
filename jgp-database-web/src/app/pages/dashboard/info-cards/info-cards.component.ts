@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { customers, orders, products, refunds } from '@data/dashboard-data';
@@ -8,6 +8,10 @@ import { PieChartComponent } from "../pie-chart/pie-chart.component";
 import { DiskSpaceComponent } from "../disk-space/disk-space.component";
 import { multi, single } from '@data/charts.data';
 import { DashboardService } from '@services/dashboard/dashboard.service';
+import { Subject, takeUntil } from 'rxjs';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ChartDialogComponent } from '../../chart-dialog/chart-dialog.component';
+import { KenyanMapComponent } from "../kenyan-map/kenyan-map.component";
 
 @Component({
   selector: 'app-info-cards',
@@ -18,12 +22,14 @@ import { DashboardService } from '@services/dashboard/dashboard.service';
     MatIconModule,
     NgxChartsModule,
     PieChartComponent,
-    DiskSpaceComponent
+    DiskSpaceComponent,
+    MatDialogModule,
+    KenyanMapComponent
 ],
   templateUrl: './info-cards.component.html',
   styleUrl: './info-cards.component.scss'
 })
-export class InfoCardsComponent implements OnInit, AfterViewChecked {
+export class InfoCardsComponent implements OnInit, AfterViewChecked, OnDestroy {
   public orders: any[];
   public products: any[];
   public customers: any[];
@@ -53,15 +59,15 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
   public loansDisbursedByPipelineDoughnut: boolean = false;
   public loansDisbursedByPipelineChartTitle: string = 'Loan Disbursed by Pipeline Source';
 
-  public loansDisbursedByQuality: any[];
-  public loansDisbursedByQualityShowXAxis: boolean = true;
-  public loansDisbursedByQualityShowYAxis: boolean = true;
-  public loansDisbursedByQualityShowLegend: boolean = false;
-  public loansDisbursedByQualityShowXAxisLabel: boolean = true;
-  public loansDisbursedByQualityShowYAxisLabel: boolean = true;
-  public loansDisbursedByQualityXAxisLabel: string = 'Quality';
-  public loansDisbursedByQualityYAxisLabel: string = 'Amount Disbursed';
-  public loansDisbursedByQualityChartTitle: string = 'Loan Disbursed by Pipeline Source';
+  public loansDisbursedByStatus: any[];
+  public loansDisbursedByStatusShowXAxis: boolean = true;
+  public loansDisbursedByStatusShowYAxis: boolean = true;
+  public loansDisbursedByStatusShowLegend: boolean = false;
+  public loansDisbursedByStatusShowXAxisLabel: boolean = true;
+  public loansDisbursedByStatusShowYAxisLabel: boolean = true;
+  public loansDisbursedByStatusXAxisLabel: string = 'Status';
+  public loansDisbursedByStatusYAxisLabel: string = 'Amount Disbursed';
+  public loansDisbursedByStatusChartTitle: string = 'Loan Disbursed by Pipeline Source';
 
   public businessesTainedByGender: any[];
   public businessesTainedByGenderShowLegend: boolean = false;
@@ -116,8 +122,19 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
   public accessedVSOutStandingAmountYAxisLabel = 'Amount';
   public accessedVSOutStandingAmountChartTitle: string = 'Accessed Vs OutStanding By Partner';
 
+  public taTrainedBySegment: any[];
+  public taTrainedBySegmentShowLegend: boolean = false;
+  public taTrainedBySegmentShowLabels: boolean = true;
+  public taTrainedBySegmentExplodeSlices: boolean = false;
+  public taTrainedBySegmentDoughnut: boolean = false;
+  public taTrainedBySegmentChartTitle: string = 'TA By Business Segment';
 
-  constructor(private dashBoardService: DashboardService){
+
+  private unsubscribe$ = new Subject<void>();
+
+  @ViewChild('contentDiv', { static: true }) contentDiv!: ElementRef;
+
+  constructor(private dashBoardService: DashboardService, public dialog: MatDialog){
     Object.assign(this, { single, multi });
   }
 
@@ -131,15 +148,17 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
     this.getLoansDisbursedByGenderSummary();
     this.getLoansDisbursedByPipelineSummary();
     this.getBusinessesTrainedByGenderSummary();
-    this.getLoansDisbursedByQualitySummary();
+    this.getLoansDisbursedByStatusSummary();
     this.getTaNeedsByGenderSummary();
     this.getTaTrainingBySectorSummary();
+    this.getTaTrainingBySegmentSummary();
     this.getTrainingByPartnerByGenderSummary();
     this.getLoansAccessedVsOutStandingByPartnerSummary();
   }
 
   getLoansDisbursedByGenderSummary() {
     this.dashBoardService.getLoansDisbursedByGenderSummary()
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.loansDisbursedByGender = response;
@@ -150,6 +169,7 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
 
   getLoansDisbursedByPipelineSummary() {
     this.dashBoardService.getLoansDisbursedByPipelineSummary()
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.loansDisbursedByPipeline = response;
@@ -158,11 +178,12 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
       });
   }
 
-  getLoansDisbursedByQualitySummary() {
-    this.dashBoardService.getLoansDisbursedByQualitySummary()
+  getLoansDisbursedByStatusSummary() {
+    this.dashBoardService.getLoansDisbursedByStatusSummary()
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
-          this.loansDisbursedByQuality = response;
+          this.loansDisbursedByStatus = response;
         },
         error: (error) => { }
       });
@@ -170,6 +191,7 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
 
   getBusinessesTrainedByGenderSummary() {
     this.dashBoardService.getBusinessesTrainedByGenderSummary()
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.businessesTainedByGender = response;
@@ -180,6 +202,7 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
 
   getTaNeedsByGenderSummary() {
     this.dashBoardService.getTaNeedsByGenderSummary()
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.TANeedsByGender = response;
@@ -190,6 +213,7 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
 
   getTaTrainingBySectorSummary() {
     this.dashBoardService.getTaTrainingBySectorSummary()
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.taTrainedBySector = response;
@@ -198,8 +222,20 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
       });
   }
 
+  getTaTrainingBySegmentSummary() {
+    this.dashBoardService.getTaTrainingBySegmentSummary()
+    .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response) => {
+          this.taTrainedBySegment = response;
+        },
+        error: (error) => { }
+      });
+  }
+
   getTrainingByPartnerByGenderSummary() {
     this.dashBoardService.getTrainingByPartnerByGenderSummary()
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.trainingByPartnerByGender = response;
@@ -210,6 +246,7 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
 
   getLoansAccessedVsOutStandingByPartnerSummary() {
     this.dashBoardService.getLoansAccessedVsOutStandingByPartnerSummary()
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.accessedVSOutStandingAmount = response;
@@ -243,6 +280,8 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
   ngOnDestroy() {
     this.orders[0].series.length = 0;
     this.customers[0].series.length = 0;
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   ngAfterViewChecked() {
@@ -255,5 +294,21 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked {
     this.previousWidthOfResizedDiv = this.resizedDiv.nativeElement.clientWidth;
   }
 
+  openExpandedChartDialog(): void {
+    const contentDivClone = this.contentDiv.nativeElement.cloneNode(true);
+    // Dynamically calculate dialog size
+    const dialogWidth = window.innerWidth;
+    const dialogHeight = window.innerHeight;
+    const dialogRef = this.dialog.open(ChartDialogComponent, {
+      width: `${dialogWidth}px`,
+      height: `${dialogHeight}px`,
+      data: { content: contentDivClone },
+      panelClass: 'custom-dialog-container', // Custom styles can be added
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog was closed');
+    });
+  }
+  
 }

@@ -48,11 +48,13 @@ public record ParticipantDto(
 
         String sampleRecords,
 
-        String taNeeds,
-
         String personWithDisability,
 
         String refugeeStatus,
+
         List<BMOClientDto> bmoClientDtos,
-        List<LoanDto> loanDtos) {
+
+        List<LoanDto> loanDtos,
+
+        String locationCountyCode) {
 }

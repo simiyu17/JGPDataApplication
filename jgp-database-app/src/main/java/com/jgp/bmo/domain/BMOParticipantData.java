@@ -59,12 +59,15 @@ public class BMOParticipantData extends BaseEntity {
     @Column(name = "data_is_approved")
     private Boolean isDataApprovedByPartner;
 
+    @Column(name = "ta_needs")
+    private String taNeeds;
+
     private transient Integer rowIndex;
 
     public BMOParticipantData() {
     }
 
-    public BMOParticipantData(Partner partner, Participant participant, LocalDate dateFormSubmitted, Boolean isApplicantEligible, Integer tasAttended, Integer taSessionsAttended, Boolean isRecommendedForFinance, LocalDate decisionDate, String fiBusinessReferred, LocalDate dateRecordedByPartner, LocalDate dateRecordedToJGPDB, Integer rowIndex) {
+    public BMOParticipantData(Partner partner, Participant participant, LocalDate dateFormSubmitted, Boolean isApplicantEligible, Integer tasAttended, Integer taSessionsAttended, Boolean isRecommendedForFinance, LocalDate decisionDate, String fiBusinessReferred, LocalDate dateRecordedByPartner, LocalDate dateRecordedToJGPDB, String taNeeds, Integer rowIndex) {
         this.partner = partner;
         this.participant = participant;
         this.dateFormSubmitted = dateFormSubmitted;
@@ -78,6 +81,7 @@ public class BMOParticipantData extends BaseEntity {
         this.dateRecordedToJGPDB = dateRecordedToJGPDB;
         this.rowIndex = rowIndex;
         this.isDataApprovedByPartner = false;
+        this.taNeeds = taNeeds;
     }
 
     public void approveData(Boolean approval){

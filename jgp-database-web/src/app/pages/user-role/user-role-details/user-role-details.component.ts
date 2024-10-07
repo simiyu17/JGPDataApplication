@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableModule } from '@angular/material/table';
 import { ContentHeaderComponent } from '../../../theme/components/content-header/content-header.component';
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { MatButtonModule } from '@angular/material/button';

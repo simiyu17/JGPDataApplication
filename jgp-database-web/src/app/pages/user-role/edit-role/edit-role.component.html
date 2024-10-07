@@ -10,24 +10,24 @@
    
 
 
-  <div fxLayout="column" fxLayout.gt-sm="row wrap" class="p-2">
-    <div fxFlex="50" class="p-2"> 
+    <div fxLayout="column" fxLayout.gt-sm="row wrap" class="p-2" fxLayoutAlign="center">
+    <div fxFlex="70" class="p-2"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center">                
                 <mat-card-title>Edit User Role</mat-card-title>
             </mat-card-header>
             <mat-card-content fxLayoutAlign="center" class="pt-3">
-                <form [formGroup]="editUserRoleForm" class="partner-form">      
-                    <div fxLayout="column" class="form-field-outer">
-                        <mat-form-field class="w-100">
+                <form [formGroup]="editUserRoleForm" class="partner-form">  
+                    <div fxLayout="row wrap" fxLayoutGap="2%">       
+                        <mat-form-field fxFlex="97%">
                             <mat-label>Role Name</mat-label>
                             <input matInput formControlName="roleName">
                         </mat-form-field>
-                        <mat-form-field class="w-100">
+                        <mat-form-field fxFlex="97%">
                             <mat-label>Description</mat-label>
                             <input matInput formControlName="description">
                         </mat-form-field>
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="fill" fxFlex="97%">
                             <mat-label>Role Permissions</mat-label>
                             <mat-select formControlName="permissions" multiple>
                                 @for (permission of allPermissions; track $index) {
@@ -36,12 +36,11 @@
                               
                             </mat-select>
                           </mat-form-field>
-                    </div>
-                    <div fxLayout="row" fxLayoutAlign="space-between center">
-                        <button mat-raised-button color="primary" (click)="onSubmitEditUserRole()" [mat-dialog-close]="editUserRoleForm.value" [disabled]="!editUserRoleForm.valid">Update</button>
+                    <div fxLayout="row" fxLayoutAlign="end center" fxFlex="100%" fxLayoutGap="2%">
                         <button mat-raised-button color="warn">Cancel</button>
+                        <button mat-raised-button color="primary" (click)="onSubmitEditUserRole()" [mat-dialog-close]="editUserRoleForm.value" [disabled]="!editUserRoleForm.valid">Update</button>
                     </div>
-                
+                    </div>
                 </form>
             </mat-card-content>
         </mat-card>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,6 +18,7 @@ import { ContentHeaderComponent } from '../../../theme/components/content-header
 import { MatCardModule } from '@angular/material/card';
 import { PermissionsService } from '@services/users/permissions.service';
 import { UserRoleService } from '@services/users/userroles.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-create-role',
@@ -42,10 +43,11 @@ import { UserRoleService } from '@services/users/userroles.service';
   templateUrl: './create-role.component.html',
   styleUrl: './create-role.component.scss'
 })
-export class CreateRoleComponent {
+export class CreateRoleComponent implements OnDestroy{
 
   allPermissions: any
   public newUserRoleForm: FormGroup;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     public fb: FormBuilder, 
     private partnerService: PartnerService,
@@ -68,6 +70,7 @@ export class CreateRoleComponent {
 
     getAvailablePermissions() {
       this.permissionsServive.getAvailablePermissions()
+      .pipe(takeUntil(this.unsubscribe$))
         .subscribe({
           next: (response) => {
             this.allPermissions = response;
@@ -79,6 +82,7 @@ export class CreateRoleComponent {
     onSubmitCreateUserRole(): void {
       if (this.newUserRoleForm.valid) {
           this.userRoleServive.createUserRole(this.newUserRoleForm.value)
+          .pipe(takeUntil(this.unsubscribe$))
           .subscribe({
             next: (response) => {
               this.gs.openSnackBar("Done sucessfully!!", "Dismiss");
@@ -92,4 +96,8 @@ export class CreateRoleComponent {
       }
     }
 
+    ngOnDestroy(): void {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+    }
 }

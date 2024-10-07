@@ -54,6 +54,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     @Override
     public List<Participant> availableClients(Pageable pageable) {
-        return this.participantRepository.findAll(pageable).stream().toList();
+        return this.participantRepository.findAll(pageable).stream().filter(Participant::getIsActive).toList();
     }
 }

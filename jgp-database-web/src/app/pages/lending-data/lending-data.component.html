@@ -16,7 +16,7 @@
                 <div fxLayout="column" class="p-2">
                     <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="end center" class="px-2 user-toolbar">
                         <div class="action-button" fxLayoutGap="25px">
-                            <button mat-raised-button color="primary" *jgpHasPermission="'USER_ROLE_CREATE'" routerLink="new" [disabled]="selection.selected.length == 0" (click)="approveSelectedRows()">
+                            <button mat-raised-button color="primary" *jgpHasPermission="'LOAN_APPROVE'" routerLink="new" [disabled]="selection.selected.length == 0" (click)="approveSelectedRows()">
                               <mat-icon>verified</mat-icon>&nbsp;&nbsp;Approve Selected
                             </button>
                           </div>
@@ -65,9 +65,9 @@
                                 <mat-header-cell *matHeaderCellDef> Date Applied </mat-header-cell>
                                 <mat-cell *matCellDef="let element"> {{element.dateApplied}} </mat-cell>
                             </ng-container>
-                            <ng-container matColumnDef="loanQuality">
-                                <mat-header-cell *matHeaderCellDef> Quality </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.loanQuality}} </mat-cell>
+                            <ng-container matColumnDef="loanStatus">
+                                <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.loanStatus}} </mat-cell>
                             </ng-container>
                             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                             <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></mat-row>

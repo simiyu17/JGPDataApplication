@@ -68,9 +68,6 @@ public class ParticipantMapper {
             if ( participant.getSampleRecords() != null ) {
                 participantResponseDto.setSampleRecords( participant.getSampleRecords() );
             }
-            if ( participant.getTaNeeds() != null ) {
-                participantResponseDto.setTaNeeds( participant.getTaNeeds() );
-            }
             if ( participant.getPersonWithDisability() != null ) {
                 participantResponseDto.setPersonWithDisability( participant.getPersonWithDisability() );
             }
@@ -89,7 +86,7 @@ public class ParticipantMapper {
             return new ArrayList<>();
         }
 
-        List<ParticipantResponseDto> list = new ArrayList<ParticipantResponseDto>( participants.size() );
+        var list = new ArrayList<ParticipantResponseDto>( participants.size() );
         for ( Participant participant : participants ) {
             list.add( toDto( participant ) );
         }

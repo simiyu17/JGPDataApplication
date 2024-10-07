@@ -8,6 +8,7 @@ import com.jgp.finance.domain.LoanRepository;
 import com.jgp.finance.dto.LoanDto;
 import com.jgp.infrastructure.bulkimport.constants.TemplatePopulateImportConstants;
 import com.jgp.infrastructure.bulkimport.event.BulkImportEvent;
+import com.jgp.participant.domain.ParticipantRepository;
 import com.jgp.util.CommonUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class LoanServiceImpl implements LoanService {
     private final ApplicationEventPublisher publisher;
     private final LoanMapper loanMapper;
     private final LoanPredicateBuilder loanPredicateBuilder;
+    private final ParticipantRepository participantRepository;
 
     @Override
     public void createLoans(List<Loan> loans) {
@@ -46,7 +48,14 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public void approvedParticipantsLoansData(List<Long> dataIds, Boolean approval) {
         var loans = this.loanRepository.findAllById(dataIds);
-        loans.forEach(loan -> loan.approveData(approval));
+        loans.forEach(loan -> {
+            loan.approveData(approval);
+            var participant = loan.getParticipant();
+            if (Boolean.TRUE.equals(approval) && Boolean.FALSE.equals(participant.getIsActive())){
+                participant.activateParticipant();
+                this.participantRepository.save(participant);
+            }
+        });
         this.loanRepository.saveAll(loans);
     }
 

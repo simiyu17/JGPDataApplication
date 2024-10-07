@@ -1,30 +1,36 @@
 package com.jgp.dashboard.service;
 
+import com.jgp.dashboard.dto.CountySummaryDto;
 import com.jgp.dashboard.dto.DataPointDto;
 import com.jgp.dashboard.dto.HighLevelSummaryDto;
 import com.jgp.dashboard.dto.SeriesDataPointDto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface DashboardService {
 
-    HighLevelSummaryDto getHighLevelSummary();
+    HighLevelSummaryDto getHighLevelSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
-    List<DataPointDto> getLoanDisbursedByGenderSummary(Long partnerId);
+    List<DataPointDto> getLoanDisbursedByGenderSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
-    List<DataPointDto> getBusinessOwnersTrainedByGenderSummary(Long partnerId);
+    List<DataPointDto> getBusinessOwnersTrainedByGenderSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
-    List<DataPointDto> getLoanDisbursedByPipelineSourceSummary(Long partnerId);
+    List<DataPointDto> getLoanDisbursedByPipelineSourceSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
-    List<DataPointDto> getLoansDisbursedByQualitySummary(Long partnerId);
+    List<DataPointDto> getLoansDisbursedByQualitySummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
-    List<SeriesDataPointDto> getTaNeedsByGenderSummary(Long partnerId);
+    List<SeriesDataPointDto> getTaNeedsByGenderSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
-    List<DataPointDto> getTaTrainingBySectorSummary(Long partnerId);
+    List<DataPointDto> getTaTrainingBySectorSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
-    List<SeriesDataPointDto> getTrainingByPartnerByGenderSummary();
+    List<DataPointDto> getTaTrainingBySegmentSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
-    List<SeriesDataPointDto> getLastThreeYearsAccessedLoanPerPartnerSummary();
+    List<SeriesDataPointDto> getTrainingByPartnerByGenderSummary(LocalDate fromDate, LocalDate toDate);
 
-    List<SeriesDataPointDto> getLoansAccessedVsOutStandingByPartnerSummary();
+    List<SeriesDataPointDto> getLastThreeYearsAccessedLoanPerPartnerSummary(Long partnerId);
+
+    List<SeriesDataPointDto> getLoansAccessedVsOutStandingByPartnerSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
+
+    List<CountySummaryDto> getCountySummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 }

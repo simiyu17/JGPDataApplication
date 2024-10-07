@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PieChartComponent } from '../pie-chart/pie-chart.component';
 import { DashboardService } from '@services/dashboard/dashboard.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-bmo-dashboard',
@@ -64,6 +65,7 @@ export class BmoDashboardComponent implements OnInit {
   public taTrainedBySectorYAxisLabel: string = 'Number Of Participants';
   public taTrainedBySectorChartTitle: string = 'TA Training By Industry Sector';
 
+  private unsubscribe$ = new Subject<void>();
   constructor(private authService: AuthService, private dashBoardService: DashboardService){
 
   }
@@ -77,6 +79,7 @@ export class BmoDashboardComponent implements OnInit {
 
   getTaNeedsByGenderSummary() {
     this.dashBoardService.getTaNeedsByGenderSummary(this.partnerId)
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.TANeedsByGender = response;
@@ -87,6 +90,7 @@ export class BmoDashboardComponent implements OnInit {
 
   getTaTrainingBySectorSummary() {
     this.dashBoardService.getTaTrainingBySectorSummary(this.partnerId)
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.taTrainedBySector = response;
@@ -97,5 +101,10 @@ export class BmoDashboardComponent implements OnInit {
 
   public onSelect(event: any) {
     console.log(event);
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

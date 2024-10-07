@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,7 +20,7 @@ import { PartnerService } from '@services/data-management/partners.service';
 import { ContentHeaderComponent } from '../../../theme/components/content-header/content-header.component';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map } from 'rxjs';
+import { map, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-edit-role',
@@ -45,12 +45,13 @@ import { map } from 'rxjs';
   templateUrl: './edit-role.component.html',
   styleUrl: './edit-role.component.scss'
 })
-export class EditRoleComponent implements OnInit {
+export class EditRoleComponent implements OnInit, OnDestroy {
 
   public editUserRoleForm: FormGroup;
 
   allPermissions: any
   selectedUserRole: UserRoleDto;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     public fb: FormBuilder, 
     private userRoleServive: UserRoleService,
@@ -69,6 +70,7 @@ export class EditRoleComponent implements OnInit {
   ngOnInit(): void {
     this.getAvailablePermissions();
     this.activatedRoute.data.pipe(map(data => data['selectedUserRole']))
+    .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.selectedUserRole = response;
@@ -83,6 +85,7 @@ export class EditRoleComponent implements OnInit {
 
     getAvailablePermissions() {
       this.permissionsServive.getAvailablePermissions()
+      .pipe(takeUntil(this.unsubscribe$))
         .subscribe({
           next: (response) => {
             this.allPermissions = response;
@@ -94,6 +97,7 @@ export class EditRoleComponent implements OnInit {
     onSubmitEditUserRole(): void {
       if (this.editUserRoleForm.valid && this.selectedUserRole.id) {
           this.userRoleServive.updateUserRole(this.selectedUserRole.id, this.editUserRoleForm.value)
+          .pipe(takeUntil(this.unsubscribe$))
           .subscribe({
             next: (response) => {
               this.gs.openSnackBar("Done sucessfully!!", "Dismiss");
@@ -107,5 +111,8 @@ export class EditRoleComponent implements OnInit {
       }
     }
 
-
+    ngOnDestroy(): void {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+    }
 }
