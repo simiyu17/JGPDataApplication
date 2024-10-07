@@ -73,7 +73,7 @@
                 <mat-label>Address</mat-label>
                 <input matInput formControlName="town">
             </mat-form-field>
-                  <div fxLayout="row" fxLayoutAlign="end center" fxFlex="100%" fxLayoutGap="2%">
+                  <div fxLayout="row" fxLayoutAlign="center" fxFlex="100%" fxLayoutGap="3%">
                     <button mat-raised-button color="warn">Cancel</button>
                     <button mat-raised-button color="primary" (click)="onSubmitCreateUser()" [mat-dialog-close]="createUserForm.value" [disabled]="!createUserForm.valid">Save</button>
                   </div>

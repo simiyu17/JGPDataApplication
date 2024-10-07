@@ -7,6 +7,7 @@ import com.jgp.dashboard.dto.SeriesDataPointDto;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface DashboardService {
 
@@ -33,4 +34,6 @@ public interface DashboardService {
     List<SeriesDataPointDto> getLoansAccessedVsOutStandingByPartnerSummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
 
     List<CountySummaryDto> getCountySummary(LocalDate fromDate, LocalDate toDate, Long partnerId);
+
+    Map<String, CountySummaryDto> getCountySummaryMap(LocalDate fromDate, LocalDate toDate, Long partnerId);
 }

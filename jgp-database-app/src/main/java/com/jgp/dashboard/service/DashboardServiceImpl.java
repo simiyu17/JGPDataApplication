@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.jgp.dashboard.dto.SeriesDataPointDto;
 import lombok.RequiredArgsConstructor;
@@ -264,6 +265,11 @@ public class DashboardServiceImpl implements DashboardService {
         }
         var sqlQuery = String.format(CountySummaryDataMapper.COUNTY_SUMMARY_SCHEMA, bpdWhereClause, loanWhereClause);
         return this.namedParameterJdbcTemplate.query(sqlQuery, parameters, countySummaryMapper);
+    }
+
+    @Override
+    public Map<String, CountySummaryDto> getCountySummaryMap(LocalDate fromDate, LocalDate toDate, Long partnerId) {
+        return getCountySummary(fromDate, toDate, partnerId).stream().collect(Collectors.toMap(CountySummaryDto::countyCode, s -> s));
     }
 
     private static final class HighLevelSummaryMapper implements RowMapper<HighLevelSummaryDto> {

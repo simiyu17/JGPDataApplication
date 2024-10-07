@@ -128,6 +128,10 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked, OnDestroy {
   public taTrainedBySegmentExplodeSlices: boolean = false;
   public taTrainedBySegmentDoughnut: boolean = false;
   public taTrainedBySegmentChartTitle: string = 'TA By Business Segment';
+  
+  public countyData: Map<number, any>;
+  public businessesTrained: string;
+  public businessesLoaned: string;
 
 
   private unsubscribe$ = new Subject<void>();
@@ -154,6 +158,7 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.getTaTrainingBySegmentSummary();
     this.getTrainingByPartnerByGenderSummary();
     this.getLoansAccessedVsOutStandingByPartnerSummary();
+    this.getCountySummaryMap();
   }
 
   getLoansDisbursedByGenderSummary() {
@@ -255,6 +260,17 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked, OnDestroy {
       });
   }
 
+  getCountySummaryMap() {
+    this.dashBoardService.getCountySummaryMap()
+    .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response) => {
+          this.countyData = response;
+        },
+        error: (error) => { }
+      });
+  }
+
 
   public onSelect(event: any) {
     console.log(event);
@@ -302,7 +318,17 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked, OnDestroy {
     const dialogRef = this.dialog.open(ChartDialogComponent, {
       width: `${dialogWidth}px`,
       height: `${dialogHeight}px`,
-      data: { content: contentDivClone },
+      data: { 
+        content: contentDivClone,
+        chartType: 'app-pie-chart',
+        chartData: this.loansDisbursedByGender,
+        chartShowLegend: this.loansDisbursedByGenderShowLegend,
+        chartSColorScheme: this.chartSColorScheme,
+        chartShowLabels: this.loansDisbursedByGenderShowLabels,
+        chartExplodeSlices: this.loansDisbursedByGenderExplodeSlices,
+        chartIsDoughnut: this.loansDisbursedByGenderDoughnut,
+        chartTitle: 'Loan Disbursed by Gender'
+      },
       panelClass: 'custom-dialog-container', // Custom styles can be added
     });
 

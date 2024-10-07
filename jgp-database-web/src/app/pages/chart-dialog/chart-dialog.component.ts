@@ -1,10 +1,23 @@
 import { AfterViewInit, Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { PieChartComponent } from '../dashboard/pie-chart/pie-chart.component';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-chart-dialog',
   standalone: true,
-  imports: [],
+  imports: [
+    PieChartComponent,
+    FlexLayoutModule,
+    MatCardModule,
+    MatIconModule,
+    NgxChartsModule,
+    MatButtonModule
+  ],
   templateUrl: './chart-dialog.component.html',
   styleUrl: './chart-dialog.component.scss'
 })

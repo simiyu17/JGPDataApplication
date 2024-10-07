@@ -67,4 +67,9 @@ export class DashboardService {
       return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/loans-accessed-vs-out-standing-per-partner${queryParam}`);
     }
 
+    getCountySummaryMap(partnerId: number | undefined = undefined): Observable<any> {
+      const queryParam = (partnerId ? `?partner-id=${partnerId}` : '');
+      return this.httpClient.get(`${this.globalService.BASE_API_URL}/reports/county-summary-map${queryParam}`);
+    }
+
 }

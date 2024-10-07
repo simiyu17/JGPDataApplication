@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -104,5 +105,12 @@ public class DashboardController {
                                                                    @RequestParam(value = "from-date", required = false) LocalDate fromDate,
                                                                    @RequestParam(value = "to-date", required = false) LocalDate toDate){
         return new ResponseEntity<>(this.dashboardService.getCountySummary(fromDate, toDate, partnerId), HttpStatus.OK);
+    }
+
+    @GetMapping("county-summary-map")
+    public ResponseEntity<Map<String, CountySummaryDto>> getCountySummaryMap(@RequestParam(value = "partner-id", required = false) Long partnerId,
+                                                                     @RequestParam(value = "from-date", required = false) LocalDate fromDate,
+                                                                     @RequestParam(value = "to-date", required = false) LocalDate toDate){
+        return new ResponseEntity<>(this.dashboardService.getCountySummaryMap(fromDate, toDate, partnerId), HttpStatus.OK);
     }
 }

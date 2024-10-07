@@ -12,6 +12,8 @@ export class KenyanMapComponent implements OnInit {
 
   @Input('mapWidth') mapWidth: number;
   @Input('mapHeight') mapHeight: number;
+  @Input('countyData') countyData: Map<number, any>;
+  @Input('countyDataToBePicked') countyDataToBePicked: any;
   @ViewChild('kenyanMap', { static: true}) private chartContainer: ElementRef;
   private margin: { top: number, bottom: number, left: number; right: number} =  {top: 20, bottom: 30, left: 30, right: 20};
   private svg: any;
@@ -64,7 +66,10 @@ export class KenyanMapComponent implements OnInit {
         .on("mouseover", (event: any, d: any) => {
           d3.select(event.currentTarget).attr("fill", "#2ca25f");
           const [x, y] = this.path.centroid(d);  // 'this' refers to the class
-          this.showCountyName(x, y, d.properties.COUNTY_NAM);  // Call a method on the component
+          const countyCode = d.properties.COUNTY_COD;
+          const dataMap = new Map(Object.entries(this.countyData))
+          const dataToDisplay = dataMap.get(`${countyCode}`) ? dataMap.get(`${countyCode}`)[this.countyDataToBePicked] : '';
+          this.showCountyName(x, y, dataToDisplay);  // Call a method on the component
         })
         .on("mouseout", (event: any, d: any) => {
           d3.select(event.currentTarget).attr("fill", "#69b3a2");
