@@ -3,6 +3,7 @@ package com.jgp.dashboard.service;
 import com.jgp.dashboard.dto.CountySummaryDto;
 import com.jgp.dashboard.dto.DataPointDto;
 import com.jgp.dashboard.dto.HighLevelSummaryDto;
+import com.jgp.util.CommonUtil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -430,13 +431,13 @@ private static final class SeriesDataPointMapper implements ResultSetExtractor<L
 
         public static final String COUNTY_SUMMARY_SCHEMA = """
                 with highLevelSummary as (
-                                     select p.business_location as county, count(*) as businessesTrained,
+                                     select p.location_county_code as county, count(*) as businessesTrained,
                                      0 as businessesLoaned, 0 as amountDisbursed,
                                      0 as outStandingAmount from bmo_participants_data bpd\s
                                      inner join participants p on p.id = bpd.participant_id %s
                                      group by 1
                                      union
-                                     select p.business_location as county, 0 as businessesTrained, count(*) as businessesLoaned,
+                                     select p.location_county_code as county, 0 as businessesTrained, count(*) as businessesLoaned,
                                      sum(loan_amount_accessed) as amountDisbursed, sum(loan_outstanding_amount) as outStandingAmount from loans l\s
                                      inner join participants p on p.id = l.participant_id %s\s
                                      group by 1
@@ -451,13 +452,15 @@ private static final class SeriesDataPointMapper implements ResultSetExtractor<L
         public List<CountySummaryDto> extractData(ResultSet rs) throws SQLException, DataAccessException {
             var dataPoints = new ArrayList<CountySummaryDto>();
             while (rs.next()){
-                final var countyName = rs.getString("county");
+                final var countyCode = rs.getString("county");
                 final var businessesTrained = rs.getInt("businessesTrained");
                 final var businessesLoaned = rs.getInt("businessesLoaned");
                 final var amountDisbursed = rs.getBigDecimal("amountDisbursed");
                 final var outStandingAmount = rs.getBigDecimal("outStandingAmount");
 
-                dataPoints.add(new CountySummaryDto(countyName, businessesTrained, businessesLoaned, amountDisbursed, outStandingAmount));
+                final var county = CommonUtil.KenyanCounty.getKenyanCountyFromCode(countyCode);
+                final var kenyaCounty = county.orElse(CommonUtil.KenyanCounty.UNKNOWN);
+                dataPoints.add(new CountySummaryDto(countyCode, kenyaCounty.getCountyName(), businessesTrained, businessesLoaned, amountDisbursed, outStandingAmount));
             }
             return dataPoints;
         }

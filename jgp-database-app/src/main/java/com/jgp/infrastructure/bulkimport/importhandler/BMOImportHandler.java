@@ -10,6 +10,7 @@ import com.jgp.infrastructure.bulkimport.constants.BMOConstants;
 import com.jgp.infrastructure.bulkimport.constants.TemplatePopulateImportConstants;
 import com.jgp.infrastructure.bulkimport.data.Count;
 import com.jgp.infrastructure.bulkimport.event.BulkImportEvent;
+import com.jgp.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -96,6 +97,7 @@ public class BMOImportHandler implements ImportHandler {
         final var gender = ImportHandlerUtils.readAsString(BMOConstants.GENDER_COL, row);
         final var age = ImportHandlerUtils.readAsInt(BMOConstants.AGE_COL, row);
         final var businessLocation = ImportHandlerUtils.readAsString(BMOConstants.BUSINESS_LOCATION_COL, row);
+        final var locationCountyCode = CommonUtil.KenyanCounty.getKenyanCountyFromName(businessLocation);
         final var industrySector = ImportHandlerUtils.readAsString(BMOConstants.INDUSTRY_SECTOR_COL, row);
         final var businessSegment = ImportHandlerUtils.readAsString(BMOConstants.BUSINESS_SEGMENT_COL, row);
         final var registrationNumber = ImportHandlerUtils.readAsString(BMOConstants.BUSINESS_REG_NUMBER, row);
@@ -121,7 +123,7 @@ public class BMOImportHandler implements ImportHandler {
                 .youthRegularEmployees(youthRegularEmployees).totalCasualEmployees(totalCasualEmployees)
                 .youthCasualEmployees(youthCasualEmployees).sampleRecords(sampleRecordsKept)
                 .personWithDisability(personWithDisability).refugeeStatus(refugeeStatus).jgpId(jgpId)
-                .build();
+                .locationCountyCode(locationCountyCode.isPresent() ? locationCountyCode.get().getCountyCode() : "999").build();
         return this.clientService.createClient(clientDto);
     }
 
