@@ -1,4 +1,5 @@
 <div fxLayout="column">
+<div fxLayout="column" id="chartDiv">
 <h1 mat-dialog-title fxFlexAlign="center">{{data.chartTitle}}</h1>
 <div mat-dialog-content fxFlex="95%" ngClass="chart-props">
   @if (data.chartType === 'app-pie-chart') {
@@ -13,8 +14,9 @@
   }
           
 </div>
+</div>
 <div fxLayout="row" fxLayoutAlign="end center" fxFlex="100%" fxLayoutGap="2%">
   <button mat-raised-button color="warn" (click)="onCloseClick()">Close</button>
-  <button mat-raised-button color="primary" >Download PDF</button>
+  <button mat-raised-button color="primary" (click)="downloadChart()">Download PDF</button>
 </div>
 </div>
