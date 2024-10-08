@@ -1,6 +1,6 @@
 <div fxLayout="row wrap" #resizedDiv>
 
-    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2" #contentDiv (click)="openExpandedChartDialog()"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2" #loansDisbursedByGenderContentDiv (click)="expandLoansDisbursedByGenderDoughnut()"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
                 <mat-card-title>{{loansDisbursedByGenderChartTitle}}</mat-card-title>
@@ -12,14 +12,14 @@
                 [colorScheme]="chartSColorScheme" 
                 [showLabels]="loansDisbursedByGenderShowLabels" 
                 [explodeSlices]="loansDisbursedByGenderExplodeSlices" 
-                [doughnut]="loansDisbursedByGenderDoughnut" 
+                [doughnut]="loansDisbursedByGenderDoughnut"
                 />       
             </div>
         </mat-card>
     </div> 
     
     
-    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2" #loansDisbursedByPipelineContentDiv (click)="expandLoansDisbursedByPipelinePieChart()"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
                 <mat-card-title>{{loansDisbursedByPipelineChartTitle}}</mat-card-title>
@@ -164,7 +164,7 @@
         </mat-card>
     </div>  
 
-    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2" #countyTrainedBusinessesMapContentDiv (click)="expandCountyTrainedBusinessesMap()"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
                 <mat-card-title>Training By County</mat-card-title>

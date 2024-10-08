@@ -136,7 +136,9 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   private unsubscribe$ = new Subject<void>();
 
-  @ViewChild('contentDiv', { static: true }) contentDiv!: ElementRef;
+  @ViewChild('loansDisbursedByGenderContentDiv', { static: true }) loansDisbursedByGenderContentDiv!: ElementRef;
+  @ViewChild('loansDisbursedByPipelineContentDiv', { static: true }) loansDisbursedByPipelineContentDiv!: ElementRef;
+  @ViewChild('countyTrainedBusinessesMapContentDiv', { static: true }) countyTrainedBusinessesMapContentDiv!: ElementRef;
 
   constructor(private dashBoardService: DashboardService, public dialog: MatDialog){
     Object.assign(this, { single, multi });
@@ -310,31 +312,71 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.previousWidthOfResizedDiv = this.resizedDiv.nativeElement.clientWidth;
   }
 
-  openExpandedChartDialog(): void {
-    const contentDivClone = this.contentDiv.nativeElement.cloneNode(true);
+  openExpandedChartDialog(chartData: any): void {
     // Dynamically calculate dialog size
     const dialogWidth = window.innerWidth;
     const dialogHeight = window.innerHeight;
     const dialogRef = this.dialog.open(ChartDialogComponent, {
       width: `${dialogWidth}px`,
       height: `${dialogHeight}px`,
-      data: { 
-        content: contentDivClone,
-        chartType: 'app-pie-chart',
-        chartData: this.loansDisbursedByGender,
-        chartShowLegend: this.loansDisbursedByGenderShowLegend,
-        chartSColorScheme: this.chartSColorScheme,
-        chartShowLabels: this.loansDisbursedByGenderShowLabels,
-        chartExplodeSlices: this.loansDisbursedByGenderExplodeSlices,
-        chartIsDoughnut: this.loansDisbursedByGenderDoughnut,
-        chartTitle: 'Loan Disbursed by Gender'
-      },
+      data: chartData,
       panelClass: 'custom-dialog-container', // Custom styles can be added
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('Dialog was closed');
     });
+  }
+
+  expandLoansDisbursedByGenderDoughnut(){
+    const data = { 
+      content: this.loansDisbursedByGenderContentDiv.nativeElement.cloneNode(true),
+      chartType: 'app-pie-chart',
+      chartData: this.loansDisbursedByGender,
+      chartShowLegend: this.loansDisbursedByGenderShowLegend,
+      chartSColorScheme: this.chartSColorScheme,
+      chartShowLabels: this.loansDisbursedByGenderShowLabels,
+      chartExplodeSlices: this.loansDisbursedByGenderExplodeSlices,
+      chartIsDoughnut: this.loansDisbursedByGenderDoughnut,
+      chartTitle: 'Loan Disbursed by Gender',
+      chartFormatLabel: (label: string): string => {
+        // Find the data object by name and return the value instead of name
+        const item = this.loansDisbursedByGender.find(data => data.name === label);
+        return item ? `${item.value}` : label; // If found, return the value; otherwise return the name as fallback
+      }
+    };
+    this.openExpandedChartDialog(data);
+  }
+
+  expandLoansDisbursedByPipelinePieChart(){
+    const data = { 
+      content: this.loansDisbursedByPipelineContentDiv.nativeElement.cloneNode(true),
+      chartType: 'app-pie-chart',
+      chartData: this.loansDisbursedByPipeline,
+      chartShowLegend: this.loansDisbursedByPipelineShowLegend,
+      chartSColorScheme: this.chartSColorScheme,
+      chartShowLabels: this.loansDisbursedByPipelineShowLabels,
+      chartExplodeSlices: this.loansDisbursedByPipelineExplodeSlices,
+      chartIsDoughnut: this.loansDisbursedByPipelineDoughnut,
+      chartTitle: this.loansDisbursedByPipelineChartTitle,
+      chartFormatLabel: (label: string): string => {
+        // Find the data object by name and return the value instead of name
+        const item = this.loansDisbursedByPipeline.find(data => data.name === label);
+        return item ? `${item.value}` : label; // If found, return the value; otherwise return the name as fallback
+      }
+    };
+    this.openExpandedChartDialog(data);
+  }
+
+  expandCountyTrainedBusinessesMap(){
+    const data = { 
+      content: this.countyTrainedBusinessesMapContentDiv.nativeElement.cloneNode(true),
+      chartType: 'kenyan-county-map',
+      chartData: this.countyData,
+      countyDataToBePicked: 'businessesTrained',
+      chartTitle: 'Training By County'
+    };
+    this.openExpandedChartDialog(data);
   }
   
 }

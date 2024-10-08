@@ -1,21 +1,29 @@
-<div fxLayout="column">
-<div fxLayout="column" id="chartDiv">
-<h1 mat-dialog-title fxFlexAlign="center">{{data.chartTitle}}</h1>
-<div mat-dialog-content fxFlex="95%" ngClass="chart-props">
+<div fxLayout="column" ngClass="chart-container">
+  <button mat-icon-button class="close-button" (click)="onCloseClick()" fxFlex="4%">
+    <mat-icon class="close-icon" color="warn">close</mat-icon>
+  </button>
+<div fxLayout="column" fxLayoutAlign="center center" fxFlex="88%" id="chartDiv" class="chart-props">
+<h1 mat-dialog-title fxFlex="10%" fxFlexAlign="center center">{{data.chartTitle}}</h1>
+<div mat-dialog-content fxLayout="row" fxFlex="90%" class="chart-props">
+  <div class="chart-props" fxFlex="100%">
   @if (data.chartType === 'app-pie-chart') {
-    <app-pie-chart 
-    [data]="data.chartData" 
-    [showLegend]="true" 
-    [colorScheme]="data.chartSColorScheme" 
-    [showLabels]="data.chartShowLabels" 
-    [explodeSlices]="data.chartExplodeSlices" 
-    [doughnut]="data.chartIsDoughnut" 
-    /> 
+      <app-pie-chart 
+      [data]="data.chartData" 
+      [showLegend]="true" 
+      [colorScheme]="data.chartSColorScheme" 
+      [showLabels]="data.chartShowLabels" 
+      [explodeSlices]="data.chartExplodeSlices" 
+      [doughnut]="data.chartIsDoughnut" 
+      [chartFormatLabel]="data.chartFormatLabel"
+      /> 
   }
-          
+  @if (data.chartType === 'kenyan-county-map') {
+    <app-kenyan-map [mapWidth]="450" [mapHeight]="350" [countyData]="data.chartData" [countyDataToBePicked]="data.countyDataToBePicked"></app-kenyan-map>
+  }
+</div>     
 </div>
 </div>
-<div fxLayout="row" fxLayoutAlign="end center" fxFlex="100%" fxLayoutGap="2%">
+<div fxLayout="row" fxLayoutAlign="center center" fxFlex="8%" fxLayoutGap="2%">
   <button mat-raised-button color="warn" (click)="onCloseClick()">Close</button>
   <button mat-raised-button color="primary" (click)="downloadChart()">Download PDF</button>
 </div>
