@@ -14,7 +14,7 @@ export class KenyanMapComponent implements OnInit {
   @Input('mapHeight') mapHeight: number;
   @Input('countyData') countyData: Map<number, any>;
   @Input('countyDataToBePicked') countyDataToBePicked: any;
-  @ViewChild('kenyanMap', { static: true}) private chartContainer: ElementRef;
+  @Input('kenyanMapChartContainer') kenyanMapChartContainer: ElementRef;
   private margin: { top: number, bottom: number, left: number; right: number} =  {top: 20, bottom: 30, left: 30, right: 20};
   private svg: any;
   private projection: any;
@@ -28,12 +28,11 @@ export class KenyanMapComponent implements OnInit {
   }
 
   private createSvg(): void {
-    /*d3.select('figure').remove();
 
-    const element = this.chartContainer.nativeElement;
-    const contentWidth = element.offsetWidth - this.margin.left - this.margin.right;
-    const contentHeight = element.offsetHeight - this.margin.top - this.margin.bottom;
-    */
+    //const element = this.kenyanMapChartContainer.nativeElement;
+    //const contentWidth = element.offsetWidth - this.margin.left - this.margin.right;
+    //const contentHeight = element.offsetHeight - this.margin.top - this.margin.bottom;
+    
 
     this.svg = d3.select("figure#map")
       .append("svg")

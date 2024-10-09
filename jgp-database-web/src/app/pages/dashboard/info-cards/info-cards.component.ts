@@ -371,6 +371,7 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked, OnDestroy {
   expandCountyTrainedBusinessesMap(){
     const data = { 
       content: this.countyTrainedBusinessesMapContentDiv.nativeElement.cloneNode(true),
+      mapContainerElement: this.countyTrainedBusinessesMapContentDiv,
       chartType: 'kenyan-county-map',
       chartData: this.countyData,
       countyDataToBePicked: 'businessesTrained',

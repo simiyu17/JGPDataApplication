@@ -18,13 +18,19 @@
       /> 
   }
   @if (data.chartType === 'kenyan-county-map') {
-    <app-kenyan-map [mapWidth]="450" [mapHeight]="350" [countyData]="data.chartData" [countyDataToBePicked]="data.countyDataToBePicked"></app-kenyan-map>
+    <h1 mat-dialog-title fxFlex="10%" fxFlexAlign="center center">hhhhhhhh</h1>
+    <app-kenyan-map 
+    [mapWidth]="450" 
+    [mapHeight]="350" 
+    [countyData]="data.chartData" 
+    [countyDataToBePicked]="data.countyDataToBePicked" 
+    [kenyanMapChartContainer]="data.mapContainerElement" />
   }
 </div>     
 </div>
 </div>
 <div fxLayout="row" fxLayoutAlign="center center" fxFlex="8%" fxLayoutGap="2%">
-  <button mat-raised-button color="warn" (click)="onCloseClick()">Close</button>
-  <button mat-raised-button color="primary" (click)="downloadChart()">Download PDF</button>
+  <button mat-raised-button color="primary">Download PDF</button>
+  <button mat-raised-button color="primary" (click)="downloadChart()">Download PNG (Image)</button>
 </div>
 </div>
