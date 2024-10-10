@@ -1,6 +1,6 @@
 
 <div fxLayout="row wrap" #resizedDiv>
-    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2" #lastThreeYearLoansAccessedPerPartnerContentDiv (click)="expandLastThreeYearLoansAccessedPerPartnerLineChart()"> 
         <mat-card class="p-0 gradient-purple">
             <mat-card-header fxLayoutAlign="center center">                
                 <mat-card-title>{{lastThreeYearLoansAccessedPerPartnerTitle}}</mat-card-title>

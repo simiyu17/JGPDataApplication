@@ -1,7 +1,9 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { analytics } from '@data/dashboard-data';
 import { DashboardService } from '@services/dashboard/dashboard.service';
+import { GlobalService } from '@services/shared/global.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { Subject, takeUntil, takeWhile } from 'rxjs';
 
@@ -48,7 +50,9 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
   public previousWidthOfResizedDiv: number = 0;
   private unsubscribe$ = new Subject<void>();
 
-  constructor(private dashBoardService: DashboardService){
+  @ViewChild('lastThreeYearLoansAccessedPerPartnerContentDiv', { static: true }) lastThreeYearLoansAccessedPerPartnerContentDiv!: ElementRef;
+
+  constructor(private dashBoardService: DashboardService, private gs: GlobalService, private dialog: MatDialog){
     
   }
   ngOnDestroy(): void {
@@ -81,6 +85,28 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
       this.analytics = [...analytics];
     }
     this.previousWidthOfResizedDiv = this.resizedDiv.nativeElement.clientWidth;
+  }
+
+  expandLastThreeYearLoansAccessedPerPartnerLineChart(){
+    const data = { 
+      content: this.lastThreeYearLoansAccessedPerPartnerContentDiv.nativeElement.cloneNode(true),
+      mapContainerElement: this.lastThreeYearLoansAccessedPerPartnerContentDiv,
+      chartType: 'ngx-charts-line-chart',
+      chartData: this.lastThreeYearLoansAccessedPerPartner,
+      chartGradient: this.gradient,
+      chartShowXAxis: this.lastThreeYearLoansAccessedPerPartnerShowXAxis,
+      chartShowYAxis: this.lastThreeYearLoansAccessedPerPartnerShowYAxis,
+      chartSColorScheme: this.chartSColorScheme,
+      chartShowLegend: true,
+      chartShowXAxisLabel: this.lastThreeYearLoansAccessedPerPartnerShowXAxisLabel,
+      chartShowYAxisLabel: this.lastThreeYearLoansAccessedPerPartnerShowYAxisLabel,
+      chartYAxisLabel: this.lastThreeYearLoansAccessedPerPartnerYAxisLabel,
+      chartXAxisLabel: this.lastThreeYearLoansAccessedPerPartnerXAxisLabel,
+      chartAutoScale: this.autoScale,
+      chartRoundDomains: this.roundDomains,
+      chartTitle: this.lastThreeYearLoansAccessedPerPartnerTitle,
+    };
+    this.gs.openExpandedChartDialog(data, this.dialog);
   }
 
 }

@@ -18,13 +18,75 @@
       /> 
   }
   @if (data.chartType === 'kenyan-county-map') {
-    <h1 mat-dialog-title fxFlex="10%" fxFlexAlign="center center">hhhhhhhh</h1>
     <app-kenyan-map 
     [mapWidth]="450" 
     [mapHeight]="350" 
     [countyData]="data.chartData" 
     [countyDataToBePicked]="data.countyDataToBePicked" 
     [kenyanMapChartContainer]="data.mapContainerElement" />
+  }
+  @if (data.chartType === 'ngx-charts-bar-vertical') {
+    <ngx-charts-bar-vertical
+    [scheme]="data.chartSColorScheme"
+    [results]="data.chartData"
+    [gradient]="data.chartGradient"
+    [xAxis]="data.chartShowXAxis"
+    [yAxis]="data.chartShowYAxis"
+    [legend]="data.chartShowLegend"
+    [showXAxisLabel]="data.chartShowXAxisLabel"
+    [showYAxisLabel]="data.chartShowYAxisLabel"
+    [xAxisLabel]="data.chartXAxisLabel"
+    [yAxisLabel]="data.chartYAxisLabel"
+    (select)="onSelect($event)"
+/> 
+  }
+  @if (data.chartType === 'ngx-charts-bar-vertical-2d') {
+    <ngx-charts-bar-vertical-2d
+      [scheme]="data.chartSColorScheme"
+      [results]="data.chartData"
+      [gradient]="data.chartGradient"
+      [xAxis]="data.chartShowXAxis"
+      [yAxis]="data.chartShowYAxis"
+      [legend]="data.chartShowLegend"
+      [showXAxisLabel]="data.chartShowXAxisLabel"
+      [showYAxisLabel]="data.chartShowYAxisLabel"
+      [xAxisLabel]="data.chartXAxisLabel"
+      [yAxisLabel]="data.chartYAxisLabel"
+      (select)="onSelect($event)"
+  />   
+  }
+  @if (data.chartType === 'ngx-charts-bar-horizontal') {
+    <ngx-charts-bar-horizontal
+    [scheme]="data.chartSColorScheme"
+    [results]="data.chartData"
+    [gradient]="data.chartGradient"
+    [xAxis]="data.chartShowXAxis"
+    [yAxis]="data.chartShowYAxis"
+    [legend]="data.chartShowLegend"
+    [showXAxisLabel]="data.chartShowXAxisLabel"
+    [showYAxisLabel]="data.chartShowYAxisLabel"
+    [xAxisLabel]="data.chartXAxisLabel"
+    [yAxisLabel]="data.chartYAxisLabel"
+    (select)="onSelect($event)"
+/>  
+  }
+
+  @if (data.chartType === 'ngx-charts-line-chart') {
+    <ngx-charts-line-chart
+    [scheme]="data.chartSColorScheme"
+    [results]="data.chartData"
+    [gradient]="data.chartGradient"
+    [xAxis]="data.chartShowXAxis"
+    [yAxis]="data.chartShowYAxis"
+    [legend]="data.chartShowLegend"
+    [showXAxisLabel]="data.chartShowXAxisLabel"
+    [showYAxisLabel]="data.chartShowYAxisLabel"
+    [xAxisLabel]="data.chartXAxisLabel"
+    [yAxisLabel]="data.chartYAxisLabel"
+    [autoScale]="data.chartAutoScale"
+    [roundDomains]="data.chartRoundDomains" 
+    (select)="onSelect($event)"
+/>  
   }
 </div>     
 </div>

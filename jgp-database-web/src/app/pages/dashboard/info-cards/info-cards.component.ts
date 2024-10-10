@@ -67,7 +67,7 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked, OnDestroy {
   public loansDisbursedByStatusShowYAxisLabel: boolean = true;
   public loansDisbursedByStatusXAxisLabel: string = 'Status';
   public loansDisbursedByStatusYAxisLabel: string = 'Amount Disbursed';
-  public loansDisbursedByStatusChartTitle: string = 'Loan Disbursed by Pipeline Source';
+  public loansDisbursedByStatusChartTitle: string = 'Loans Disbursed By Status';
 
   public businessesTainedByGender: any[];
   public businessesTainedByGenderShowLegend: boolean = false;
@@ -139,6 +139,12 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild('loansDisbursedByGenderContentDiv', { static: true }) loansDisbursedByGenderContentDiv!: ElementRef;
   @ViewChild('loansDisbursedByPipelineContentDiv', { static: true }) loansDisbursedByPipelineContentDiv!: ElementRef;
   @ViewChild('countyTrainedBusinessesMapContentDiv', { static: true }) countyTrainedBusinessesMapContentDiv!: ElementRef;
+  @ViewChild('loansDisbursedByStatusContentDiv', { static: true }) loansDisbursedByStatusContentDiv!: ElementRef;
+  @ViewChild('taNeedsByGenderContentDiv', { static: true }) taNeedsByGenderContentDiv!: ElementRef;
+  @ViewChild('trainingByPartnerByGenderContentDiv', { static: true }) trainingByPartnerByGenderContentDiv!: ElementRef;
+  @ViewChild('taTrainedBySectorContentDiv', { static: true }) taTrainedBySectorContentDiv!: ElementRef;
+  @ViewChild('accessedVSOutStandingAmountContentDiv', { static: true }) accessedVSOutStandingAmountContentDiv!: ElementRef;
+  @ViewChild('taTrainedBySegmentContentDiv', { static: true }) taTrainedBySegmentContentDiv!: ElementRef;
 
   constructor(private dashBoardService: DashboardService, public dialog: MatDialog){
     Object.assign(this, { single, multi });
@@ -376,6 +382,126 @@ export class InfoCardsComponent implements OnInit, AfterViewChecked, OnDestroy {
       chartData: this.countyData,
       countyDataToBePicked: 'businessesTrained',
       chartTitle: 'Training By County'
+    };
+    this.openExpandedChartDialog(data);
+  }
+
+  expandLoansDisbursedByStatusBarChart(){
+    const data = { 
+      content: this.loansDisbursedByStatusContentDiv.nativeElement.cloneNode(true),
+      mapContainerElement: this.loansDisbursedByStatusContentDiv,
+      chartType: 'ngx-charts-bar-vertical',
+      chartData: this.loansDisbursedByStatus,
+      chartGradient: this.gradient,
+      chartShowXAxis: this.loansDisbursedByStatusShowXAxis,
+      chartShowYAxis: this.loansDisbursedByStatusShowYAxis,
+      chartSColorScheme: this.chartSColorScheme,
+      chartShowLegend: true,
+      chartShowXAxisLabel: this.loansDisbursedByStatusShowXAxisLabel,
+      chartShowYAxisLabel: this.loansDisbursedByStatusShowYAxisLabel,
+      chartYAxisLabel: this.loansDisbursedByStatusYAxisLabel,
+      chartXAxisLabel: this.loansDisbursedByStatusXAxisLabel,
+      chartTitle: this.loansDisbursedByStatusChartTitle,
+    };
+    this.openExpandedChartDialog(data);
+  }
+
+  expandTANeedsByGenderBarChart(){
+    const data = { 
+      content: this.taNeedsByGenderContentDiv.nativeElement.cloneNode(true),
+      mapContainerElement: this.taNeedsByGenderContentDiv,
+      chartType: 'ngx-charts-bar-vertical-2d',
+      chartData: this.TANeedsByGender,
+      chartGradient: this.gradient,
+      chartShowXAxis: this.TANeedsByGenderShowXAxis,
+      chartShowYAxis: this.TANeedsByGenderShowYAxis,
+      chartSColorScheme: this.chartSColorScheme,
+      chartShowLegend: true,
+      chartShowXAxisLabel: this.TANeedsByGenderShowXAxisLabel,
+      chartShowYAxisLabel: this.TANeedsByGenderShowYAxisLabel,
+      chartYAxisLabel: this.TANeedsByGenderYAxisLabel,
+      chartXAxisLabel: this.TANeedsByGenderXAxisLabel,
+      chartTitle: this.TANeedsByGenderChartTitle,
+    };
+    this.openExpandedChartDialog(data);
+  }
+
+  expandTrainingByPartnerByGenderBarChart(){
+    const data = { 
+      content: this.trainingByPartnerByGenderContentDiv.nativeElement.cloneNode(true),
+      mapContainerElement: this.trainingByPartnerByGenderContentDiv,
+      chartType: 'ngx-charts-bar-vertical-2d',
+      chartData: this.trainingByPartnerByGender,
+      chartGradient: this.gradient,
+      chartShowXAxis: this.trainingByPartnerByGenderShowXAxis,
+      chartShowYAxis: this.trainingByPartnerByGenderShowYAxis,
+      chartSColorScheme: this.chartSColorScheme,
+      chartShowLegend: true,
+      chartShowXAxisLabel: this.trainingByPartnerByGenderShowXAxisLabel,
+      chartShowYAxisLabel: this.trainingByPartnerByGenderShowYAxisLabel,
+      chartYAxisLabel: this.trainingByPartnerByGenderYAxisLabel,
+      chartXAxisLabel: this.trainingByPartnerByGenderXAxisLabel,
+      chartTitle: this.trainingByPartnerByGenderChartTitle,
+    };
+    this.openExpandedChartDialog(data);
+  }
+
+  expandTaTrainedBySectorBarChart(){
+    const data = { 
+      content: this.taTrainedBySectorContentDiv.nativeElement.cloneNode(true),
+      mapContainerElement: this.taTrainedBySectorContentDiv,
+      chartType: 'ngx-charts-bar-horizontal',
+      chartData: this.taTrainedBySector,
+      chartGradient: this.gradient,
+      chartShowXAxis: this.taTrainedBySectorShowXAxis,
+      chartShowYAxis: this.taTrainedBySectorShowYAxis,
+      chartSColorScheme: this.chartSColorScheme,
+      chartShowLegend: true,
+      chartShowXAxisLabel: this.taTrainedBySectorShowXAxisLabel,
+      chartShowYAxisLabel: this.taTrainedBySectorShowYAxisLabel,
+      chartYAxisLabel: this.taTrainedBySectorXAxisLabel,
+      chartXAxisLabel: this.taTrainedBySectorYAxisLabel,
+      chartTitle: this.taTrainedBySectorChartTitle,
+    };
+    this.openExpandedChartDialog(data);
+  }
+
+  expandAccessedVSOutStandingAmountBarChart(){
+    const data = { 
+      content: this.accessedVSOutStandingAmountContentDiv.nativeElement.cloneNode(true),
+      mapContainerElement: this.accessedVSOutStandingAmountContentDiv,
+      chartType: 'ngx-charts-bar-vertical-2d',
+      chartData: this.accessedVSOutStandingAmount,
+      chartGradient: this.gradient,
+      chartShowXAxis: this.accessedVSOutStandingAmountShowXAxis,
+      chartShowYAxis: this.accessedVSOutStandingAmountShowYAxis,
+      chartSColorScheme: this.chartSColorScheme,
+      chartShowLegend: true,
+      chartShowXAxisLabel: this.accessedVSOutStandingAmountShowXAxisLabel,
+      chartShowYAxisLabel: this.accessedVSOutStandingAmountShowYAxisLabel,
+      chartYAxisLabel: this.accessedVSOutStandingAmountYAxisLabel,
+      chartXAxisLabel: this.accessedVSOutStandingAmountXAxisLabel,
+      chartTitle: this.accessedVSOutStandingAmountChartTitle,
+    };
+    this.openExpandedChartDialog(data);
+  }
+
+  expandTaTrainedBySegmentPieChart(){
+    const data = { 
+      content: this.taTrainedBySegmentContentDiv.nativeElement.cloneNode(true),
+      chartType: 'app-pie-chart',
+      chartData: this.taTrainedBySegment,
+      chartShowLegend: true,
+      chartSColorScheme: this.chartSColorScheme,
+      chartShowLabels: this.taTrainedBySegmentShowLabels,
+      chartExplodeSlices: this.taTrainedBySegmentExplodeSlices,
+      chartIsDoughnut: this.taTrainedBySegmentDoughnut,
+      chartTitle: this.taTrainedBySegmentChartTitle,
+      chartFormatLabel: (label: string): string => {
+        // Find the data object by name and return the value instead of name
+        const item = this.loansDisbursedByPipeline.find(data => data.name === label);
+        return item ? `${item.value}` : label; // If found, return the value; otherwise return the name as fallback
+      }
     };
     this.openExpandedChartDialog(data);
   }

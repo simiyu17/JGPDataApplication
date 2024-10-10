@@ -9,6 +9,7 @@ import { AnalyticsComponent } from './analytics/analytics.component';
 import { DashboardService } from '@services/dashboard/dashboard.service';
 import { NoPermissionComponent } from '../errors/no-permission/no-permission.component';
 import { AuthService } from '@services/users/auth.service';
+import { DashboardFiltersComponent } from './dashboard-filters/dashboard-filters.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,7 +22,8 @@ import { AuthService } from '@services/users/auth.service';
     TilesComponent,
     InfoCardsComponent,
     AnalyticsComponent,
-    NoPermissionComponent
+    NoPermissionComponent,
+    DashboardFiltersComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'

@@ -36,10 +36,10 @@
             </div>
         </mat-card>
     </div> 
-    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2" #loansDisbursedByStatusContentDiv (click)="expandLoansDisbursedByStatusBarChart()"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
-                <mat-card-title>Loans Disbursed By Status</mat-card-title>
+                <mat-card-title>{{loansDisbursedByStatusChartTitle}}</mat-card-title>
             </mat-card-header>
             <div class="w-100 h-300p">
                 <ngx-charts-bar-vertical
@@ -51,14 +51,14 @@
                     [legend]="loansDisbursedByStatusShowLegend"
                     [showXAxisLabel]="loansDisbursedByStatusShowXAxisLabel"
                     [showYAxisLabel]="loansDisbursedByStatusShowYAxisLabel"
-                    [xAxisLabel]="loansDisbursedByStatusYAxisLabel"
-                    [yAxisLabel]="loansDisbursedByStatusXAxisLabel"
+                    [xAxisLabel]="loansDisbursedByStatusXAxisLabel"
+                    [yAxisLabel]="loansDisbursedByStatusYAxisLabel"
                     (select)="onSelect($event)"
                 />         
             </div>
         </mat-card>
     </div>    
-    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2" #taNeedsByGenderContentDiv (click)="expandTANeedsByGenderBarChart()"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
                 <mat-card-title>{{TANeedsByGenderChartTitle}}</mat-card-title>
@@ -75,12 +75,12 @@
                     [showYAxisLabel]="TANeedsByGenderShowYAxisLabel"
                     [xAxisLabel]="TANeedsByGenderXAxisLabel"
                     [yAxisLabel]="TANeedsByGenderYAxisLabel"
-                    (select)="onSelect($event)">
-                </ngx-charts-bar-vertical-2d>        
+                    (select)="onSelect($event)"
+                />        
             </div>
         </mat-card>
     </div>   
-    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2" #trainingByPartnerByGenderContentDiv (click)="expandTrainingByPartnerByGenderBarChart()"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
                 <mat-card-title>{{trainingByPartnerByGenderChartTitle}}</mat-card-title>
@@ -102,7 +102,7 @@
             </div>
         </mat-card>
     </div> 
-    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2" #taTrainedBySectorContentDiv (click)="expandTaTrainedBySectorBarChart()"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
                 <mat-card-title>{{taTrainedBySectorChartTitle}}</mat-card-title>
@@ -124,7 +124,7 @@
             </div>
         </mat-card>
     </div>  
-    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2" #accessedVSOutStandingAmountContentDiv (click)="expandAccessedVSOutStandingAmountBarChart()"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
                 <mat-card-title>{{accessedVSOutStandingAmountChartTitle}}</mat-card-title>
@@ -146,7 +146,7 @@
             </div>
         </mat-card>
     </div> 
-    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2"> 
+    <div fxFlex="100" fxFlex.xl="25" fxFlex.lg="25" fxFlex.md="33.3" fxFlex.sm="50" class="p-2" #taTrainedBySegmentContentDiv (click)="expandTaTrainedBySegmentPieChart()"> 
         <mat-card>
             <mat-card-header fxLayoutAlign="center center">                
                 <mat-card-title>{{taTrainedBySegmentChartTitle}}</mat-card-title>

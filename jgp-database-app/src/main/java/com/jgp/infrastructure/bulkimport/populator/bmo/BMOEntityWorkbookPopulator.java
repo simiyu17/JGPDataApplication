@@ -22,13 +22,13 @@ public class BMOEntityWorkbookPopulator extends AbstractWorkbookPopulator {
         worksheet.setColumnWidth(BMOConstants.BUSINESS_NAME_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
         worksheet.setColumnWidth(BMOConstants.JGP_ID_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
         worksheet.setColumnWidth(BMOConstants.BUSINESS_PHONE_NUMBER_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
-        worksheet.setColumnWidth(BMOConstants.GENDER_COL, TemplatePopulateImportConstants.SMALL_COL_SIZE);
-        worksheet.setColumnWidth(BMOConstants.AGE_COL, TemplatePopulateImportConstants.SMALL_COL_SIZE);
+        worksheet.setColumnWidth(BMOConstants.GENDER_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
+        worksheet.setColumnWidth(BMOConstants.AGE_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
         worksheet.setColumnWidth(BMOConstants.BUSINESS_LOCATION_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
         worksheet.setColumnWidth(BMOConstants.INDUSTRY_SECTOR_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
         worksheet.setColumnWidth(BMOConstants.BUSINESS_SEGMENT_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
         worksheet.setColumnWidth(BMOConstants.BUSINESS_REG_NUMBER, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
-        worksheet.setColumnWidth(BMOConstants.MEMBERSHIP_BMO_COL, TemplatePopulateImportConstants.SMALL_COL_SIZE);
+        worksheet.setColumnWidth(BMOConstants.MEMBERSHIP_BMO_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
         worksheet.setColumnWidth(BMOConstants.BEST_MONTH_MONTHLY_REVENUE_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
         worksheet.setColumnWidth(BMOConstants.WORST_MONTH_MONTHLY_REVENUE_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
         worksheet.setColumnWidth(BMOConstants.TOTAL_REGULAR_EMPLOYEES_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
@@ -40,7 +40,7 @@ public class BMOEntityWorkbookPopulator extends AbstractWorkbookPopulator {
         worksheet.setColumnWidth(BMOConstants.PERSON_WITH_DISABILITY_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
         worksheet.setColumnWidth(BMOConstants.REFUGEE_STATUS_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
         worksheet.setColumnWidth(BMOConstants.APPLICATION_FORM_SUBMITTED_DATE_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
-        worksheet.setColumnWidth(BMOConstants.IS_APPLICANT_ELIGIBLE_COL, TemplatePopulateImportConstants.SMALL_COL_SIZE);
+        worksheet.setColumnWidth(BMOConstants.IS_APPLICANT_ELIGIBLE_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
         worksheet.setColumnWidth(BMOConstants.NUMBER_TAS_ATTENDED_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
         worksheet.setColumnWidth(BMOConstants.NUMBER_TA_SESSION_ATTENDED_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);
         worksheet.setColumnWidth(BMOConstants.RECOMMENDED_FOR_FINANCE_COL, TemplatePopulateImportConstants.MEDIUM_COL_SIZE);

@@ -86,4 +86,8 @@ export class ChartDialogComponent implements AfterViewInit {
     });
   }
 
+  public onSelect(event: any) {
+    console.log(event);
+  }
+
 }
