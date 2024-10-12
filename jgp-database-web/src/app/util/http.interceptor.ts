@@ -8,11 +8,10 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   const globalService = inject(GlobalService);
   const token: string = localStorage.getItem("auth_token")!;
   const authService: AuthService = inject(AuthService)
-  const forceChangePassword: string = localStorage.getItem(authService.FORCE_PASS_CHANGE)!;
- 
-  /*if(forceChangePassword && 'true' == forceChangePassword){
+  const forceChangePassword: boolean | undefined = authService.currentUser()?.forceChangePassword;
+  if(forceChangePassword && true === forceChangePassword){
     authService.redirectToChangePassword()
-  }*/
+  }
   if (token != null) {
     req = req.clone({
       setHeaders: { Authorization: `Bearer ${token}`}

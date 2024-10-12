@@ -62,6 +62,11 @@ export const routes: Routes = [
         data: { breadcrumb: 'Partners' }
       },
       {
+        path: 'change-password',
+        loadComponent: () => import('./change-password/change-password.component').then(c => c.ChangePasswordComponent),
+        data: { breadcrumb: 'Change Password' }
+      },
+      {
         path: 'ui',
         loadChildren: () => import('./ui/ui.routes').then(p => p.routes),
         data: { breadcrumb: 'UI' }

@@ -7,12 +7,14 @@ import com.jgp.authentication.dto.AuthRequestDto;
 import com.jgp.authentication.dto.AuthResponseDto;
 import com.jgp.authentication.dto.UserDtoV2;
 import com.jgp.authentication.dto.UserPassChangeDto;
+import com.jgp.authentication.exception.PasswordChangeException;
 import com.jgp.authentication.exception.UserNotAuthenticatedException;
 import com.jgp.authentication.exception.UserNotFoundException;
 import com.jgp.authentication.filter.JwtTokenProvider;
 import com.jgp.patner.domain.Partner;
 import com.jgp.patner.domain.PartnerRepository;
 import com.jgp.patner.exception.PartnerNotFoundException;
+import com.jgp.shared.exception.DataRulesViolationException;
 import com.jgp.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -87,14 +90,29 @@ public class UserServiceImpl implements UserService{
     @Override
     public void updateUserPassword(UserPassChangeDto userPassChangeDto) {
         if (!StringUtils.equals(userPassChangeDto.newPass(), userPassChangeDto.passConfirm())){
-            throw new UserNotAuthenticatedException("New password must match with confirmation password!!");
+            throw new DataRulesViolationException("New password must match with confirmation password!!");
+        }
+        final var passWordStrengthRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+        boolean isValidPassword = Pattern.compile(passWordStrengthRegex)
+                .matcher(userPassChangeDto.newPass())
+                .find();
+        if (!isValidPassword){
+            throw new DataRulesViolationException("""
+                    Invalid new password.  A password must:\s
+                    1. Has minimum 8 characters in length. \s
+                    2. Has at least one uppercase English letter (A-Z).
+                    3. Has at least one lowercase English letter (a-z).
+                    4. Has at least one digit (0-9) and\s
+                    5. Has at least one special character (@#$%^&+=)
+                   \s"""
+            );
         }
         final var currentUser = currentUser();
         if (this.passwordEncoder.matches(userPassChangeDto.password(), currentUser.getPassword())){
             currentUser.setPassword(this.passwordEncoder.encode(userPassChangeDto.newPass()));
             currentUser.setForceChangePass(false);
         }else {
-            throw new UserNotFoundException("Invalid current password!!");
+            throw new DataRulesViolationException("Invalid current password!!");
         }
         this.userRepository.save(currentUser);
     }

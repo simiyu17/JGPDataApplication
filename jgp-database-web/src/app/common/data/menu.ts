@@ -1,7 +1,7 @@
 import { Menu } from "../models/menu.model"; 
 
 export const verticalMenuItems = [
-    new Menu(1, 'Dashboard', '/', null, 'dashboard', null, false, 0),
+    new Menu(1, 'Overview', '/', null, 'dashboard', null, false, 0),
     new Menu(2, 'Partner Dashboard', '/my-partner-dashboard', null, 'dashboard_customize', null, false, 0),
     new Menu(3, 'Project Participants', '/participants', null, 'supervisor_account', null, false, 0),
     new Menu(4, 'Partners', '/partners', null, 'linked_services', null, false, 0),
@@ -73,7 +73,7 @@ export const verticalMenuItems = [
 ]
 
 export const horizontalMenuItems = [
-    new Menu(1, 'Dashboard', '/', null, 'dashboard', null, false, 0),
+    new Menu(1, 'Overview', '/', null, 'dashboard', null, false, 0),
     new Menu(2, 'Partner Dashboard', '/my-partner-dashboard', null, 'dashboard_customize', null, false, 0),
     new Menu(3, 'Project Participants', '/participants', null, 'supervisor_account', null, false, 0),
     new Menu(4, 'Partners', '/partners', null, 'linked_services', null, false, 0),
