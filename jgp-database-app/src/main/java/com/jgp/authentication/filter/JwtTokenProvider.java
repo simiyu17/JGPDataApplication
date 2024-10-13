@@ -6,6 +6,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,6 +15,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -32,10 +36,11 @@ public class JwtTokenProvider {
         return claimsResolver.apply(claims);
     }
 
-    private static Claims extractAllClaims(String token) {
-        Key key = Keys.hmacShaKeyFor(SecurityConstants.SECRET.getBytes());
-        return Jwts.parser().setSigningKey(key)
-                .build().parseClaimsJws(token).getBody();
+    private static Claims extractAllClaims(String jwtToken) {
+        SecretKey secretKey = Keys.hmacShaKeyFor(SecurityConstants.SECRET.getBytes()); // key must be at least 256 bits
+
+    return Jwts.parser().setSigningKey(secretKey)
+              .build().parseClaimsJws(jwtToken).getBody();
     }
 
     private static boolean isTokenExpired(String token) {
@@ -56,6 +61,10 @@ public class JwtTokenProvider {
     }
 
     public static String createToken(AppUser user) {
+
+        SecretKey secretKey = Keys.hmacShaKeyFor(SecurityConstants.SECRET.getBytes()); // key must be at least 256 bits
+
+
         return Jwts.builder()
                 .subject(user.getUsername())
                 .claim("user_id", user.getId())
@@ -70,12 +79,8 @@ public class JwtTokenProvider {
                 .claim("user_permissions", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()))
                 .claim("force_change_password", user.isForceChangePass())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET.getBytes())
+                .expiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+                .signWith(secretKey)
                 .compact();
-    }
-
-    private static String createTokenFromClaims(Claims claims) {
-        return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET.getBytes()).compact();
     }
 }
