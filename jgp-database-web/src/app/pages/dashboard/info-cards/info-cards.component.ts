@@ -12,6 +12,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ChartDialogComponent } from '../../chart-dialog/chart-dialog.component';
 import { KenyanMapComponent } from "../kenyan-map/kenyan-map.component";
+import { KenyanCountyMapComponent } from "../kenyan-county-map/kenyan-county-map.component";
 
 @Component({
   selector: 'app-info-cards',
@@ -24,7 +25,8 @@ import { KenyanMapComponent } from "../kenyan-map/kenyan-map.component";
     PieChartComponent,
     DiskSpaceComponent,
     MatDialogModule,
-    KenyanMapComponent
+    KenyanMapComponent,
+    KenyanCountyMapComponent
 ],
   templateUrl: './info-cards.component.html',
   styleUrl: './info-cards.component.scss'

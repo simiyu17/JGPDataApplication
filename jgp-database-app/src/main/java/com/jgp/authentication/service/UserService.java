@@ -27,4 +27,6 @@ public interface UserService {
     AppUser currentUser();
 
     void updateUserRoles(Long userId, List<String> roleNames);
+
+    void changeUserStatus(Long userId, boolean status);
 }

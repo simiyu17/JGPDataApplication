@@ -137,6 +137,9 @@ public class UserServiceImpl implements UserService{
             throw  new UserNotFoundException("Bad User Credentials !!");
         }else {
             final var user = findUserByUsername(userDetails.getUsername());
+            if (!user.isActive()){
+                throw  new UserNotFoundException("User Locked !!");
+            }
             this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDetails, authRequestDto.password(), userDetails.getAuthorities()));
             return new AuthResponseDto(true, "User Authenticated!!", JwtTokenProvider.createToken(user));
         }
@@ -167,6 +170,15 @@ public class UserServiceImpl implements UserService{
         final var user =  this.userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("No user found with Id"));
         user.updateRoles(new HashSet<>(this.roleService.retrieveRolesByNames(roleNames)));
+        this.userRepository.save(user);
+    }
+
+    @Transactional
+    @Override
+    public void changeUserStatus(Long userId, boolean status) {
+        final var user =  this.userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("No user found with Id"));
+        user.changeUserStatus(status);
         this.userRepository.save(user);
     }
 

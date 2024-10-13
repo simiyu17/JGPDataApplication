@@ -128,6 +128,10 @@ public class AppUser extends BaseEntity implements PlatformUser {
         }
     }
 
+    public void changeUserStatus(boolean status){
+        this.isActive = status;
+    }
+
     public UserDtoV2 toDto(){
         return new UserDtoV2(getId(),
                 this.firstName, this.lastName, this.gender, this.image, this.roles.stream().map(Role::getRoleName).collect(Collectors.toSet()),

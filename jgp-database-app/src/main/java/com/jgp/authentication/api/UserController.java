@@ -62,4 +62,10 @@ public class UserController {
     public ResponseEntity<UserDtoV2> getUser(@PathVariable("userId") Long userId){
         return new ResponseEntity<>(this.userService.findUserById(userId), HttpStatus.OK);
     }
+
+    @PutMapping("change-user-status/{user-id}/{new-status}")
+    public ResponseEntity<ApiResponseDto> changeUserStatus(@PathVariable("user-id") Long userId, @PathVariable("new-status") String newStatus){
+        this.userService.changeUserStatus(userId, "ACTIVE".equals(newStatus));
+        return new ResponseEntity<>(new ApiResponseDto(true, "User status updated !!"), HttpStatus.OK);
+    }
 }

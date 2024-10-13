@@ -48,6 +48,8 @@ export class KenyanMapComponent implements OnInit {
   }
 
   private drawMap(): void {
+    // Color scale
+    const color = d3.scaleQuantize([1, 10], d3.schemeBlues[9]);
     // Load the GeoJSON data for Kenya counties
     d3.json('data/kenya-counties.json').then((data: any) => {
 
